@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Shop from "./pages/Shop";
 import Testimonials from "./pages/Testimonials";
 import CartDrawer from "./components/CartDrawer";
+import { appBackground } from "./styles/background.css";
 
 type Product = { id: number; name: string; price: number };
 
@@ -18,15 +19,19 @@ export default function App() {
     setCartOpen(true);
   };
 
-  return (
+    return (
+  <div className={appBackground}>
     <Router>
       <Navbar onCartClick={() => setCartOpen(true)} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<Shop onAddToCart={addToCart} />} />
-        <Route path="/testimonials" element={<Testimonials />} />
-      </Routes>
+      <main style={{ paddingTop: "5rem" }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/shop" element={<Shop onAddToCart={addToCart} />} />
+          <Route path="/testimonials" element={<Testimonials />} />
+        </Routes>
+      </main>
       {cartOpen && <CartDrawer cart={cart} onClose={() => setCartOpen(false)} />}
     </Router>
-  );
+  </div>
+);
 }
