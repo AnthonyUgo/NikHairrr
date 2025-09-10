@@ -24,9 +24,9 @@ export const vars = createGlobalThemeContract({
 // Apply actual values to those tokens
 createGlobalTheme(":root", vars, {
   color: {
-    bg: "#0b0b0c",
+    bg: "#0b0b0c",   // <--- THIS is your page background color
     text: "#f7f7f7",
-    brand: "#FF3EA5", // Signature pink
+    brand: "#9C7B4D",
     muted: "#9aa0a6", // Grayish neutral
   },
   space: {
@@ -45,7 +45,6 @@ createGlobalTheme(":root", vars, {
 globalStyle("html, body, #app", {
   height: "100%",
   margin: 0,
-  background: "linear-gradient(to right, #111, #333)", // the fade
   color: "white",
   fontFamily: "Inter, ui-sans-serif, system-ui, Arial, sans-serif",
 });

@@ -1,0 +1,9 @@
+<!-- /public/textures/cement.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024">
+  <!-- Base cement tone (slightly olive so it blends nicely) -->
+  <rect width="100%" height="100%" fill="#2f3430"></rect>
+
+  <!-- Main noise (tileable) -->
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <!-- Big blotches -->
+    </filter></svg>

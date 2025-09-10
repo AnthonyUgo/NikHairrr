@@ -3,10 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-import Shop from "./pages/Shop";
 import Testimonials from "./pages/Testimonials";
 import CartDrawer from "./components/CartDrawer";
 import { appBackground } from "./styles/background.css";
+import Shop from "./pages/Shop";
+import ShopBundles from "./pages/ShopBundles";
+import ShopWigs from "./pages/ShopWigs";
 
 type Product = { id: number; name: string; price: number };
 
@@ -26,7 +28,9 @@ export default function App() {
       <main style={{ paddingTop: "5rem" }}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/shop" element={<Shop onAddToCart={addToCart} />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/shop/bundles" element={<ShopBundles onAddToCart={addToCart} />} />
+          <Route path="/shop/wigs" element={<ShopWigs onAddToCart={addToCart} />} />
           <Route path="/testimonials" element={<Testimonials />} />
         </Routes>
       </main>

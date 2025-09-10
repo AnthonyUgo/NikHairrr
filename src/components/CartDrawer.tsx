@@ -18,10 +18,10 @@ export default function CartDrawer({
         right: 0,
         width: "320px",
         height: "100%",
-        background: "#111",
+        background: "#071f02ff",
         color: "white",
         padding: "1rem",
-        boxShadow: "-4px 0 10px rgba(0,0,0,0.5)",
+        boxShadow: "-4px 0 10px rgba(7, 49, 2, 0.58)",
         zIndex: 200,
       }}
     >
@@ -42,7 +42,7 @@ export default function CartDrawer({
       )}
       <h4>Total: ${total}</h4>
       <button
-        style={{ width: "100%", padding: "0.8rem", background: "#FF3EA5", border: "none", borderRadius: "8px", color: "white" }}
+        style={{ width: "100%", padding: "0.8rem", background: "#655804ff", border: "none", borderRadius: "8px", color: "white" }}
       >
         Checkout
       </button>

@@ -6,7 +6,7 @@ export const container = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  background: 'linear-gradient(to right, #111, #333)',
+  background: 'linear-gradient(to right, #023311ff, #022508ff)',
   color: 'white',
   fontFamily: 'system-ui, sans-serif',
 });

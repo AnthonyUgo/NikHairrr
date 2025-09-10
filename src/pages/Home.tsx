@@ -1,9 +1,10 @@
-// Home.tsx
+// src/pages/Home.tsx
+import Hero from "../components/Hero";
+
 export default function Home() {
   return (
-    <div style={{ paddingTop: "6rem", textAlign: "center", background: "transparent" }}>
-      <h1>NikHairrr</h1>
-      <p>Beauty. Confidence. Style.</p>
+    <div style={{ paddingTop: "6rem" }}>
+      <Hero />
     </div>
   );
 }
