@@ -1,17 +1,17 @@
 // src/styles/background.css.ts
+// Premium deep olive-black background for NikHairrr luxury experience
 import { style } from "@vanilla-extract/css";
+import { vars } from "./theme.css";
 
 export const appBackground = style({
   minHeight: "100vh",
   width: "100%",
-  backgroundColor: "#4A5A2C", // olive green base
+  backgroundColor: vars.color.bg, // Deep olive-black (#101510)
   backgroundImage: `
-    linear-gradient(to right, rgba(74,90,44,0.95), rgba(30,30,30,0.85)),
-    url("/textures/cement.svg")
+    linear-gradient(145deg, ${vars.color.bg} 0%, ${vars.color.bg2} 50%, ${vars.color.bg} 100%)
   `,
-  backgroundSize: "cover, 512px 512px",
-  backgroundRepeat: "no-repeat, repeat",
-  backgroundAttachment: "fixed, fixed",
-  backgroundBlendMode: "soft-light, normal",
-  color: "white",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  backgroundAttachment: "fixed",
+  color: vars.color.text,
 });

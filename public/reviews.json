@@ -1,0 +1,64 @@
+{
+  "reviews": [
+    {
+      "id": 1,
+      "name": "Jasmine Williams",
+      "rating": 5,
+      "date": "2025-10-01",
+      "title": "Absolutely Life-Changing!",
+      "text": "I've tried countless hair extensions over the years, but NikHairrr is on another level. The quality is unmatched - my bundles still look brand new after 6 months! The natural movement and shine make people think it's my real hair. Worth every penny!",
+      "product": "22-inch Brazilian Bundle",
+      "verified": true
+    },
+    {
+      "id": 2,
+      "name": "Marcus Thompson",
+      "rating": 5,
+      "date": "2025-09-28",
+      "title": "Salon-Grade Quality at Home",
+      "text": "As a professional stylist, I'm extremely picky about the hair I use on my clients. NikHairrr bundles blend seamlessly and hold styles perfectly. My clients always leave satisfied and the hair lasts through multiple installs.",
+      "product": "Frontal Lace 13x4",
+      "verified": true
+    },
+    {
+      "id": 3,
+      "name": "Alicia Chen",
+      "rating": 5,
+      "date": "2025-09-25",
+      "title": "The Glow Up I Needed",
+      "text": "This wig changed my whole vibe! The editorial finish is no joke - I get compliments everywhere I go. It's lightweight, breathable, and looks so natural. I've already ordered 2 more in different styles!",
+      "product": "Luxury Wave Wig",
+      "verified": true
+    },
+    {
+      "id": 4,
+      "name": "Sierra Banks",
+      "rating": 4,
+      "date": "2025-09-20",
+      "title": "Beautiful but Pricey",
+      "text": "The hair is absolutely gorgeous - soft, silky, and no shedding. It's definitely premium quality. Only wish it was a bit more affordable, but I understand you get what you pay for. Still love it!",
+      "product": "Deep Wave Bundle",
+      "verified": true
+    },
+    {
+      "id": 5,
+      "name": "Taylor Morgan",
+      "rating": 5,
+      "date": "2025-09-15",
+      "title": "Zero Compromise Indeed",
+      "text": "The tagline is accurate! This is luxury hair with zero compromise. No tangling, no matting, minimal shedding. I can style it with heat and it bounces back beautifully. Best investment in my beauty routine.",
+      "product": "Straight Bundle Pack",
+      "verified": true
+    },
+    {
+      "id": 6,
+      "name": "Nicole Rodriguez",
+      "rating": 5,
+      "date": "2025-09-10",
+      "title": "Customer Service A++",
+      "text": "Not only is the hair amazing, but the customer service is top-tier. They helped me choose the perfect texture and length for my face shape. Arrived quickly and beautifully packaged. This is my new go-to brand!",
+      "product": "Body Wave Bundle",
+      "verified": true
+    }
+  ]
+}

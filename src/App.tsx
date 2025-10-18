@@ -25,15 +25,13 @@ export default function App() {
   <div className={appBackground}>
     <Router>
       <Navbar onCartClick={() => setCartOpen(true)} />
-      <main style={{ paddingTop: "5rem" }}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/shop/bundles" element={<ShopBundles onAddToCart={addToCart} />} />
-          <Route path="/shop/wigs" element={<ShopWigs onAddToCart={addToCart} />} />
-          <Route path="/testimonials" element={<Testimonials />} />
-        </Routes>
-      </main>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/shop/bundles" element={<ShopBundles onAddToCart={addToCart} />} />
+        <Route path="/shop/wigs" element={<ShopWigs onAddToCart={addToCart} />} />
+        <Route path="/testimonials" element={<Testimonials />} />
+      </Routes>
       {cartOpen && <CartDrawer cart={cart} onClose={() => setCartOpen(false)} />}
     </Router>
   </div>

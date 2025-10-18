@@ -1,0 +1,13 @@
+<!-- Temporary placeholder image for look2-2.jpg -->
+<svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#101510;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#283820;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#grad6)"/>
+  <text x="960" y="500" font-family="Arial, sans-serif" font-size="80" fill="#D4A373" text-anchor="middle" font-weight="bold">Editorial Finish</text>
+  <text x="960" y="600" font-family="Arial, sans-serif" font-size="40" fill="#EDEAE5" text-anchor="middle">Look 2 Layer 2 (Bottom)</text>
+  <text x="960" y="660" font-family="Arial, sans-serif" font-size="28" fill="#D9D7D0" text-anchor="middle">Natural opulence revealed</text>
+</svg>

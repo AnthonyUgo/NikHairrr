@@ -1,0 +1,10 @@
+<svg width="500" height="120" viewBox="0 0 500 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&amp;display=swap');
+    </style>
+  </defs>
+  <text x="10" y="85" font-family="'Playfair Display', Georgia, serif" font-size="72" font-style="italic" font-weight="600" fill="#C8A97E" letter-spacing="0.03em">
+    NikHairrr
+  </text>
+</svg>
