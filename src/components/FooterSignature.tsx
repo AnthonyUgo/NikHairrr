@@ -5,7 +5,7 @@ export default function FooterSignature() {
   return (
     <div className={styles.signatureContainer}>
       <img 
-        src="/Logo.png" 
+        src="/small-logo.svg" 
         alt="NikHairrr signature" 
         className={styles.signatureLogo}
       />

@@ -22,14 +22,9 @@ export default function ReviewCarousel() {
     fetch('/reviews.json')
       .then((res) => res.json())
       .then((data) => {
-        // Get top 3 reviews (sorted by rating and date)
-        const topReviews = data.reviews
-          .sort((a: Review, b: Review) => {
-            if (b.rating !== a.rating) return b.rating - a.rating;
-            return new Date(b.date).getTime() - new Date(a.date).getTime();
-          })
-          .slice(0, 3);
-        setReviews(topReviews);
+        // Shuffle reviews randomly for variety
+        const shuffled = [...data.reviews].sort(() => Math.random() - 0.5);
+        setReviews(shuffled);
         setLoading(false);
       })
       .catch((err) => {
@@ -43,7 +38,7 @@ export default function ReviewCarousel() {
     
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % reviews.length);
-    }, 6000); // Auto-advance every 6 seconds
+    }, 5000); // Auto-advance every 5 seconds
 
     return () => clearInterval(timer);
   }, [reviews.length]);
@@ -75,9 +70,10 @@ export default function ReviewCarousel() {
 
   return (
     <div className={styles.reviewCarousel}>
-      <div className={styles.carouselTrack} style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-        {reviews.map((review) => (
-          <div key={review.id} className={styles.reviewCard}>
+      <div style={{ position: 'relative', width: '100%' }}>
+        <div className={styles.carouselTrack} style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+          {reviews.map((review) => (
+            <div key={review.id} className={styles.reviewCard}>
             <div className={styles.reviewHeader}>
               <div>
                 <h4 className={styles.reviewerName}>{review.name}</h4>
@@ -101,6 +97,7 @@ export default function ReviewCarousel() {
             </div>
           </div>
         ))}
+        </div>
       </div>
 
       <div className={styles.carouselControls}>

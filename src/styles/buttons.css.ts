@@ -4,24 +4,24 @@
 import { style, globalStyle } from '@vanilla-extract/css';
 import { vars } from './theme.css';
 
-// Primary button - champagne gold with hover lift
+// Primary button - pure white with hover lift
 export const btnPrimary = style({
-  background: `linear-gradient(90deg, ${vars.color.gold}, ${vars.color.focus})`,
+  background: '#ffffff',
   backgroundSize: '200% 100%',
-  color: vars.color.bg,
+  color: '#000000',
   borderRadius: vars.radius.full,
   padding: '0.75rem 1.5rem',
-  border: '1px solid transparent',
+  border: '1px solid #ffffff',
   fontWeight: 600,
   fontSize: '1rem',
   cursor: 'pointer',
   position: 'relative',
   overflow: 'hidden',
   transition: 'transform 0.2s ease, box-shadow 0.3s ease',
-  boxShadow: `0 4px 15px ${vars.color.gold}40`,
+  boxShadow: '0 4px 15px rgba(255, 255, 255, 0.3)',
   ':hover': {
     transform: 'translateY(-2px)',
-    boxShadow: `0 6px 25px ${vars.color.gold}60`,
+    boxShadow: '0 6px 25px rgba(255, 255, 255, 0.5)',
   },
   ':active': {
     transform: 'translateY(0)',
@@ -43,11 +43,11 @@ globalStyle('.btnPrimary:hover::before', {
   left: '100%',
 });
 
-// Outline button - transparent with gold border
+// Outline button - transparent with white border
 export const btnOutline = style({
   background: 'transparent',
-  color: vars.color.gold,
-  border: `1px solid ${vars.color.gold}`,
+  color: '#ffffff',
+  border: '1px solid #ffffff',
   borderRadius: vars.radius.full,
   padding: '0.75rem 1.5rem',
   fontWeight: 600,
@@ -55,8 +55,8 @@ export const btnOutline = style({
   cursor: 'pointer',
   transition: 'transform 0.2s ease, background-color 0.2s ease, color 0.2s ease',
   ':hover': {
-    background: vars.color.gold,
-    color: vars.color.bg,
+    background: '#ffffff',
+    color: '#000000',
     transform: 'translateY(-1px)',
   },
   ':active': {

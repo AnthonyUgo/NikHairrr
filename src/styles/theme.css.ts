@@ -29,18 +29,18 @@ export const vars = createGlobalThemeContract({
   },
 });
 
-// Apply actual values to those tokens - Premium NikHairrr Palette
+// Apply actual values to those tokens - Luxury Black & White Palette
 createGlobalTheme(":root", vars, {
   color: {
-    bg: "#101510",      // deep olive-black
-    bg2: "#283820",     // dark botanical
-    text: "#D9D7D0",    // body text
-    brand: "#C8A97E",   // champagne gold (primary)
-    gold: "#C8A97E",    // champagne gold
-    gold2: "#9B6B3C",   // bronze hover
-    cream: "#EDEAE5",   // headings / light text
-    focus: "#D4A373",   // active/accent
-    muted: "#9aa0a6",   // Grayish neutral (legacy)
+    bg: "#000000",      // pure black
+    bg2: "#1a1a1a",     // deep charcoal
+    text: "#e5e5e5",    // off-white text
+    brand: "#ffffff",   // pure white (primary)
+    gold: "#ffffff",    // white accent
+    gold2: "#cccccc",   // light gray hover
+    cream: "#ffffff",   // headings / bright white
+    focus: "#f5f5f5",   // active/accent light gray
+    muted: "#666666",   // medium gray
   },
   space: {
     xs: "4px",
@@ -62,12 +62,18 @@ globalStyle("html, body, #app", {
   height: "100%",
   margin: 0,
   color: "white",
-  fontFamily: "Inter, ui-sans-serif, system-ui, Arial, sans-serif",
+  fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+  fontFeatureSettings: "'ss01', 'ss02', 'cv01', 'cv03'",
+  WebkitFontSmoothing: "antialiased",
+  MozOsxFontSmoothing: "grayscale",
 });
 globalStyle("body", {
   margin: 0,
   backgroundColor: vars.color.bg,
   color: vars.color.text,
-  fontFamily: "Inter, ui-sans-serif, system-ui, Arial, sans-serif",
+  fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
+  fontFeatureSettings: "'ss01', 'ss02', 'cv01', 'cv03'",
+  WebkitFontSmoothing: "antialiased",
+  MozOsxFontSmoothing: "grayscale",
 });
 

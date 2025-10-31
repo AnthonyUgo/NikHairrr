@@ -2,49 +2,49 @@
   "reviews": [
     {
       "id": 1,
-      "name": "Jasmine Williams",
+      "name": "Chioms",
       "rating": 5,
-      "date": "2025-10-01",
+      "date": "2025-10-15",
       "title": "Absolutely Life-Changing!",
       "text": "I've tried countless hair extensions over the years, but NikHairrr is on another level. The quality is unmatched - my bundles still look brand new after 6 months! The natural movement and shine make people think it's my real hair. Worth every penny!",
-      "product": "22-inch Brazilian Bundle",
+      "product": "Body Wave Bundle",
       "verified": true
     },
     {
       "id": 2,
-      "name": "Marcus Thompson",
+      "name": "Hafs",
       "rating": 5,
-      "date": "2025-09-28",
-      "title": "Salon-Grade Quality at Home",
-      "text": "As a professional stylist, I'm extremely picky about the hair I use on my clients. NikHairrr bundles blend seamlessly and hold styles perfectly. My clients always leave satisfied and the hair lasts through multiple installs.",
-      "product": "Frontal Lace 13x4",
+      "date": "2025-10-10",
+      "title": "Salon-Grade Quality",
+      "text": "As someone who's super picky about hair quality, I'm blown away. NikHairrr bundles blend seamlessly and hold styles perfectly. The shine and movement is unreal - people keep asking where I got my hair done!",
+      "product": "Straight Bundle",
       "verified": true
     },
     {
       "id": 3,
-      "name": "Alicia Chen",
+      "name": "Mo",
       "rating": 5,
-      "date": "2025-09-25",
+      "date": "2025-10-05",
       "title": "The Glow Up I Needed",
-      "text": "This wig changed my whole vibe! The editorial finish is no joke - I get compliments everywhere I go. It's lightweight, breathable, and looks so natural. I've already ordered 2 more in different styles!",
-      "product": "Luxury Wave Wig",
+      "text": "This wig changed my whole vibe! The editorial finish is no joke - I get compliments everywhere I go. It's lightweight, breathable, and looks so natural. Already ordered 2 more in different styles!",
+      "product": "Lace Front Wig",
       "verified": true
     },
     {
       "id": 4,
-      "name": "Sierra Banks",
-      "rating": 4,
-      "date": "2025-09-20",
-      "title": "Beautiful but Pricey",
-      "text": "The hair is absolutely gorgeous - soft, silky, and no shedding. It's definitely premium quality. Only wish it was a bit more affordable, but I understand you get what you pay for. Still love it!",
+      "name": "Zainab",
+      "rating": 5,
+      "date": "2025-09-28",
+      "title": "Premium Quality All Around",
+      "text": "The hair is absolutely gorgeous - soft, silky, and no shedding. It's definitely premium quality and you can tell the difference immediately. Best hair purchase I've ever made!",
       "product": "Deep Wave Bundle",
       "verified": true
     },
     {
       "id": 5,
-      "name": "Taylor Morgan",
+      "name": "Amina",
       "rating": 5,
-      "date": "2025-09-15",
+      "date": "2025-09-22",
       "title": "Zero Compromise Indeed",
       "text": "The tagline is accurate! This is luxury hair with zero compromise. No tangling, no matting, minimal shedding. I can style it with heat and it bounces back beautifully. Best investment in my beauty routine.",
       "product": "Straight Bundle Pack",
@@ -52,12 +52,32 @@
     },
     {
       "id": 6,
-      "name": "Nicole Rodriguez",
+      "name": "Aisha",
       "rating": 5,
-      "date": "2025-09-10",
+      "date": "2025-09-18",
       "title": "Customer Service A++",
       "text": "Not only is the hair amazing, but the customer service is top-tier. They helped me choose the perfect texture and length for my face shape. Arrived quickly and beautifully packaged. This is my new go-to brand!",
       "product": "Body Wave Bundle",
+      "verified": true
+    },
+    {
+      "id": 7,
+      "name": "Fatima",
+      "rating": 5,
+      "date": "2025-09-12",
+      "title": "Obsessed!",
+      "text": "I'm literally obsessed with this hair. The quality is insane - soft, no smell, and it blends perfectly with my natural hair. I've gotten so many compliments. NikHairrr has a customer for life!",
+      "product": "Curly Bob Wig",
+      "verified": true
+    },
+    {
+      "id": 8,
+      "name": "Khadijah",
+      "rating": 5,
+      "date": "2025-09-05",
+      "title": "Worth Every Penny",
+      "text": "Yes, it's an investment, but the quality justifies the price. This hair lasts forever, styles beautifully, and always looks fresh. I've tried cheaper brands and they don't compare. You truly get what you pay for!",
+      "product": "Straight HD Wig",
       "verified": true
     }
   ]

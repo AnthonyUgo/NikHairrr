@@ -129,25 +129,30 @@ export const submitButton = style({
 export const reviewCarousel = style({
   position: 'relative',
   marginBottom: '4rem',
-  overflow: 'visible',
-  borderRadius: '16px',
+  overflow: 'hidden',
+  borderRadius: '0',
+  width: '100%',
 });
 
 export const carouselTrack = style({
   display: 'flex',
   transition: 'transform 0.5s ease-in-out',
-  overflow: 'hidden',
-  borderRadius: '16px',
+  width: '100%',
+  willChange: 'transform',
 });
 
 export const reviewCard = style({
   minWidth: '100%',
+  maxWidth: '100%',
+  width: '100%',
+  flex: '0 0 100%',
   padding: '2.5rem',
-  background: 'rgba(16, 21, 16, 0.8)',
+  background: 'rgba(0, 0, 0, 0.9)',
   backdropFilter: 'blur(20px)',
-  border: `1px solid ${vars.color.gold}33`,
-  borderRadius: '16px',
+  border: '1px solid rgba(255, 255, 255, 0.15)',
+  borderRadius: '0',
   position: 'relative',
+  boxSizing: 'border-box',
 });
 
 export const reviewHeader = style({
@@ -160,18 +165,18 @@ export const reviewHeader = style({
 export const reviewerName = style({
   fontSize: '1.25rem',
   fontWeight: 700,
-  color: vars.color.cream,
+  color: '#ffffff',
   marginBottom: '0.25rem',
 });
 
 export const reviewDate = style({
   fontSize: '0.875rem',
-  color: vars.color.muted,
+  color: '#e5e5e5',
   opacity: 0.7,
 });
 
 export const reviewStars = style({
-  color: vars.color.gold,
+  color: '#ffffff',
   fontSize: '1.25rem',
   letterSpacing: '0.1rem',
 });
@@ -179,7 +184,7 @@ export const reviewStars = style({
 export const reviewTitle = style({
   fontSize: '1.5rem',
   fontWeight: 700,
-  color: vars.color.gold,
+  color: '#ffffff',
   marginBottom: vars.space.md,
 });
 
@@ -193,14 +198,14 @@ export const reviewText = style({
 
 export const reviewProduct = style({
   fontSize: '0.95rem',
-  color: vars.color.gold,
+  color: '#ffffff',
   fontWeight: 600,
   display: 'flex',
   alignItems: 'center',
   gap: '0.5rem',
   marginTop: vars.space.md,
   paddingTop: vars.space.md,
-  borderTop: `1px solid ${vars.color.gold}20`,
+  borderTop: '1px solid rgba(255, 255, 255, 0.2)',
 });
 
 export const verifiedBadge = style({
@@ -208,11 +213,11 @@ export const verifiedBadge = style({
   alignItems: 'center',
   gap: '0.25rem',
   padding: '0.25rem 0.75rem',
-  background: `${vars.color.gold}20`,
-  border: `1px solid ${vars.color.gold}40`,
+  background: 'rgba(255, 255, 255, 0.1)',
+  border: '1px solid rgba(255, 255, 255, 0.3)',
   borderRadius: vars.radius.full,
   fontSize: '0.8rem',
-  color: vars.color.gold,
+  color: '#ffffff',
   fontWeight: 600,
 });
 
@@ -224,22 +229,22 @@ export const carouselControls = style({
 });
 
 export const carouselButton = style({
-  background: `${vars.color.gold}20`,
-  border: `1px solid ${vars.color.gold}40`,
-  borderRadius: vars.radius.full,
+  background: 'rgba(255, 255, 255, 0.1)',
+  border: '1px solid rgba(255, 255, 255, 0.3)',
+  borderRadius: '0',
   width: '48px',
   height: '48px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  color: vars.color.gold,
+  color: '#ffffff',
   fontSize: '1.5rem',
   cursor: 'pointer',
   transition: 'all 0.3s ease',
   ':hover': {
-    background: vars.color.gold,
-    color: vars.color.bg,
-    transform: 'scale(1.1)',
+    background: '#ffffff',
+    color: '#000000',
+    transform: 'scale(1.05)',
   },
   ':disabled': {
     opacity: 0.3,
@@ -258,18 +263,18 @@ export const carouselDots = style({
 export const dot = style({
   width: '10px',
   height: '10px',
-  borderRadius: '50%',
-  background: `${vars.color.gold}30`,
+  borderRadius: '0',
+  background: 'rgba(255, 255, 255, 0.3)',
   border: 'none',
   cursor: 'pointer',
   transition: 'all 0.3s ease',
   ':hover': {
-    background: `${vars.color.gold}60`,
+    background: 'rgba(255, 255, 255, 0.6)',
   },
 });
 
 export const dotActive = style({
-  background: vars.color.gold,
+  background: '#ffffff',
   width: '28px',
-  borderRadius: vars.radius.full,
+  borderRadius: '0',
 });

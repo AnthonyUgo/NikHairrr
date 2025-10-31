@@ -20,12 +20,12 @@ export default function CartDrawer({
         right: 0,
         width: "420px",
         height: "100vh",
-        background: "rgba(16, 21, 16, 0.97)",
+        background: "rgba(0, 0, 0, 0.98)",
         backdropFilter: "blur(24px)",
-        color: "#D9D7D0",
+        color: "#e5e5e5",
         padding: 0,
-        boxShadow: "-8px 0 32px rgba(0, 0, 0, 0.6)",
-        borderLeft: "1px solid rgba(200, 169, 126, 0.2)",
+        boxShadow: "-8px 0 32px rgba(0, 0, 0, 0.9)",
+        borderLeft: "1px solid rgba(255, 255, 255, 0.15)",
         zIndex: 200,
         display: "flex",
         flexDirection: "column",
@@ -34,23 +34,21 @@ export default function CartDrawer({
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem", padding: "2rem 2rem 0 2rem", flexShrink: 0 }}>
         <h3 style={{ 
-          color: "#EDEAE5", 
+          color: "#ffffff", 
           fontSize: "1.75rem", 
           fontWeight: 700,
           margin: 0,
-          background: "linear-gradient(135deg, #C8A97E 0%, #EDEAE5 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
+          letterSpacing: "0.1em",
         }}>
-          Your Cart
+          YOUR CART
         </h3>
         <button 
           onClick={onClose} 
           style={{ 
-            color: "#C8A97E", 
-            background: "rgba(200, 169, 126, 0.1)", 
-            border: "1px solid rgba(200, 169, 126, 0.3)",
-            borderRadius: "8px",
+            color: "#ffffff", 
+            background: "rgba(255, 255, 255, 0.1)", 
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            borderRadius: "0",
             width: "40px",
             height: "40px",
             display: "flex",
@@ -61,11 +59,11 @@ export default function CartDrawer({
             transition: "all 0.3s ease",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "rgba(200, 169, 126, 0.2)";
+            e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)";
             e.currentTarget.style.transform = "rotate(90deg)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = "rgba(200, 169, 126, 0.1)";
+            e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
             e.currentTarget.style.transform = "rotate(0deg)";
           }}
         >
@@ -77,7 +75,7 @@ export default function CartDrawer({
           <div style={{ 
             textAlign: "center", 
             padding: "3rem 1rem",
-            color: "#D9D7D0", 
+            color: "#e5e5e5", 
             opacity: 0.6,
           }}>
             <p style={{ fontSize: "1.1rem", marginBottom: "0.5rem" }}>Your cart is empty</p>
@@ -91,19 +89,19 @@ export default function CartDrawer({
                 style={{ 
                   marginBottom: "1rem", 
                   padding: "1.25rem",
-                  background: "rgba(40, 56, 32, 0.4)",
+                  background: "rgba(255, 255, 255, 0.05)",
                   backdropFilter: "blur(8px)",
-                  border: "1px solid rgba(200, 169, 126, 0.2)",
-                  borderRadius: "12px",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                  borderRadius: "0",
                   transition: "all 0.3s ease",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "rgba(40, 56, 32, 0.6)";
-                  e.currentTarget.style.borderColor = "rgba(200, 169, 126, 0.4)";
+                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "rgba(40, 56, 32, 0.4)";
-                  e.currentTarget.style.borderColor = "rgba(200, 169, 126, 0.2)";
+                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.15)";
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: "0.75rem" }}>
@@ -111,18 +109,18 @@ export default function CartDrawer({
                   <button style={{
                     background: "transparent",
                     border: "none",
-                    color: "#D9D7D0",
+                    color: "#ffffff",
                     cursor: "pointer",
                     opacity: 0.6,
                     transition: "all 0.2s ease",
                     padding: "0.25rem",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = "#C8A97E";
+                    e.currentTarget.style.color = "#ffffff";
                     e.currentTarget.style.opacity = "1";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "#D9D7D0";
+                    e.currentTarget.style.color = "#ffffff";
                     e.currentTarget.style.opacity = "0.6";
                   }}>
                     <FiTrash2 size={16} />
@@ -131,7 +129,7 @@ export default function CartDrawer({
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span style={{ fontSize: "0.9rem", opacity: 0.7 }}>Qty: 1</span>
                   <span style={{ 
-                    color: "#C8A97E", 
+                    color: "#ffffff", 
                     fontWeight: 700,
                     fontSize: "1.15rem",
                   }}>
@@ -145,38 +143,35 @@ export default function CartDrawer({
       </div>
       <div style={{
         padding: "1.5rem",
-        background: "rgba(40, 56, 32, 0.4)",
+        background: "rgba(255, 255, 255, 0.05)",
         backdropFilter: "blur(8px)",
-        border: "1px solid rgba(200, 169, 126, 0.2)",
-        borderRadius: "12px",
+        border: "1px solid rgba(255, 255, 255, 0.15)",
+        borderRadius: "0",
         marginBottom: "1rem",
         marginLeft: "2rem",
         marginRight: "2rem",
         flexShrink: 0,
       }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-          <span style={{ color: "#D9D7D0", fontSize: "0.95rem" }}>Subtotal</span>
-          <span style={{ color: "#D9D7D0", fontWeight: 600 }}>${total}</span>
+          <span style={{ color: "#e5e5e5", fontSize: "0.95rem" }}>Subtotal</span>
+          <span style={{ color: "#e5e5e5", fontWeight: 600 }}>${total}</span>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-          <span style={{ color: "#D9D7D0", fontSize: "0.95rem" }}>Shipping</span>
-          <span style={{ color: "#C8A97E", fontSize: "0.9rem" }}>FREE</span>
+          <span style={{ color: "#e5e5e5", fontSize: "0.95rem" }}>Shipping</span>
+          <span style={{ color: "#ffffff", fontSize: "0.9rem" }}>FREE</span>
         </div>
         <div style={{ 
-          borderTop: "1px solid rgba(200, 169, 126, 0.3)",
+          borderTop: "1px solid rgba(255, 255, 255, 0.2)",
           paddingTop: "1rem",
           display: "flex", 
           justifyContent: "space-between", 
           alignItems: "center",
         }}>
-          <span style={{ color: "#EDEAE5", fontSize: "1.15rem", fontWeight: 700 }}>Total</span>
+          <span style={{ color: "#ffffff", fontSize: "1.15rem", fontWeight: 700 }}>Total</span>
           <span style={{ 
-            color: "#C8A97E", 
+            color: "#ffffff", 
             fontSize: "1.5rem", 
             fontWeight: 700,
-            background: "linear-gradient(135deg, #C8A97E 0%, #D4A373 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
           }}>
             ${total}
           </span>
@@ -188,29 +183,30 @@ export default function CartDrawer({
         style={{ 
           width: "calc(100% - 4rem)", 
           margin: "0 2rem 2rem 2rem",
-          padding: "1rem 1.5rem", 
-          background: cart.length === 0 ? "rgba(200, 169, 126, 0.3)" : "linear-gradient(135deg, #C8A97E, #D4A373)", 
+          padding: "1.25rem 2rem", 
+          background: cart.length === 0 ? "rgba(255, 255, 255, 0.1)" : "#ffffff", 
           border: "none", 
-          borderRadius: "999px", 
-          color: cart.length === 0 ? "#9aa0a6" : "#101510",
-          fontWeight: 700,
-          fontSize: "1.05rem",
+          borderRadius: "0", 
+          color: cart.length === 0 ? "#666666" : "#000000",
+          fontWeight: 600,
+          fontSize: "0.95rem",
           cursor: cart.length === 0 ? "not-allowed" : "pointer",
-          transition: "all 0.3s ease",
-          boxShadow: cart.length === 0 ? "none" : "0 4px 20px rgba(200, 169, 126, 0.4)",
-          letterSpacing: "0.02em",
+          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          letterSpacing: "0.12em",
           flexShrink: 0,
+          position: "relative",
+          overflow: "hidden",
         }}
         onMouseEnter={(e) => {
           if (cart.length > 0) {
-            (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
-            (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 6px 30px rgba(200, 169, 126, 0.6)";
+            (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.02)";
+            (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 15px 35px rgba(255, 255, 255, 0.2)";
           }
         }}
         onMouseLeave={(e) => {
           if (cart.length > 0) {
-            (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
-            (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 20px rgba(200, 169, 126, 0.4)";
+            (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
+            (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
           }
         }}
       >

@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { FiArrowLeft } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import FooterSignature from "../components/FooterSignature";
 import ReviewCarousel from "../components/ReviewCarousel";
 import ReviewForm from "../components/ReviewForm";
 
 export default function Testimonials() {
   const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
 
   const handleReviewSubmit = (review: any) => {
     console.log('New review submitted:', review);
@@ -15,44 +18,89 @@ export default function Testimonials() {
 
   return (
     <>
-      <div style={{ padding: "6rem 2rem 4rem", color: "#D9D7D0", minHeight: "100vh", maxWidth: "1200px", margin: "0 auto" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "3rem" }}>
-          <h2 style={{ 
-            color: "#EDEAE5", 
-            fontSize: "2.5rem", 
-            fontWeight: 700, 
-            background: "linear-gradient(135deg, #C8A97E 0%, #EDEAE5 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}>
-            What Our Clients Say
-          </h2>
+      <div style={{ padding: "6rem 2rem 4rem", color: "#e5e5e5", minHeight: "100vh", maxWidth: "1200px", margin: "0 auto" }}>
+        {/* Back Button */}
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            background: "transparent",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            color: "#ffffff",
+            padding: "0.75rem 1.5rem",
+            fontSize: "0.9rem",
+            fontWeight: 500,
+            letterSpacing: "0.05em",
+            cursor: "pointer",
+            transition: "all 0.3s ease",
+            marginBottom: "2rem",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.4)";
+            e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
+            e.currentTarget.style.background = "transparent";
+          }}
+        >
+          <FiArrowLeft /> BACK
+        </button>
+
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "3rem", flexWrap: "wrap", gap: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+            <img 
+              src="/small-logo.svg" 
+              alt="NikHairrr Logo" 
+              style={{ 
+                height: "clamp(60px, 8vw, 100px)", 
+                width: "auto",
+                filter: "drop-shadow(0 0 20px rgba(242, 238, 235, 0.3))"
+              }}
+            />
+            <h2 style={{ 
+              color: "#ffffff", 
+              fontSize: "clamp(2rem, 5vw, 3.5rem)", 
+              fontWeight: 700, 
+              letterSpacing: "-0.02em",
+              lineHeight: 1.1,
+            }}>
+              WHAT OUR CLIENTS SAY
+            </h2>
+          </div>
           
           <button
             onClick={() => setShowForm(!showForm)}
             style={{
-              padding: "0.75rem 1.5rem",
-              background: showForm ? "transparent" : "#C8A97E",
-              border: `1px solid #C8A97E`,
-              borderRadius: "999px",
-              color: showForm ? "#C8A97E" : "#101510",
+              padding: "1rem 2rem",
+              background: showForm ? "transparent" : "#ffffff",
+              border: "1px solid #ffffff",
+              borderRadius: "0",
+              color: showForm ? "#ffffff" : "#000000",
               fontWeight: 600,
-              fontSize: "1rem",
+              fontSize: "0.9rem",
               cursor: "pointer",
-              transition: "all 0.3s ease",
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              letterSpacing: "0.1em",
             }}
             onMouseEnter={(e) => {
-              if (!showForm) {
-                e.currentTarget.style.background = "#9B6B3C";
+              if (showForm) {
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+              } else {
+                e.currentTarget.style.transform = "scale(1.02)";
               }
             }}
             onMouseLeave={(e) => {
-              if (!showForm) {
-                e.currentTarget.style.background = "#C8A97E";
+              if (showForm) {
+                e.currentTarget.style.background = "transparent";
+              } else {
+                e.currentTarget.style.transform = "scale(1)";
               }
             }}
           >
-            {showForm ? "Cancel" : "Write a Review"}
+            {showForm ? "CANCEL" : "WRITE A REVIEW"}
           </button>
         </div>
 
@@ -62,11 +110,11 @@ export default function Testimonials() {
           <h3 style={{ 
             fontSize: "1.5rem", 
             fontWeight: 600, 
-            color: "#EDEAE5", 
+            color: "#ffffff", 
             marginBottom: "1.5rem",
-            opacity: 0.9,
+            letterSpacing: "0.05em",
           }}>
-            Top Rated Reviews
+            TOP RATED REVIEWS
           </h3>
           <ReviewCarousel />
         </div>
@@ -75,24 +123,24 @@ export default function Testimonials() {
           <h3 style={{ 
             fontSize: "1.5rem", 
             fontWeight: 600, 
-            color: "#EDEAE5", 
+            color: "#ffffff", 
             marginBottom: "1.5rem",
-            opacity: 0.9,
+            letterSpacing: "0.05em",
           }}>
-            All Reviews
+            ALL REVIEWS
           </h3>
           <div style={{ display: "grid", gap: "1.5rem" }}>
             <blockquote style={{ 
               margin: 0, 
               fontStyle: "italic", 
               fontSize: "1.1rem",
-              padding: "1.5rem",
-              background: "rgba(16, 21, 16, 0.7)",
+              padding: "2rem",
+              background: "rgba(0, 0, 0, 0.9)",
               backdropFilter: "blur(12px)",
-              border: "1px solid rgba(200, 169, 126, 0.3)",
-              borderRadius: "12px",
-              borderLeft: "4px solid #C8A97E",
-              color: "#D9D7D0",
+              border: "1px solid rgba(255, 255, 255, 0.15)",
+              borderRadius: "0",
+              borderLeft: "4px solid #ffffff",
+              color: "#e5e5e5",
               lineHeight: 1.6,
             }}>
               "NikHairrr products transformed my curls - the quality is unmatched!"
@@ -102,13 +150,13 @@ export default function Testimonials() {
               margin: 0, 
               fontStyle: "italic", 
               fontSize: "1.1rem",
-              padding: "1.5rem",
-              background: "rgba(16, 21, 16, 0.7)",
+              padding: "2rem",
+              background: "rgba(0, 0, 0, 0.9)",
               backdropFilter: "blur(12px)",
-              border: "1px solid rgba(200, 169, 126, 0.3)",
-              borderRadius: "12px",
-              borderLeft: "4px solid #C8A97E",
-              color: "#D9D7D0",
+              border: "1px solid rgba(255, 255, 255, 0.15)",
+              borderRadius: "0",
+              borderLeft: "4px solid #ffffff",
+              color: "#e5e5e5",
               lineHeight: 1.6,
             }}>
               "Best salon experience I have ever had. Professional service and amazing results!"
