@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Testimonials from "./pages/Testimonials";
 import CartDrawer from "./components/CartDrawer";
+import ScrollToTop from "./components/ScrollToTop";
 import { appBackground } from "./styles/background.css";
 import Shop from "./pages/Shop";
 import ShopBundles from "./pages/ShopBundles";
@@ -44,6 +45,7 @@ export default function App() {
     return (
   <div className={appBackground}>
     <Router>
+      <ScrollToTop />
       <Navbar onCartClick={() => setCartOpen(!cartOpen)} />
       <Routes>
         <Route path="/" element={<Home />} />
