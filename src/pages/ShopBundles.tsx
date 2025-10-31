@@ -21,7 +21,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
   );
 
   return (
-    <div style={{ padding: "6rem 2rem", color: "#e5e5e5", minHeight: "100vh", maxWidth: "1400px", margin: "0 auto" }}>
+    <div style={{ padding: "6rem clamp(1rem, 4vw, 2rem)", color: "#e5e5e5", minHeight: "100vh", maxWidth: "1400px", margin: "0 auto" }}>
       {/* Back Button */}
       <button
         onClick={() => navigate("/shop")}
@@ -56,7 +56,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
         <div>
           <h2 style={{ 
             color: "#ffffff", 
-            fontSize: "2.5rem", 
+            fontSize: "clamp(1.5rem, 5vw, 2.5rem)", 
             fontWeight: 700,
             marginBottom: "0.5rem",
             letterSpacing: "0.1em",
@@ -133,7 +133,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
       <div style={{ 
         display: viewMode === 'grid' ? "grid" : "flex",
         flexDirection: viewMode === 'list' ? "column" : undefined,
-        gridTemplateColumns: viewMode === 'grid' ? "repeat(auto-fit, minmax(300px, 1fr))" : undefined,
+        gridTemplateColumns: viewMode === 'grid' ? "repeat(auto-fit, minmax(min(100%, 280px), 1fr))" : undefined,
         gap: "2rem",
       }}>
         {sortedBundles.map((b) => (

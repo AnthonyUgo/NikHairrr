@@ -1,13 +1,10 @@
 import { useState } from "react";
-import { FiArrowLeft } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
 import FooterSignature from "../components/FooterSignature";
 import ReviewCarousel from "../components/ReviewCarousel";
 import ReviewForm from "../components/ReviewForm";
 
 export default function Testimonials() {
   const [showForm, setShowForm] = useState(false);
-  const navigate = useNavigate();
 
   const handleReviewSubmit = (review: any) => {
     console.log('New review submitted:', review);
@@ -18,51 +15,21 @@ export default function Testimonials() {
 
   return (
     <>
-      <div style={{ padding: "6rem 2rem 4rem", color: "#e5e5e5", minHeight: "100vh", maxWidth: "1200px", margin: "0 auto" }}>
-        {/* Back Button */}
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            background: "transparent",
-            border: "1px solid rgba(255, 255, 255, 0.2)",
-            color: "#ffffff",
-            padding: "0.75rem 1.5rem",
-            fontSize: "0.9rem",
-            fontWeight: 500,
-            letterSpacing: "0.05em",
-            cursor: "pointer",
-            transition: "all 0.3s ease",
-            marginBottom: "2rem",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.4)";
-            e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
-            e.currentTarget.style.background = "transparent";
-          }}
-        >
-          <FiArrowLeft /> BACK
-        </button>
-
+      <div style={{ padding: "6rem clamp(1rem, 4vw, 2rem) 4rem", color: "#e5e5e5", minHeight: "100vh", maxWidth: "1200px", margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "3rem", flexWrap: "wrap", gap: "1rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "clamp(0.75rem, 3vw, 1.5rem)", flexWrap: "wrap" }}>
             <img 
               src="/small-logo.svg" 
               alt="NikHairrr Logo" 
               style={{ 
-                height: "clamp(60px, 8vw, 100px)", 
+                height: "clamp(50px, 6vw, 80px)", 
                 width: "auto",
                 filter: "drop-shadow(0 0 20px rgba(242, 238, 235, 0.3))"
               }}
             />
             <h2 style={{ 
               color: "#ffffff", 
-              fontSize: "clamp(2rem, 5vw, 3.5rem)", 
+              fontSize: "clamp(1.5rem, 5vw, 3.5rem)", 
               fontWeight: 700, 
               letterSpacing: "-0.02em",
               lineHeight: 1.1,

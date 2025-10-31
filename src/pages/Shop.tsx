@@ -6,7 +6,7 @@ export default function Shop() {
   const navigate = useNavigate();
 
   return (
-    <div style={{ padding: "6rem 2rem", minHeight: "100vh", maxWidth: "1400px", margin: "0 auto" }}>
+    <div style={{ padding: "6rem clamp(1rem, 4vw, 2rem)", minHeight: "100vh", maxWidth: "1400px", margin: "0 auto" }}>
       <div style={{ marginBottom: "4rem" }}>
         <h2 style={{ 
           color: "#ffffff", 
@@ -26,8 +26,8 @@ export default function Shop() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
-          gap: "3rem",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 350px), 1fr))",
+          gap: "clamp(1.5rem, 4vw, 3rem)",
         }}
       >
         {/* Bundles Card */}

@@ -5,23 +5,42 @@ export default function Navbar({ onCartClick }: { onCartClick: () => void }) {
   const navigate = useNavigate();
 
   return (
-    <nav
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "0.75rem 2rem",
-        background: "rgba(0, 0, 0, 0.95)",
-        backdropFilter: "blur(20px)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-        boxShadow: "0 4px 24px rgba(0, 0, 0, 0.8)",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-      }}
-    >
+    <>
+      <style>{`
+        .nav-links {
+          display: flex;
+          gap: 2rem;
+          align-items: center;
+        }
+        .nav-link-text {
+          display: inline;
+        }
+        @media (max-width: 768px) {
+          .nav-links {
+            gap: 0.5rem;
+          }
+          .nav-link-text {
+            display: none;
+          }
+        }
+      `}</style>
+      <nav
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0.75rem clamp(1rem, 3vw, 2rem)",
+          background: "rgba(0, 0, 0, 0.95)",
+          backdropFilter: "blur(20px)",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+          boxShadow: "0 4px 24px rgba(0, 0, 0, 0.8)",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+        }}
+      >
       {/* Logo Button */}
       <button
         onClick={() => navigate("/")}
@@ -65,7 +84,7 @@ export default function Navbar({ onCartClick }: { onCartClick: () => void }) {
       </button>
 
       {/* Tabs */}
-      <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+      <div className="nav-links">
         <Link
           to="/"
           style={{
@@ -89,7 +108,7 @@ export default function Navbar({ onCartClick }: { onCartClick: () => void }) {
             e.currentTarget.style.background = "transparent";
           }}
         >
-          <FiHome size={18} /> Home
+          <FiHome size={18} /> <span className="nav-link-text">Home</span>
         </Link>
         <Link
           to="/shop"
@@ -114,7 +133,7 @@ export default function Navbar({ onCartClick }: { onCartClick: () => void }) {
             e.currentTarget.style.background = "transparent";
           }}
         >
-          <FiShoppingBag size={18} /> Shop
+          <FiShoppingBag size={18} /> <span className="nav-link-text">Shop</span>
         </Link>
         <Link
           to="/testimonials"
@@ -139,7 +158,7 @@ export default function Navbar({ onCartClick }: { onCartClick: () => void }) {
             e.currentTarget.style.background = "transparent";
           }}
         >
-          <FiMessageCircle size={18} /> Testimonials
+          <FiMessageCircle size={18} /> <span className="nav-link-text">Testimonials</span>
         </Link>
         <button
           onClick={onCartClick}
@@ -151,7 +170,7 @@ export default function Navbar({ onCartClick }: { onCartClick: () => void }) {
             background: "#ffffff",
             border: "1px solid #ffffff",
             borderRadius: "999px",
-            padding: "0.65rem 1.5rem",
+            padding: "0.65rem clamp(0.75rem, 2vw, 1.5rem)",
             cursor: "pointer",
             fontWeight: 700,
             fontSize: "0.95rem",
@@ -167,9 +186,10 @@ export default function Navbar({ onCartClick }: { onCartClick: () => void }) {
             e.currentTarget.style.boxShadow = "0 4px 15px rgba(255, 255, 255, 0.3)";
           }}
         >
-          <FiShoppingCart size={18} /> Cart
+          <FiShoppingCart size={18} /> <span className="nav-link-text">Cart</span>
         </button>
       </div>
     </nav>
+    </>
   );
 }

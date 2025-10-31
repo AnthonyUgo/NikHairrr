@@ -14,7 +14,7 @@ export default function Home() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "2rem",
+        padding: "clamp(1rem, 5vw, 2rem)",
         position: "relative",
       }}>
         {/* Background gradient */}
@@ -29,8 +29,8 @@ export default function Home() {
           maxWidth: "1400px",
           width: "100%",
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "4rem",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 400px), 1fr))",
+          gap: "clamp(2rem, 4vw, 4rem)",
           alignItems: "center",
           position: "relative",
           zIndex: 1,
