@@ -6,7 +6,7 @@ export default function Shop() {
   const navigate = useNavigate();
 
   return (
-    <div style={{ padding: "6rem clamp(1rem, 4vw, 2rem)", minHeight: "100vh", maxWidth: "1400px", margin: "0 auto" }}>
+    <div style={{ padding: "clamp(5rem, 10vw, 6rem) clamp(1rem, 4vw, 2rem) 2rem", minHeight: "100vh", maxWidth: "1400px", margin: "0 auto" }}>
       <div style={{ marginBottom: "4rem" }}>
         <h2 style={{ 
           color: "#ffffff", 

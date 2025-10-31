@@ -15,7 +15,7 @@ export default function Testimonials() {
 
   return (
     <>
-      <div style={{ padding: "6rem clamp(1rem, 4vw, 2rem) 4rem", color: "#e5e5e5", minHeight: "100vh", maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{ padding: "clamp(5rem, 10vw, 6rem) clamp(1rem, 4vw, 2rem) 4rem", color: "#e5e5e5", minHeight: "100vh", maxWidth: "1200px", margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "3rem", flexWrap: "wrap", gap: "1rem" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "clamp(0.75rem, 3vw, 1.5rem)", flexWrap: "wrap" }}>
             <img 

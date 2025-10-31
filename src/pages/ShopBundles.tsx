@@ -21,7 +21,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
   );
 
   return (
-    <div style={{ padding: "6rem clamp(1rem, 4vw, 2rem)", color: "#e5e5e5", minHeight: "100vh", maxWidth: "1400px", margin: "0 auto" }}>
+    <div style={{ padding: "clamp(5rem, 10vw, 6rem) clamp(1rem, 4vw, 2rem) 2rem", color: "#e5e5e5", minHeight: "100vh", maxWidth: "1400px", margin: "0 auto" }}>
       {/* Back Button */}
       <button
         onClick={() => navigate("/shop")}

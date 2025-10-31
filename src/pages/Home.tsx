@@ -14,7 +14,7 @@ export default function Home() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "clamp(1rem, 5vw, 2rem)",
+        padding: "clamp(5rem, 8vw, 2rem) clamp(1rem, 5vw, 2rem) clamp(1rem, 5vw, 2rem)",
         position: "relative",
       }}>
         {/* Background gradient */}
@@ -215,7 +215,7 @@ export default function Home() {
               }} />
               
               <img 
-                src="/nh-logo.svg" 
+                src="/hero-logo.svg" 
                 alt="NikHairrr" 
                 style={{
                   width: "100%",
