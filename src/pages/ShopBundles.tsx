@@ -3,15 +3,19 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiGrid, FiList } from "react-icons/fi";
 
-type Product = { id: number; name: string; price: number; image: string };
+type Product = { id: number; name: string; price: number; image: string; size?: string; quantity: number };
 
-const bundles: Product[] = [
+const bundles: Omit<Product, 'size' | 'quantity'>[] = [
   { id: 1, name: "Body Wave Bundle", price: 85, image: "/bundles-1.jpeg" },
   { id: 2, name: "Straight Bundle", price: 90, image: "/bundles-2.jpeg" },
   { id: 3, name: "Deep Wave Bundle", price: 95, image: "/bundles-3.jpeg" },
 ];
 
+const SIZES = ['12"', '14"', '16"', '18"', '20"', '22"', '24"', '26"'];
+
 export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product) => void }) {
+  const [selectedSizes, setSelectedSizes] = useState<{[key: number]: string}>({});
+  const [selectedQuantities, setSelectedQuantities] = useState<{[key: number]: number}>({});
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortOrder, setSortOrder] = useState<'low-high' | 'high-low'>('low-high');
@@ -179,9 +183,71 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                 <p style={{ color: "#ffffff", fontWeight: 700, fontSize: "1.5rem", marginBottom: "1.25rem" }}>
                   ${b.price}
                 </p>
+                
+                {/* Size Selector */}
+                <div style={{ marginBottom: "1rem" }}>
+                  <label style={{ display: "block", color: "#e5e5e5", fontSize: "0.85rem", marginBottom: "0.5rem", fontWeight: 600, letterSpacing: "0.05em" }}>
+                    SIZE
+                  </label>
+                  <select
+                    value={selectedSizes[b.id] || ''}
+                    onChange={(e) => setSelectedSizes({...selectedSizes, [b.id]: e.target.value})}
+                    style={{
+                      width: "100%",
+                      padding: "0.75rem",
+                      background: "rgba(255, 255, 255, 0.05)",
+                      border: "1px solid rgba(255, 255, 255, 0.2)",
+                      borderRadius: "0",
+                      color: "#ffffff",
+                      fontSize: "0.9rem",
+                      cursor: "pointer",
+                      fontWeight: 600,
+                    }}
+                  >
+                    <option value="" style={{ background: "#000000" }}>Select Size</option>
+                    {SIZES.map(size => (
+                      <option key={size} value={size} style={{ background: "#000000" }}>{size}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Quantity Selector */}
+                <div style={{ marginBottom: "1.25rem" }}>
+                  <label style={{ display: "block", color: "#e5e5e5", fontSize: "0.85rem", marginBottom: "0.5rem", fontWeight: 600, letterSpacing: "0.05em" }}>
+                    QUANTITY
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="10"
+                    value={selectedQuantities[b.id] || 1}
+                    onChange={(e) => setSelectedQuantities({...selectedQuantities, [b.id]: parseInt(e.target.value) || 1})}
+                    style={{
+                      width: "100%",
+                      padding: "0.75rem",
+                      background: "rgba(255, 255, 255, 0.05)",
+                      border: "1px solid rgba(255, 255, 255, 0.2)",
+                      borderRadius: "0",
+                      color: "#ffffff",
+                      fontSize: "0.9rem",
+                      fontWeight: 600,
+                    }}
+                  />
+                </div>
               </div>
               <button
-                onClick={() => onAddToCart(b)}
+                onClick={() => {
+                  const size = selectedSizes[b.id];
+                  if (!size) {
+                    alert('Please select a size');
+                    return;
+                  }
+                  onAddToCart({
+                    ...b,
+                    size,
+                    quantity: selectedQuantities[b.id] || 1
+                  });
+                }}
                 style={{ 
                   background: "#ffffff",
                   border: "none", 

@@ -10,7 +10,7 @@ import Shop from "./pages/Shop";
 import ShopBundles from "./pages/ShopBundles";
 import ShopWigs from "./pages/ShopWigs";
 
-type Product = { id: number; name: string; price: number };
+type Product = { id: number; name: string; price: number; size?: string; quantity: number };
 
 export default function App() {
   const [cart, setCart] = useState<Product[]>([]);
@@ -21,10 +21,30 @@ export default function App() {
     setCartOpen(true);
   };
 
+  const updateQuantity = (index: number, newQuantity: number) => {
+    setCart((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], quantity: newQuantity };
+      return updated;
+    });
+  };
+
+  const updateSize = (index: number, newSize: string) => {
+    setCart((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], size: newSize };
+      return updated;
+    });
+  };
+
+  const removeItem = (index: number) => {
+    setCart((prev) => prev.filter((_, i) => i !== index));
+  };
+
     return (
   <div className={appBackground}>
     <Router>
-      <Navbar onCartClick={() => setCartOpen(true)} />
+      <Navbar onCartClick={() => setCartOpen(!cartOpen)} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
@@ -32,7 +52,15 @@ export default function App() {
         <Route path="/shop/wigs" element={<ShopWigs onAddToCart={addToCart} />} />
         <Route path="/testimonials" element={<Testimonials />} />
       </Routes>
-      {cartOpen && <CartDrawer cart={cart} onClose={() => setCartOpen(false)} />}
+      {cartOpen && (
+        <CartDrawer 
+          cart={cart} 
+          onClose={() => setCartOpen(false)}
+          onUpdateQuantity={updateQuantity}
+          onUpdateSize={updateSize}
+          onRemoveItem={removeItem}
+        />
+      )}
     </Router>
   </div>
 );

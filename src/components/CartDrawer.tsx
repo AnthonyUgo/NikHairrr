@@ -1,16 +1,24 @@
 // src/components/CartDrawer.tsx
 import { FiX, FiTrash2 } from "react-icons/fi";
 
-type Product = { id: number; name: string; price: number };
+type Product = { id: number; name: string; price: number; size?: string; quantity: number };
 
 export default function CartDrawer({
   cart,
   onClose,
+  onUpdateQuantity,
+  onUpdateSize,
+  onRemoveItem,
 }: {
   cart: Product[];
   onClose: () => void;
+  onUpdateQuantity: (index: number, newQuantity: number) => void;
+  onUpdateSize: (index: number, newSize: string) => void;
+  onRemoveItem: (index: number) => void;
 }) {
-  const total = cart.reduce((sum, p) => sum + p.price, 0);
+  const total = cart.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+  
+  const sizes = ["12\"", "14\"", "16\"", "18\"", "20\"", "22\"", "24\"", "26\""];
 
   return (
     <div
@@ -105,35 +113,117 @@ export default function CartDrawer({
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: "0.75rem" }}>
-                  <span style={{ fontWeight: 600, fontSize: "1.05rem" }}>{item.name}</span>
-                  <button style={{
-                    background: "transparent",
-                    border: "none",
-                    color: "#ffffff",
-                    cursor: "pointer",
-                    opacity: 0.6,
-                    transition: "all 0.2s ease",
-                    padding: "0.25rem",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = "#ffffff";
-                    e.currentTarget.style.opacity = "1";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "#ffffff";
-                    e.currentTarget.style.opacity = "0.6";
-                  }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, fontSize: "1.05rem", marginBottom: "0.5rem" }}>{item.name}</div>
+                    
+                    {/* Size Selector */}
+                    {item.size && (
+                      <div style={{ marginTop: "0.5rem" }}>
+                        <label style={{ fontSize: "0.75rem", opacity: 0.7, display: "block", marginBottom: "0.25rem" }}>
+                          Size:
+                        </label>
+                        <select
+                          value={item.size}
+                          onChange={(e) => onUpdateSize(idx, e.target.value)}
+                          style={{
+                            background: "rgba(255, 255, 255, 0.1)",
+                            border: "1px solid rgba(255, 255, 255, 0.2)",
+                            color: "#ffffff",
+                            padding: "0.4rem 0.6rem",
+                            fontSize: "0.85rem",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {sizes.map(size => (
+                            <option key={size} value={size} style={{ background: "#000000" }}>
+                              {size}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <button 
+                    onClick={() => onRemoveItem(idx)}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "#ffffff",
+                      cursor: "pointer",
+                      opacity: 0.6,
+                      transition: "all 0.2s ease",
+                      padding: "0.25rem",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = "#ff4444";
+                      e.currentTarget.style.opacity = "1";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = "#ffffff";
+                      e.currentTarget.style.opacity = "0.6";
+                    }}
+                  >
                     <FiTrash2 size={16} />
                   </button>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: "0.9rem", opacity: 0.7 }}>Qty: 1</span>
+                
+                {/* Quantity Controls and Price */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.75rem", paddingTop: "0.75rem", borderTop: "1px solid rgba(255, 255, 255, 0.1)" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <span style={{ fontSize: "0.85rem", opacity: 0.7 }}>Qty:</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "rgba(255, 255, 255, 0.1)", borderRadius: "4px", padding: "0.25rem" }}>
+                      <button
+                        onClick={() => onUpdateQuantity(idx, Math.max(1, item.quantity - 1))}
+                        style={{
+                          background: "transparent",
+                          border: "none",
+                          color: "#ffffff",
+                          cursor: "pointer",
+                          fontSize: "1.1rem",
+                          padding: "0.25rem 0.5rem",
+                          lineHeight: 1,
+                          transition: "all 0.2s ease",
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = "#cccccc"}
+                        onMouseLeave={(e) => e.currentTarget.style.color = "#ffffff"}
+                      >
+                        −
+                      </button>
+                      <span style={{ 
+                        minWidth: "30px", 
+                        textAlign: "center",
+                        fontWeight: 600,
+                        fontSize: "0.95rem"
+                      }}>
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() => onUpdateQuantity(idx, item.quantity + 1)}
+                        style={{
+                          background: "transparent",
+                          border: "none",
+                          color: "#ffffff",
+                          cursor: "pointer",
+                          fontSize: "1.1rem",
+                          padding: "0.25rem 0.5rem",
+                          lineHeight: 1,
+                          transition: "all 0.2s ease",
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = "#cccccc"}
+                        onMouseLeave={(e) => e.currentTarget.style.color = "#ffffff"}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
                   <span style={{ 
                     color: "#ffffff", 
                     fontWeight: 700,
                     fontSize: "1.15rem",
                   }}>
-                    ${item.price}
+                    ${item.price * item.quantity}
                   </span>
                 </div>
               </li>
