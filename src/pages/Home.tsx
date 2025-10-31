@@ -215,11 +215,13 @@ export default function Home() {
               }} />
               
               <img 
-                src="/hero-logo.svg" 
+                src="/small-logo.svg" 
                 alt="NikHairrr" 
                 style={{
                   width: "100%",
                   height: "auto",
+                  maxWidth: "500px",
+                  margin: "0 auto",
                   filter: "drop-shadow(0 0 40px rgba(255, 255, 255, 0.1))",
                 }}
               />
