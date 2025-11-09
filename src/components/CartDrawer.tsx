@@ -1,7 +1,7 @@
 // src/components/CartDrawer.tsx
 import { useState } from "react";
 import { FiX, FiTrash2 } from "react-icons/fi";
-import { redirectToMvmntPay, estimateTotal } from "../utils/mvmntpay";
+import { redirectToMvmntPay } from "../utils/mvmntpay";
 import { getPriceId } from "../utils/productPrices";
 
 type Product = { id: number; name: string; price: number; size?: string; quantity: number };
@@ -23,8 +23,6 @@ export default function CartDrawer({
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   
   const subtotal = cart.reduce((sum, p) => sum + (p.price * p.quantity), 0);
-  const total = estimateTotal(subtotal);
-  const platformFee = total - subtotal;
   
   const sizes = ["12\"", "14\"", "16\"", "18\"", "20\"", "22\"", "24\"", "26\"", "28\"", "30\""];
 
@@ -299,13 +297,9 @@ export default function CartDrawer({
         marginRight: "2rem",
         flexShrink: 0,
       }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
           <span style={{ color: "#e5e5e5", fontSize: "0.95rem" }}>Subtotal</span>
           <span style={{ color: "#e5e5e5", fontWeight: 600 }}>${subtotal.toFixed(2)}</span>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-          <span style={{ color: "#e5e5e5", fontSize: "0.85rem" }}>Platform Fee (2.94%)</span>
-          <span style={{ color: "#e5e5e5", fontSize: "0.9rem" }}>${platformFee.toFixed(2)}</span>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
           <span style={{ color: "#e5e5e5", fontSize: "0.95rem" }}>Shipping</span>
@@ -318,7 +312,8 @@ export default function CartDrawer({
           fontStyle: "italic",
           lineHeight: 1.5,
         }}>
-          *Free shipping available for Houston area
+          *Free shipping available for Houston area<br />
+          *Platform fees & taxes calculated at checkout
         </div>
         <div style={{ 
           borderTop: "1px solid rgba(255, 255, 255, 0.2)",
@@ -327,13 +322,13 @@ export default function CartDrawer({
           justifyContent: "space-between", 
           alignItems: "center",
         }}>
-          <span style={{ color: "#ffffff", fontSize: "1.15rem", fontWeight: 700 }}>Total</span>
+          <span style={{ color: "#ffffff", fontSize: "1.15rem", fontWeight: 700 }}>Subtotal</span>
           <span style={{ 
             color: "#ffffff", 
             fontSize: "1.5rem", 
             fontWeight: 700,
           }}>
-            ${total.toFixed(2)}
+            ${subtotal.toFixed(2)}
           </span>
         </div>
         <div style={{ 

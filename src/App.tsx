@@ -12,6 +12,9 @@ import ShopBundles from "./pages/ShopBundles";
 import ShopWigs from "./pages/ShopWigs";
 import ShopClosures from "./pages/ShopClosures";
 import ShopFrontals from "./pages/ShopFrontals";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import RefundPolicy from "./pages/RefundPolicy";
 
 type Product = { id: number; name: string; price: number; size?: string; quantity: number };
 
@@ -77,6 +80,9 @@ export default function App() {
         <Route path="/shop/closures" element={<ShopClosures onAddToCart={addToCart} />} />
         <Route path="/shop/frontals" element={<ShopFrontals onAddToCart={addToCart} />} />
         <Route path="/testimonials" element={<Testimonials />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-of-service" element={<TermsOfService />} />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
       </Routes>
       {cartOpen && (
         <CartDrawer 

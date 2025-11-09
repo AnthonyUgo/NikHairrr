@@ -1,0 +1,10 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://nikhairrr.com/sitemap.xml
+
+# Disallow admin and checkout paths
+Disallow: /admin/
+Disallow: /checkout/
