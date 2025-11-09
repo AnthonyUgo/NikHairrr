@@ -40,15 +40,20 @@ export interface MvmntPayPaymentIntent {
  * @param priceId - Stripe Price ID for the product
  * @param quantity - Number of items (default: 1)
  * @param successUrl - URL to redirect after successful payment
+ * @param cancelUrl - URL to redirect when user cancels/goes back
  */
 export function redirectToMvmntPay(
   priceId: string,
   quantity: number = 1,
-  successUrl?: string
+  successUrl?: string,
+  cancelUrl?: string
 ): void {
-  // Store success URL in session storage
+  // Store URLs in session storage
   if (successUrl) {
     sessionStorage.setItem('mvmntpay_success_url', successUrl);
+  }
+  if (cancelUrl) {
+    sessionStorage.setItem('mvmntpay_cancel_url', cancelUrl);
   }
   
   // Build checkout URL (using 'client' param like Elite Aces)
@@ -68,6 +73,9 @@ export function redirectToMvmntPay(
   // Add optional URLs if provided
   if (successUrl) {
     params.append('successUrl', successUrl);
+  }
+  if (cancelUrl) {
+    params.append('cancelUrl', cancelUrl);
   }
   
   const checkoutUrl = `${MVMNTPAY_BASE_URL}/checkout?${params.toString()}`;
@@ -171,4 +179,5 @@ export function estimateTotal(baseAmount: number, feePercent: number = 2.94): nu
  */
 export function clearCheckoutData(): void {
   sessionStorage.removeItem('mvmntpay_success_url');
+  sessionStorage.removeItem('mvmntpay_cancel_url');
 }

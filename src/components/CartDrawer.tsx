@@ -62,7 +62,8 @@ export default function CartDrawer({
       redirectToMvmntPay(
         priceId,
         hafyBobItem.quantity,
-        `${window.location.origin}/success`
+        `${window.location.origin}/success`,
+        window.location.href  // Return to current page (shop with cart open)
       );
       
     } catch (error) {

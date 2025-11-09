@@ -1,6 +1,6 @@
 // App.tsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Testimonials from "./pages/Testimonials";
@@ -15,9 +15,29 @@ import ShopFrontals from "./pages/ShopFrontals";
 
 type Product = { id: number; name: string; price: number; size?: string; quantity: number };
 
+const CART_STORAGE_KEY = 'nikhairrr_cart';
+
 export default function App() {
-  const [cart, setCart] = useState<Product[]>([]);
+  // Initialize cart from localStorage
+  const [cart, setCart] = useState<Product[]>(() => {
+    try {
+      const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+      console.error('Failed to load cart from localStorage:', error);
+      return [];
+    }
+  });
   const [cartOpen, setCartOpen] = useState(false);
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    } catch (error) {
+      console.error('Failed to save cart to localStorage:', error);
+    }
+  }, [cart]);
 
   const addToCart = (product: Product) => {
     setCart((prev) => [...prev, product]);
