@@ -177,6 +177,154 @@ export default function Shop() {
             </div>
           </div>
         </button>
+
+        {/* Closures Card */}
+        <button
+          onClick={() => navigate("/shop/closures")}
+          style={{
+            background: "transparent",
+            border: "1px solid rgba(255, 255, 255, 0.15)",
+            overflow: "hidden",
+            color: "white",
+            textAlign: "left",
+            cursor: "pointer",
+            padding: 0,
+            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+            position: "relative",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
+            const img = e.currentTarget.querySelector('img') as HTMLImageElement;
+            if (img) img.style.transform = "scale(1.05)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.15)";
+            const img = e.currentTarget.querySelector('img') as HTMLImageElement;
+            if (img) img.style.transform = "scale(1)";
+          }}
+        >
+          <div style={{ overflow: "hidden", position: "relative", aspectRatio: "4/5" }}>
+            <img
+              src="/face-1.jpeg"
+              alt="Closures"
+              style={{ 
+                width: "100%", 
+                height: "100%", 
+                objectFit: "cover",
+                transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
+            />
+            <div style={{
+              position: "absolute",
+              inset: 0,
+              background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%)",
+            }} />
+          </div>
+          <div style={{ padding: "2rem" }}>
+            <h3 style={{ 
+              fontSize: "1.75rem", 
+              fontWeight: 700, 
+              color: "#ffffff", 
+              letterSpacing: "0.08em",
+              marginBottom: "1rem",
+            }}>
+              CLOSURES
+            </h3>
+            <p style={{ 
+              fontSize: "0.95rem", 
+              lineHeight: 1.6, 
+              color: "#e5e5e5",
+              opacity: 0.8,
+            }}>
+              Premium lace closures for a natural, seamless finish to your install.
+            </p>
+            <div style={{
+              marginTop: "1.5rem",
+              fontSize: "0.85rem",
+              color: "#ffffff",
+              letterSpacing: "0.15em",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+            }}>
+              SHOP NOW <span style={{ fontSize: "1.2rem" }}>→</span>
+            </div>
+          </div>
+        </button>
+
+        {/* Frontals Card */}
+        <button
+          onClick={() => navigate("/shop/frontals")}
+          style={{
+            background: "transparent",
+            border: "1px solid rgba(255, 255, 255, 0.15)",
+            overflow: "hidden",
+            color: "white",
+            textAlign: "left",
+            cursor: "pointer",
+            padding: 0,
+            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+            position: "relative",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
+            const img = e.currentTarget.querySelector('img') as HTMLImageElement;
+            if (img) img.style.transform = "scale(1.05)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.15)";
+            const img = e.currentTarget.querySelector('img') as HTMLImageElement;
+            if (img) img.style.transform = "scale(1)";
+          }}
+        >
+          <div style={{ overflow: "hidden", position: "relative", aspectRatio: "4/5" }}>
+            <img
+              src="/face-2.jpeg"
+              alt="Frontals"
+              style={{ 
+                width: "100%", 
+                height: "100%", 
+                objectFit: "cover",
+                transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
+            />
+            <div style={{
+              position: "absolute",
+              inset: 0,
+              background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%)",
+            }} />
+          </div>
+          <div style={{ padding: "2rem" }}>
+            <h3 style={{ 
+              fontSize: "1.75rem", 
+              fontWeight: 700, 
+              color: "#ffffff", 
+              letterSpacing: "0.08em",
+              marginBottom: "1rem",
+            }}>
+              FRONTALS
+            </h3>
+            <p style={{ 
+              fontSize: "0.95rem", 
+              lineHeight: 1.6, 
+              color: "#e5e5e5",
+              opacity: 0.8,
+            }}>
+              Premium lace frontals for maximum versatility and styling freedom.
+            </p>
+            <div style={{
+              marginTop: "1.5rem",
+              fontSize: "0.85rem",
+              color: "#ffffff",
+              letterSpacing: "0.15em",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+            }}>
+              SHOP NOW <span style={{ fontSize: "1.2rem" }}>→</span>
+            </div>
+          </div>
+        </button>
       </div>
       
       <FooterSignature />

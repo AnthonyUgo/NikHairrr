@@ -3,15 +3,50 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiGrid, FiList } from "react-icons/fi";
 
-type Product = { id: number; name: string; price: number; image: string; size?: string; quantity: number };
+type Product = { id: number; name: string; price: number; image: string; size?: string; quantity: number; available?: boolean; description?: string; priceMap?: {[key: string]: number} };
 
-const bundles: Omit<Product, 'size' | 'quantity'>[] = [
-  { id: 1, name: "Body Wave Bundle", price: 85, image: "/bundles-1.jpeg" },
-  { id: 2, name: "Straight Bundle", price: 90, image: "/bundles-2.jpeg" },
-  { id: 3, name: "Deep Wave Bundle", price: 95, image: "/bundles-3.jpeg" },
+const SIZES_WITH_PRICES: {size: string; price: number}[] = [
+  { size: '12"', price: 120 },
+  { size: '14"', price: 135 },
+  { size: '16"', price: 155 },
+  { size: '18"', price: 175 },
+  { size: '20"', price: 195 },
+  { size: '22"', price: 225 },
+  { size: '24"', price: 255 },
+  { size: '26"', price: 285 },
+  { size: '28"', price: 310 },
+  { size: '30"', price: 340 },
 ];
 
-const SIZES = ['12"', '14"', '16"', '18"', '20"', '22"', '24"', '26"'];
+const bundles: Omit<Product, 'size' | 'quantity'>[] = [
+  { 
+    id: 1, 
+    name: "Body Wave Bundle", 
+    price: 120, // Starting price
+    image: "/bundles-1.jpeg", 
+    available: true,
+    description: "Premium body wave texture\nTotal weight 100g per bundle\nNatural bouncy wave pattern\nDouble drawn quality",
+    priceMap: Object.fromEntries(SIZES_WITH_PRICES.map(({size, price}) => [size, price]))
+  },
+  { 
+    id: 2, 
+    name: "Straight Bundle", 
+    price: 90, 
+    image: "/bundles-2.jpeg", 
+    available: false,
+    description: "Silky straight texture\nTotal weight 100g per bundle\nSleek and smooth finish"
+  },
+  { 
+    id: 3, 
+    name: "Deep Wave Bundle", 
+    price: 95, 
+    image: "/bundles-3.jpeg", 
+    available: false,
+    description: "Luxurious deep wave texture\nTotal weight 100g per bundle\nDefined curl pattern"
+  },
+];
+
+const SIZES = ['12"', '14"', '16"', '18"', '20"', '22"', '24"', '26"', '28"', '30"'];
 
 export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product) => void }) {
   const [selectedSizes, setSelectedSizes] = useState<{[key: number]: string}>({});
@@ -23,6 +58,14 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
   const sortedBundles = [...bundles].sort((a, b) => 
     sortOrder === 'low-high' ? a.price - b.price : b.price - a.price
   );
+
+  // Get dynamic price based on selected size
+  const getPrice = (bundle: typeof bundles[0], size?: string) => {
+    if (bundle.priceMap && size && bundle.priceMap[size]) {
+      return bundle.priceMap[size];
+    }
+    return bundle.price;
+  };
 
   return (
     <div style={{ padding: "clamp(5rem, 10vw, 6rem) clamp(1rem, 4vw, 2rem) 2rem", color: "#e5e5e5", minHeight: "100vh", maxWidth: "1400px", margin: "0 auto" }}>
@@ -140,7 +183,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
         gridTemplateColumns: viewMode === 'grid' ? "repeat(auto-fit, minmax(min(100%, 280px), 1fr))" : undefined,
         gap: "2rem",
       }}>
-        {sortedBundles.map((b) => (
+        {sortedBundles.map((b, index) => (
           <div 
             key={b.id} 
             style={{ 
@@ -165,24 +208,91 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
               e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.15)";
             }}
           >
-            <img 
-              src={b.image} 
-              alt={b.name}
-              style={{ 
-                width: viewMode === 'list' ? "300px" : "100%",
-                aspectRatio: viewMode === 'list' ? "1" : "4 / 5",
-                objectFit: "cover",
-                flexShrink: 0,
-              }}
-            />
+            <div style={{ 
+              width: viewMode === 'list' ? "300px" : "100%",
+              aspectRatio: viewMode === 'list' ? "1" : "4 / 5",
+              position: "relative",
+              flexShrink: 0,
+              overflow: "hidden",
+            }}>
+              <video 
+                autoPlay
+                loop
+                muted
+                playsInline
+                src={`/videos/nh_${(index % 2) + 1}.MOV`}
+                style={{ 
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+              <div style={{
+                position: "absolute",
+                inset: 0,
+                background: "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%)",
+              }} />
+            </div>
             <div style={{ padding: "1.5rem", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
               <div>
                 <h3 style={{ color: "#ffffff", marginBottom: "0.75rem", fontSize: "1.4rem", fontWeight: 700, letterSpacing: "0.05em" }}>
                   {b.name}
                 </h3>
                 <p style={{ color: "#ffffff", fontWeight: 700, fontSize: "1.5rem", marginBottom: "1.25rem" }}>
-                  ${b.price}
+                  ${getPrice(b, selectedSizes[b.id])}
                 </p>
+                
+                {/* Description */}
+                {b.description && (
+                  <div style={{ 
+                    marginBottom: "1.25rem", 
+                    padding: "1rem",
+                    background: "rgba(255, 255, 255, 0.03)",
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                  }}>
+                    {b.description.split('\n').map((line, i) => (
+                      <p key={i} style={{ 
+                        color: "#e5e5e5", 
+                        fontSize: "0.85rem", 
+                        marginBottom: i < b.description!.split('\n').length - 1 ? "0.5rem" : "0",
+                        lineHeight: 1.6,
+                      }}>
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                )}
+
+                {/* Legend for Body Wave */}
+                {b.id === 1 && (
+                  <div style={{
+                    marginBottom: "1rem",
+                    padding: "0.75rem 1rem",
+                    background: "rgba(255, 255, 255, 0.05)",
+                    border: "1px solid rgba(255, 255, 255, 0.15)",
+                  }}>
+                    <div style={{ 
+                      fontSize: "0.75rem", 
+                      color: "#999", 
+                      letterSpacing: "0.1em", 
+                      marginBottom: "0.5rem",
+                      fontWeight: 600,
+                    }}>
+                      TEXTURE LEGEND
+                    </div>
+                    <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
+                      <div style={{ fontSize: "0.8rem", color: "#e5e5e5" }}>
+                        <span style={{ fontWeight: 700, color: "#ffffff" }}>ST</span> - Straight
+                      </div>
+                      <div style={{ fontSize: "0.8rem", color: "#e5e5e5" }}>
+                        <span style={{ fontWeight: 700, color: "#ffffff" }}>BW</span> - Body Wave
+                      </div>
+                      <div style={{ fontSize: "0.8rem", color: "#e5e5e5" }}>
+                        <span style={{ fontWeight: 700, color: "#ffffff" }}>NW</span> - Natural Wave
+                      </div>
+                    </div>
+                  </div>
+                )}
                 
                 {/* Size Selector */}
                 <div style={{ marginBottom: "1rem" }}>
@@ -216,27 +326,94 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                   <label style={{ display: "block", color: "#e5e5e5", fontSize: "0.85rem", marginBottom: "0.5rem", fontWeight: 600, letterSpacing: "0.05em" }}>
                     QUANTITY
                   </label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="10"
-                    value={selectedQuantities[b.id] || 1}
-                    onChange={(e) => setSelectedQuantities({...selectedQuantities, [b.id]: parseInt(e.target.value) || 1})}
-                    style={{
-                      width: "100%",
-                      padding: "0.75rem",
+                  <div style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    width: "fit-content",
+                  }}>
+                    <button
+                      onClick={() => {
+                        const current = selectedQuantities[b.id] || 1;
+                        if (current > 1) {
+                          setSelectedQuantities({...selectedQuantities, [b.id]: current - 1});
+                        }
+                      }}
+                      style={{
+                        width: "36px",
+                        height: "36px",
+                        background: "rgba(255, 255, 255, 0.05)",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        color: "#ffffff",
+                        fontSize: "1.2rem",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        transition: "all 0.2s ease",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+                        e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.4)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                        e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      }}
+                    >
+                      −
+                    </button>
+                    <div style={{
+                      minWidth: "50px",
+                      padding: "0.5rem 1rem",
                       background: "rgba(255, 255, 255, 0.05)",
                       border: "1px solid rgba(255, 255, 255, 0.2)",
-                      borderRadius: "0",
                       color: "#ffffff",
-                      fontSize: "0.9rem",
+                      fontSize: "0.95rem",
                       fontWeight: 600,
-                    }}
-                  />
+                      textAlign: "center",
+                    }}>
+                      {selectedQuantities[b.id] || 1}
+                    </div>
+                    <button
+                      onClick={() => {
+                        const current = selectedQuantities[b.id] || 1;
+                        if (current < 10) {
+                          setSelectedQuantities({...selectedQuantities, [b.id]: current + 1});
+                        }
+                      }}
+                      style={{
+                        width: "36px",
+                        height: "36px",
+                        background: "rgba(255, 255, 255, 0.05)",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        color: "#ffffff",
+                        fontSize: "1.2rem",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        transition: "all 0.2s ease",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+                        e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.4)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                        e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
               </div>
               <button
                 onClick={() => {
+                  if (b.available === false) return;
                   const size = selectedSizes[b.id];
                   if (!size) {
                     alert('Please select a size');
@@ -245,18 +422,20 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                   onAddToCart({
                     ...b,
                     size,
-                    quantity: selectedQuantities[b.id] || 1
+                    quantity: selectedQuantities[b.id] || 1,
+                    price: getPrice(b, size)
                   });
                 }}
+                disabled={b.available === false}
                 style={{ 
-                  background: "#ffffff",
+                  background: b.available === false ? "rgba(255, 255, 255, 0.1)" : "#ffffff",
                   border: "none", 
                   padding: "1rem 2rem", 
                   borderRadius: "0", 
-                  color: "#000000", 
+                  color: b.available === false ? "rgba(255, 255, 255, 0.3)" : "#000000", 
                   fontWeight: 600, 
                   fontSize: "0.9rem",
-                  cursor: "pointer", 
+                  cursor: b.available === false ? "not-allowed" : "pointer", 
                   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                   width: viewMode === 'list' ? "200px" : "100%",
                   letterSpacing: "0.12em",
@@ -264,15 +443,19 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                   overflow: "hidden",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "scale(1.02)";
-                  e.currentTarget.style.boxShadow = "0 10px 30px rgba(255, 255, 255, 0.2)";
+                  if (b.available !== false) {
+                    e.currentTarget.style.transform = "scale(1.02)";
+                    e.currentTarget.style.boxShadow = "0 10px 30px rgba(255, 255, 255, 0.2)";
+                  }
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "scale(1)";
-                  e.currentTarget.style.boxShadow = "none";
+                  if (b.available !== false) {
+                    e.currentTarget.style.transform = "scale(1)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }
                 }}
               >
-                Add to Cart
+                {b.available === false ? 'Unavailable' : 'Add to Cart'}
               </button>
             </div>
           </div>

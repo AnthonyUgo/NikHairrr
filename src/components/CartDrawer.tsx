@@ -1,5 +1,8 @@
 // src/components/CartDrawer.tsx
+import { useState } from "react";
 import { FiX, FiTrash2 } from "react-icons/fi";
+import { redirectToMvmntPay, estimateTotal } from "../utils/mvmntpay";
+import { getPriceId } from "../utils/productPrices";
 
 type Product = { id: number; name: string; price: number; size?: string; quantity: number };
 
@@ -16,9 +19,62 @@ export default function CartDrawer({
   onUpdateSize: (index: number, newSize: string) => void;
   onRemoveItem: (index: number) => void;
 }) {
-  const total = cart.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   
-  const sizes = ["12\"", "14\"", "16\"", "18\"", "20\"", "22\"", "24\"", "26\""];
+  const subtotal = cart.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+  const total = estimateTotal(subtotal);
+  const platformFee = total - subtotal;
+  
+  const sizes = ["12\"", "14\"", "16\"", "18\"", "20\"", "22\"", "24\"", "26\"", "28\"", "30\""];
+
+  const handleCheckout = async () => {
+    if (cart.length === 0) {
+      return;
+    }
+
+    setIsProcessing(true);
+    setCheckoutError(null);
+
+    try {
+      // For now, only handle Hafy Bob wig
+      const hafyBobItem = cart.find(item => 
+        item.name.toLowerCase().includes('hafy') || 
+        item.name.toLowerCase().includes('bob')
+      );
+
+      if (!hafyBobItem) {
+        setCheckoutError('Only Hafy Bob wig is available for checkout at this time. Other products coming soon!');
+        setIsProcessing(false);
+        return;
+      }
+
+      // Get Stripe Price ID for Hafy Bob
+      const priceId = getPriceId('hafy-bob-wig');
+      
+      if (!priceId) {
+        setCheckoutError('Product not configured for checkout. Please contact support.');
+        setIsProcessing(false);
+        return;
+      }
+      
+      // Redirect to MvmntPay checkout
+      redirectToMvmntPay(
+        priceId,
+        hafyBobItem.quantity,
+        `${window.location.origin}/success`
+      );
+      
+    } catch (error) {
+      console.error('Checkout error:', error);
+      setCheckoutError(
+        error instanceof Error 
+          ? error.message 
+          : 'Failed to process checkout. Please try again.'
+      );
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <div
@@ -244,11 +300,24 @@ export default function CartDrawer({
       }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
           <span style={{ color: "#e5e5e5", fontSize: "0.95rem" }}>Subtotal</span>
-          <span style={{ color: "#e5e5e5", fontWeight: 600 }}>${total}</span>
+          <span style={{ color: "#e5e5e5", fontWeight: 600 }}>${subtotal.toFixed(2)}</span>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+          <span style={{ color: "#e5e5e5", fontSize: "0.85rem" }}>Platform Fee (2.94%)</span>
+          <span style={{ color: "#e5e5e5", fontSize: "0.9rem" }}>${platformFee.toFixed(2)}</span>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
           <span style={{ color: "#e5e5e5", fontSize: "0.95rem" }}>Shipping</span>
-          <span style={{ color: "#ffffff", fontSize: "0.9rem" }}>FREE</span>
+          <span style={{ color: "#999", fontSize: "0.85rem", fontStyle: "italic" }}>Calculated at checkout</span>
+        </div>
+        <div style={{ 
+          fontSize: "0.75rem", 
+          color: "#999", 
+          marginBottom: "1rem",
+          fontStyle: "italic",
+          lineHeight: 1.5,
+        }}>
+          *Free shipping available for Houston area
         </div>
         <div style={{ 
           borderTop: "1px solid rgba(255, 255, 255, 0.2)",
@@ -263,24 +332,47 @@ export default function CartDrawer({
             fontSize: "1.5rem", 
             fontWeight: 700,
           }}>
-            ${total}
+            ${total.toFixed(2)}
           </span>
+        </div>
+        <div style={{ 
+          fontSize: "0.7rem", 
+          color: "#888", 
+          marginTop: "0.75rem",
+          textAlign: "center",
+        }}>
+          Secure checkout powered by MvmntPay
         </div>
       </div>
       
+      {checkoutError && (
+        <div style={{
+          margin: "0 2rem 1rem 2rem",
+          padding: "1rem",
+          background: "rgba(255, 68, 68, 0.1)",
+          border: "1px solid rgba(255, 68, 68, 0.3)",
+          color: "#ff4444",
+          fontSize: "0.9rem",
+          lineHeight: 1.5,
+        }}>
+          {checkoutError}
+        </div>
+      )}
+
       <button
-        disabled={cart.length === 0}
+        onClick={handleCheckout}
+        disabled={cart.length === 0 || isProcessing}
         style={{ 
           width: "calc(100% - 4rem)", 
           margin: "0 2rem 2rem 2rem",
           padding: "1.25rem 2rem", 
-          background: cart.length === 0 ? "rgba(255, 255, 255, 0.1)" : "#ffffff", 
+          background: cart.length === 0 || isProcessing ? "rgba(255, 255, 255, 0.1)" : "#ffffff", 
           border: "none", 
           borderRadius: "0", 
-          color: cart.length === 0 ? "#666666" : "#000000",
+          color: cart.length === 0 || isProcessing ? "#666666" : "#000000",
           fontWeight: 600,
           fontSize: "0.95rem",
-          cursor: cart.length === 0 ? "not-allowed" : "pointer",
+          cursor: cart.length === 0 || isProcessing ? "not-allowed" : "pointer",
           transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
           letterSpacing: "0.12em",
           flexShrink: 0,
@@ -288,19 +380,19 @@ export default function CartDrawer({
           overflow: "hidden",
         }}
         onMouseEnter={(e) => {
-          if (cart.length > 0) {
+          if (cart.length > 0 && !isProcessing) {
             (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.02)";
             (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 15px 35px rgba(255, 255, 255, 0.2)";
           }
         }}
         onMouseLeave={(e) => {
-          if (cart.length > 0) {
+          if (cart.length > 0 && !isProcessing) {
             (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
             (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
           }
         }}
       >
-        {cart.length === 0 ? "Add Items to Checkout" : "Proceed to Checkout"}
+        {isProcessing ? "Processing..." : cart.length === 0 ? "Add Items to Checkout" : "Proceed to Checkout"}
       </button>
     </div>
   );

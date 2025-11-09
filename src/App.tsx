@@ -10,6 +10,8 @@ import { appBackground } from "./styles/background.css";
 import Shop from "./pages/Shop";
 import ShopBundles from "./pages/ShopBundles";
 import ShopWigs from "./pages/ShopWigs";
+import ShopClosures from "./pages/ShopClosures";
+import ShopFrontals from "./pages/ShopFrontals";
 
 type Product = { id: number; name: string; price: number; size?: string; quantity: number };
 
@@ -52,6 +54,8 @@ export default function App() {
         <Route path="/shop" element={<Shop />} />
         <Route path="/shop/bundles" element={<ShopBundles onAddToCart={addToCart} />} />
         <Route path="/shop/wigs" element={<ShopWigs onAddToCart={addToCart} />} />
+        <Route path="/shop/closures" element={<ShopClosures onAddToCart={addToCart} />} />
+        <Route path="/shop/frontals" element={<ShopFrontals onAddToCart={addToCart} />} />
         <Route path="/testimonials" element={<Testimonials />} />
       </Routes>
       {cartOpen && (

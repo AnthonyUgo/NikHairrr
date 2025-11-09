@@ -3,12 +3,34 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiGrid, FiList } from "react-icons/fi";
 
-type Product = { id: number; name: string; price: number; image: string; size?: string; quantity: number };
+type Product = { id: number; name: string; price: number; image: string; size?: string; quantity: number; available?: boolean; description?: string; availableSizes?: string[] };
 
 const wigs: Omit<Product, 'size' | 'quantity'>[] = [
-  { id: 101, name: "Lace Front Wig", price: 220, image: "/weave-1.jpeg" },
-  { id: 102, name: "Curly Bob Wig", price: 180, image: "/weave-2.jpeg" },
-  { id: 103, name: "Straight HD Wig", price: 250, image: "/weave-3.jpeg" },
+  { 
+    id: 101, 
+    name: "Lace Front Wig", 
+    price: 220, 
+    image: "/weave-1.jpeg", 
+    available: false,
+    description: "13 x 4 frontal unit\nTotal weight 350g\nNatural hairline"
+  },
+  { 
+    id: 102, 
+    name: "Hafy Bob", 
+    price: 465, 
+    image: "/weave-2.jpeg", 
+    available: true,
+    description: "13 x 4 frontal unit\nTotal weight 400g\nPremium bob style",
+    availableSizes: ['12"']
+  },
+  { 
+    id: 103, 
+    name: "Straight HD Wig", 
+    price: 250, 
+    image: "/weave-3.jpeg", 
+    available: false,
+    description: "13 x 4 frontal unit\nTotal weight 380g\nHD lace technology"
+  },
 ];
 
 const SIZES = ['12"', '14"', '16"', '18"', '20"', '22"', '24"', '26"'];
@@ -142,7 +164,7 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
           gap: "2rem",
         }}
       >
-        {sortedWigs.map((wig) => (
+        {sortedWigs.map((wig, index) => (
           <div
             key={wig.id}
             style={{
@@ -167,16 +189,31 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
               e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.15)";
             }}
           >
-            <img 
-              src={wig.image} 
-              alt={wig.name}
-              style={{ 
-                width: viewMode === 'list' ? "300px" : "100%",
-                aspectRatio: viewMode === 'list' ? "1" : "4 / 5",
-                objectFit: "cover",
-                flexShrink: 0,
-              }}
-            />
+            <div style={{ 
+              width: viewMode === 'list' ? "300px" : "100%",
+              aspectRatio: viewMode === 'list' ? "1" : "4 / 5",
+              position: "relative",
+              flexShrink: 0,
+              overflow: "hidden",
+            }}>
+              <video 
+                autoPlay
+                loop
+                muted
+                playsInline
+                src={`/videos/nh_${(index % 2) + 3}.MOV`}
+                style={{ 
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+              <div style={{
+                position: "absolute",
+                inset: 0,
+                background: "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%)",
+              }} />
+            </div>
             <div style={{ padding: "1.5rem", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
               <div>
                 <h3 style={{ marginBottom: "0.75rem", color: "#ffffff", fontSize: "1.4rem", fontWeight: 700, letterSpacing: "0.05em" }}>
@@ -185,6 +222,27 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
                 <p style={{ marginBottom: "1.25rem", color: "#ffffff", fontWeight: 700, fontSize: "1.5rem" }}>
                   ${wig.price}
                 </p>
+                
+                {/* Description */}
+                {wig.description && (
+                  <div style={{ 
+                    marginBottom: "1.25rem", 
+                    padding: "1rem",
+                    background: "rgba(255, 255, 255, 0.03)",
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                  }}>
+                    {wig.description.split('\n').map((line, i) => (
+                      <p key={i} style={{ 
+                        color: "#e5e5e5", 
+                        fontSize: "0.85rem", 
+                        marginBottom: i < wig.description!.split('\n').length - 1 ? "0.5rem" : "0",
+                        lineHeight: 1.6,
+                      }}>
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                )}
                 
                 {/* Size Selector */}
                 <div style={{ marginBottom: "1rem" }}>
@@ -207,7 +265,7 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
                     }}
                   >
                     <option value="" style={{ background: "#000000" }}>Select Size</option>
-                    {SIZES.map(size => (
+                    {(wig.availableSizes || SIZES).map(size => (
                       <option key={size} value={size} style={{ background: "#000000" }}>{size}</option>
                     ))}
                   </select>
@@ -218,27 +276,94 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
                   <label style={{ display: "block", color: "#e5e5e5", fontSize: "0.85rem", marginBottom: "0.5rem", fontWeight: 600, letterSpacing: "0.05em" }}>
                     QUANTITY
                   </label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="10"
-                    value={selectedQuantities[wig.id] || 1}
-                    onChange={(e) => setSelectedQuantities({...selectedQuantities, [wig.id]: parseInt(e.target.value) || 1})}
-                    style={{
-                      width: "100%",
-                      padding: "0.75rem",
+                  <div style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    width: "fit-content",
+                  }}>
+                    <button
+                      onClick={() => {
+                        const current = selectedQuantities[wig.id] || 1;
+                        if (current > 1) {
+                          setSelectedQuantities({...selectedQuantities, [wig.id]: current - 1});
+                        }
+                      }}
+                      style={{
+                        width: "36px",
+                        height: "36px",
+                        background: "rgba(255, 255, 255, 0.05)",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        color: "#ffffff",
+                        fontSize: "1.2rem",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        transition: "all 0.2s ease",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+                        e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.4)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                        e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      }}
+                    >
+                      −
+                    </button>
+                    <div style={{
+                      minWidth: "50px",
+                      padding: "0.5rem 1rem",
                       background: "rgba(255, 255, 255, 0.05)",
                       border: "1px solid rgba(255, 255, 255, 0.2)",
-                      borderRadius: "0",
                       color: "#ffffff",
-                      fontSize: "0.9rem",
+                      fontSize: "0.95rem",
                       fontWeight: 600,
-                    }}
-                  />
+                      textAlign: "center",
+                    }}>
+                      {selectedQuantities[wig.id] || 1}
+                    </div>
+                    <button
+                      onClick={() => {
+                        const current = selectedQuantities[wig.id] || 1;
+                        if (current < 10) {
+                          setSelectedQuantities({...selectedQuantities, [wig.id]: current + 1});
+                        }
+                      }}
+                      style={{
+                        width: "36px",
+                        height: "36px",
+                        background: "rgba(255, 255, 255, 0.05)",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        color: "#ffffff",
+                        fontSize: "1.2rem",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        transition: "all 0.2s ease",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+                        e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.4)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                        e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
               </div>
               <button
                 onClick={() => {
+                  if (wig.available === false) return;
                   const size = selectedSizes[wig.id];
                   if (!size) {
                     alert('Please select a size');
@@ -250,15 +375,16 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
                     quantity: selectedQuantities[wig.id] || 1
                   });
                 }}
+                disabled={wig.available === false}
                 style={{
-                  background: "#ffffff",
+                  background: wig.available === false ? "rgba(255, 255, 255, 0.1)" : "#ffffff",
                   border: "none",
                   borderRadius: "0",
                   padding: "1rem 2rem",
-                  color: "#000000",
+                  color: wig.available === false ? "rgba(255, 255, 255, 0.3)" : "#000000",
                   fontWeight: 600,
                   fontSize: "0.9rem",
-                  cursor: "pointer",
+                  cursor: wig.available === false ? "not-allowed" : "pointer",
                   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                   width: viewMode === 'list' ? "200px" : "100%",
                   letterSpacing: "0.12em",
@@ -266,15 +392,19 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
                   overflow: "hidden",
                 }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.02)";
-                  (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 10px 30px rgba(255, 255, 255, 0.2)";
+                  if (wig.available !== false) {
+                    (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.02)";
+                    (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 10px 30px rgba(255, 255, 255, 0.2)";
+                  }
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
-                  (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
+                  if (wig.available !== false) {
+                    (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
+                    (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
+                  }
                 }}
               >
-                Add to Cart
+                {wig.available === false ? 'Unavailable' : 'Add to Cart'}
               </button>
             </div>
           </div>
