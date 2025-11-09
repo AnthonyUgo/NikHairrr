@@ -5,6 +5,25 @@ import { FiArrowLeft, FiGrid, FiList } from "react-icons/fi";
 
 type Product = { id: number; name: string; price: number; image: string; size?: string; quantity: number; available?: boolean; description?: string; priceMap?: {[key: string]: number} };
 
+type ServiceAddon = {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+};
+
+const COLORING_SERVICES: ServiceAddon[] = [
+  { id: "jet-black", name: "Jet Black", price: 30, description: "$30/bundle" },
+  { id: "browns", name: "Browns/Brunettes", price: 35, description: "$35/bundle" },
+  { id: "blondes", name: "Blondes", price: 50, description: "$50/bundle" },
+  { id: "reds", name: "Reds/Gingers", price: 50, description: "$50/bundle" },
+];
+
+const WIGGING_SERVICES: ServiceAddon[] = [
+  { id: "3-bundles-closure", name: "3 Bundles & Closure", price: 35, description: "$35" },
+  { id: "extra-bundle", name: "Extra Bundle", price: 10, description: "$10" },
+];
+
 const SIZES_WITH_PRICES: {size: string; price: number}[] = [
   { size: '12"', price: 120 },
   { size: '14"', price: 135 },
@@ -51,6 +70,9 @@ const SIZES = ['12"', '14"', '16"', '18"', '20"', '22"', '24"', '26"', '28"', '3
 export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product) => void }) {
   const [selectedSizes, setSelectedSizes] = useState<{[key: number]: string}>({});
   const [selectedQuantities, setSelectedQuantities] = useState<{[key: number]: number}>({});
+  const [selectedColoringService, setSelectedColoringService] = useState<{[key: number]: string}>({});
+  const [selectedWiggingService, setSelectedWiggingService] = useState<{[key: number]: string}>({});
+  const [showAddons, setShowAddons] = useState<{[key: number]: boolean}>({});
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortOrder, setSortOrder] = useState<'low-high' | 'high-low'>('low-high');
@@ -409,6 +431,105 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                       +
                     </button>
                   </div>
+                </div>
+
+                {/* Service Add-ons - Collapsible */}
+                <div style={{
+                  marginBottom: "1.25rem",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                  overflow: "hidden",
+                }}>
+                  <button
+                    onClick={() => setShowAddons({...showAddons, [b.id]: !showAddons[b.id]})}
+                    style={{
+                      width: "100%",
+                      padding: "1rem 1.25rem",
+                      background: "rgba(255, 255, 255, 0.03)",
+                      border: "none",
+                      color: "#ffffff",
+                      fontSize: "0.9rem",
+                      fontWeight: 700,
+                      letterSpacing: "0.05em",
+                      cursor: "pointer",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "rgba(255, 255, 255, 0.03)";
+                    }}
+                  >
+                    <span>ADD-ON SERVICES (OPTIONAL)</span>
+                    <span style={{
+                      transform: showAddons[b.id] ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.3s ease",
+                      display: "inline-block",
+                    }}>▼</span>
+                  </button>
+
+                  {showAddons[b.id] && (
+                    <div style={{ padding: "1.25rem" }}>
+                      {/* Wigging Services */}
+                      <div style={{ marginBottom: "1rem" }}>
+                        <label style={{ display: "block", color: "#e5e5e5", fontSize: "0.8rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                          Wigging Service
+                        </label>
+                        <select
+                          value={selectedWiggingService[b.id] || ''}
+                          onChange={(e) => setSelectedWiggingService({...selectedWiggingService, [b.id]: e.target.value})}
+                          style={{
+                            width: "100%",
+                            padding: "0.65rem",
+                            background: "rgba(255, 255, 255, 0.05)",
+                            border: "1px solid rgba(255, 255, 255, 0.2)",
+                            borderRadius: "0",
+                            color: "#ffffff",
+                            fontSize: "0.85rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          <option value="" style={{ background: "#000000" }}>None</option>
+                          {WIGGING_SERVICES.map(service => (
+                            <option key={service.id} value={service.id} style={{ background: "#000000" }}>
+                              {service.name} - {service.description}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Coloring Services */}
+                      <div>
+                        <label style={{ display: "block", color: "#e5e5e5", fontSize: "0.8rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                          Coloring Service
+                        </label>
+                        <select
+                          value={selectedColoringService[b.id] || ''}
+                          onChange={(e) => setSelectedColoringService({...selectedColoringService, [b.id]: e.target.value})}
+                          style={{
+                            width: "100%",
+                            padding: "0.65rem",
+                            background: "rgba(255, 255, 255, 0.05)",
+                            border: "1px solid rgba(255, 255, 255, 0.2)",
+                            borderRadius: "0",
+                            color: "#ffffff",
+                            fontSize: "0.85rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          <option value="" style={{ background: "#000000" }}>None</option>
+                          {COLORING_SERVICES.map(service => (
+                            <option key={service.id} value={service.id} style={{ background: "#000000" }}>
+                              {service.name} - {service.description}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               <button

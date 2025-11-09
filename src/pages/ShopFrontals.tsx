@@ -5,6 +5,20 @@ import { FiArrowLeft } from "react-icons/fi";
 
 type Product = { id: number; name: string; price: number; image: string; size?: string; quantity: number; available?: boolean; description?: string; type?: string };
 
+type ServiceAddon = {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+};
+
+const COLORING_SERVICES: ServiceAddon[] = [
+  { id: "jet-black", name: "Jet Black", price: 30, description: "$30/bundle" },
+  { id: "browns", name: "Browns/Brunettes", price: 35, description: "$35/bundle" },
+  { id: "blondes", name: "Blondes", price: 50, description: "$50/bundle" },
+  { id: "reds", name: "Reds/Gingers", price: 50, description: "$50/bundle" },
+];
+
 const frontals: Omit<Product, 'size' | 'quantity'>[] = [
   { 
     id: 301, 
@@ -45,6 +59,8 @@ const SIZES_PRICES: {[key: string]: {size: string; price: number}[]} = {
 export default function ShopFrontals({ onAddToCart }: { onAddToCart: (p: Product) => void }) {
   const [selectedSizes, setSelectedSizes] = useState<{[key: number]: string}>({});
   const [selectedQuantities, setSelectedQuantities] = useState<{[key: number]: number}>({});
+  const [selectedColoringService, setSelectedColoringService] = useState<{[key: number]: string}>({});
+  const [showAddons, setShowAddons] = useState<{[key: number]: boolean}>({});
   const navigate = useNavigate();
 
   const getPrice = (frontal: typeof frontals[0], size?: string) => {
@@ -329,6 +345,77 @@ export default function ShopFrontals({ onAddToCart }: { onAddToCart: (p: Product
                     +
                   </button>
                 </div>
+              </div>
+
+              {/* Service Add-ons - Collapsible */}
+              <div style={{
+                marginBottom: "1.25rem",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
+                overflow: "hidden",
+              }}>
+                <button
+                  onClick={() => setShowAddons({...showAddons, [frontal.id]: !showAddons[frontal.id]})}
+                  style={{
+                    width: "100%",
+                    padding: "1rem 1.25rem",
+                    background: "rgba(255, 255, 255, 0.03)",
+                    border: "none",
+                    color: "#ffffff",
+                    fontSize: "0.9rem",
+                    fontWeight: 700,
+                    letterSpacing: "0.05em",
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "rgba(255, 255, 255, 0.03)";
+                  }}
+                >
+                  <span>ADD-ON SERVICES (OPTIONAL)</span>
+                  <span style={{
+                    transform: showAddons[frontal.id] ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "transform 0.3s ease",
+                    display: "inline-block",
+                  }}>▼</span>
+                </button>
+
+                {showAddons[frontal.id] && (
+                  <div style={{ padding: "1.25rem" }}>
+                    {/* Coloring Services */}
+                    <div>
+                      <label style={{ display: "block", color: "#e5e5e5", fontSize: "0.8rem", marginBottom: "0.5rem", fontWeight: 600 }}>
+                        Coloring Service
+                      </label>
+                      <select
+                        value={selectedColoringService[frontal.id] || ''}
+                        onChange={(e) => setSelectedColoringService({...selectedColoringService, [frontal.id]: e.target.value})}
+                        style={{
+                          width: "100%",
+                          padding: "0.65rem",
+                          background: "rgba(255, 255, 255, 0.05)",
+                          border: "1px solid rgba(255, 255, 255, 0.2)",
+                          borderRadius: "0",
+                          color: "#ffffff",
+                          fontSize: "0.85rem",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <option value="" style={{ background: "#000000" }}>None</option>
+                        {COLORING_SERVICES.map(service => (
+                          <option key={service.id} value={service.id} style={{ background: "#000000" }}>
+                            {service.name} - {service.description}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <button

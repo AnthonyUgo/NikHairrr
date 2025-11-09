@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { FiHome, FiShoppingBag, FiMessageCircle, FiShoppingCart } from "react-icons/fi";
+import { FiHome, FiShoppingBag, FiMessageCircle, FiShoppingCart, FiTool } from "react-icons/fi";
 
 export default function Navbar({ onCartClick }: { onCartClick: () => void }) {
   const navigate = useNavigate();
@@ -137,6 +137,31 @@ export default function Navbar({ onCartClick }: { onCartClick: () => void }) {
           }}
         >
           <FiShoppingBag size={18} /> <span className="nav-link-text">Shop</span>
+        </Link>
+        <Link
+          to="/services"
+          style={{
+            color: "#ffffff",
+            textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            transition: "all 0.3s ease",
+            fontWeight: 600,
+            fontSize: "0.95rem",
+            padding: "0.5rem 0.75rem",
+            borderRadius: "8px",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "#cccccc";
+            e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "#ffffff";
+            e.currentTarget.style.background = "transparent";
+          }}
+        >
+          <FiTool size={18} /> <span className="nav-link-text">Services</span>
         </Link>
         <Link
           to="/testimonials"
