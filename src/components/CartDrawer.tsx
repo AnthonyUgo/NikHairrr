@@ -81,7 +81,7 @@ export default function CartDrawer({
         position: "fixed",
         top: 0,
         right: 0,
-        width: "420px",
+        width: "min(420px, 100vw)",
         height: "100vh",
         background: "rgba(0, 0, 0, 0.98)",
         backdropFilter: "blur(24px)",

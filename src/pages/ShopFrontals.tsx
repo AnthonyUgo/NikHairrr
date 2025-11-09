@@ -12,7 +12,7 @@ const frontals: Omit<Product, 'size' | 'quantity'>[] = [
     price: 205,
     image: "/bundles-2.jpeg",
     available: true,
-    description: "13 by 4 frontal\nEar to ear coverage\nST/BW textures available",
+    description: "13 by 4 frontal\nEar to ear coverage\nST/NW textures available",
     type: "13x4"
   },
   { 
@@ -21,7 +21,7 @@ const frontals: Omit<Product, 'size' | 'quantity'>[] = [
     price: 290,
     image: "/bundles-3.jpeg",
     available: true,
-    description: "13 by 6 frontal\nExtended parting space\nST/BW textures available",
+    description: "13 by 6 frontal\nExtended parting space\nST/NW textures available",
     type: "13x6"
   },
 ];
@@ -129,14 +129,14 @@ export default function ShopFrontals({ onAddToCart }: { onAddToCart: (p: Product
             <span style={{ fontWeight: 700, color: "#ffffff" }}>ST</span> - Straight
           </div>
           <div style={{ fontSize: "0.85rem", color: "#e5e5e5" }}>
-            <span style={{ fontWeight: 700, color: "#ffffff" }}>BW</span> - Body Wave
+            <span style={{ fontWeight: 700, color: "#ffffff" }}>NW</span> - Natural Wave
           </div>
         </div>
       </div>
       
       <div style={{ 
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+        gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 280px), 1fr))",
         gap: "2rem",
       }}>
         {frontals.map((frontal, index) => (

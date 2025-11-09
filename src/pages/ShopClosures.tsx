@@ -12,7 +12,7 @@ const closures: Omit<Product, 'size' | 'quantity'>[] = [
     price: 156,
     image: "/bundles-1.jpeg",
     available: true,
-    description: "5 by 5 closure\nPremium lace closure\nST/BW textures available",
+    description: "5 by 5 closure\nPremium lace closure\nST/NW textures available",
     type: "5x5"
   },
 ];
@@ -95,7 +95,7 @@ export default function ShopClosures({ onAddToCart }: { onAddToCart: (p: Product
       
       <div style={{ 
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+        gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 280px), 1fr))",
         gap: "2rem",
       }}>
         {closures.map((closure) => (
@@ -194,7 +194,7 @@ export default function ShopClosures({ onAddToCart }: { onAddToCart: (p: Product
                     <span style={{ fontWeight: 700, color: "#ffffff" }}>ST</span> - Straight
                   </div>
                   <div style={{ fontSize: "0.8rem", color: "#e5e5e5" }}>
-                    <span style={{ fontWeight: 700, color: "#ffffff" }}>BW</span> - Body Wave
+                    <span style={{ fontWeight: 700, color: "#ffffff" }}>NW</span> - Natural Wave
                   </div>
                 </div>
               </div>

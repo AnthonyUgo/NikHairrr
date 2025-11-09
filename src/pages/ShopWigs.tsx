@@ -7,14 +7,6 @@ type Product = { id: number; name: string; price: number; image: string; size?: 
 
 const wigs: Omit<Product, 'size' | 'quantity'>[] = [
   { 
-    id: 101, 
-    name: "Lace Front Wig", 
-    price: 220, 
-    image: "/weave-1.jpeg", 
-    available: false,
-    description: "13 x 4 frontal unit\nTotal weight 350g\nNatural hairline"
-  },
-  { 
     id: 102, 
     name: "Hafy Bob", 
     price: 465, 
@@ -22,14 +14,6 @@ const wigs: Omit<Product, 'size' | 'quantity'>[] = [
     available: true,
     description: "13 x 4 frontal unit\nTotal weight 400g\nPremium bob style",
     availableSizes: ['12"']
-  },
-  { 
-    id: 103, 
-    name: "Straight HD Wig", 
-    price: 250, 
-    image: "/weave-3.jpeg", 
-    available: false,
-    description: "13 x 4 frontal unit\nTotal weight 380g\nHD lace technology"
   },
 ];
 
@@ -160,7 +144,7 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
         style={{
           display: viewMode === 'grid' ? "grid" : "flex",
           flexDirection: viewMode === 'list' ? "column" : undefined,
-          gridTemplateColumns: viewMode === 'grid' ? "repeat(auto-fit, minmax(min(100%, 280px), 1fr))" : undefined,
+          gridTemplateColumns: viewMode === 'grid' ? "repeat(auto-fill, minmax(min(100%, 280px), 1fr))" : undefined,
           gap: "2rem",
         }}
       >

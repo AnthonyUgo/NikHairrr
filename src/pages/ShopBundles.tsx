@@ -21,11 +21,11 @@ const SIZES_WITH_PRICES: {size: string; price: number}[] = [
 const bundles: Omit<Product, 'size' | 'quantity'>[] = [
   { 
     id: 1, 
-    name: "Body Wave Bundle", 
+    name: "Natural Wave Bundle", 
     price: 120, // Starting price
     image: "/bundles-1.jpeg", 
     available: true,
-    description: "Premium body wave texture\nTotal weight 100g per bundle\nNatural bouncy wave pattern\nDouble drawn quality",
+    description: "Premium natural wave texture\nTotal weight 100g per bundle\nNatural flowing wave pattern\nDouble drawn quality",
     priceMap: Object.fromEntries(SIZES_WITH_PRICES.map(({size, price}) => [size, price]))
   },
   { 
@@ -285,7 +285,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                         <span style={{ fontWeight: 700, color: "#ffffff" }}>ST</span> - Straight
                       </div>
                       <div style={{ fontSize: "0.8rem", color: "#e5e5e5" }}>
-                        <span style={{ fontWeight: 700, color: "#ffffff" }}>BW</span> - Body Wave
+                        <span style={{ fontWeight: 700, color: "#ffffff" }}>NW</span> - Natural Wave
                       </div>
                       <div style={{ fontSize: "0.8rem", color: "#e5e5e5" }}>
                         <span style={{ fontWeight: 700, color: "#ffffff" }}>NW</span> - Natural Wave
