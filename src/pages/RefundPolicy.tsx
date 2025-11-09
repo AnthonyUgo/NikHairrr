@@ -132,7 +132,7 @@ export default function RefundPolicy() {
       <section style={{ marginBottom: "3rem" }}>
         <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>Warranty</h2>
         <p style={{ lineHeight: 1.8 }}>
-          All NikHairrr products are covered by our quality guarantee:
+          All NikHairrr products are 100% single donor raw hair and covered by our quality guarantee:
         </p>
         <ul style={{ lineHeight: 1.8, paddingLeft: "1.5rem", marginTop: "1rem" }}>
           <li><strong>Coverage:</strong> Manufacturing defects and quality issues</li>

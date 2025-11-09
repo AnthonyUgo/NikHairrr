@@ -30,7 +30,7 @@ export default function TermsOfService() {
           <li>Hair care accessories</li>
         </ul>
         <p style={{ lineHeight: 1.8, marginTop: "1rem" }}>
-          All products are 100% virgin human hair unless otherwise stated.
+          All products are 100% single donor raw human hair unless otherwise stated.
         </p>
       </section>
 

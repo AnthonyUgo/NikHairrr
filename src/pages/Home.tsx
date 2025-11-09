@@ -59,7 +59,7 @@ export default function Home() {
                 opacity: 0.9,
                 maxWidth: "500px",
               }}>
-                Premium hair extensions crafted for those who refuse to compromise on quality.
+                100% single donor raw hair extensions crafted for those who refuse to compromise on quality.
               </p>
             </div>
 
@@ -135,7 +135,7 @@ export default function Home() {
                   QUALITY
                 </div>
                 <div style={{ fontSize: "1rem", color: "#ffffff", fontWeight: 600 }}>
-                  100% Premium
+                  100% Raw Hair
                 </div>
               </div>
               <div>
@@ -567,9 +567,9 @@ export default function Home() {
             margin: "0 auto 3rem",
             opacity: 0.8,
           }}>
-            Every bundle is ethically sourced and meticulously crafted to deliver 
-            the natural movement and shine you see in editorial shoots. Professional-grade 
-            quality that transforms your look instantly.
+            Every bundle is 100% single donor raw hair, ethically sourced and unprocessed. 
+            Natural cuticle-aligned hair that delivers authentic movement and shine. 
+            Professional-grade quality that transforms your look instantly.
           </p>
           <div style={{
             display: "grid",
@@ -596,7 +596,7 @@ export default function Home() {
                 letterSpacing: "0.1em",
                 opacity: 0.7,
               }}>
-                VIRGIN HAIR
+                RAW HAIR
               </div>
             </div>
             <div style={{

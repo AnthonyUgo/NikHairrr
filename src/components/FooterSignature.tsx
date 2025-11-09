@@ -49,7 +49,7 @@ export default function FooterSignature() {
           © {new Date().getFullYear()} NikHairrr. All rights reserved.
         </p>
         <p style={{ margin: "0.5rem 0", fontSize: "0.75rem" }}>
-          Houston, Texas | Premium Virgin Hair Extensions
+          Houston, Texas | Premium Single Donor Raw Hair
         </p>
       </footer>
     </>
