@@ -180,7 +180,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
       <div style={{ 
         display: viewMode === 'grid' ? "grid" : "flex",
         flexDirection: viewMode === 'list' ? "column" : undefined,
-        gridTemplateColumns: viewMode === 'grid' ? "repeat(auto-fit, minmax(min(100%, 280px), 1fr))" : undefined,
+        gridTemplateColumns: viewMode === 'grid' ? "repeat(auto-fill, minmax(min(100%, 280px), 1fr))" : undefined,
         gap: "2rem",
       }}>
         {sortedBundles.map((b, index) => (

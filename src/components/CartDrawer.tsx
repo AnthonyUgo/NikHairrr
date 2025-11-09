@@ -76,25 +76,41 @@ export default function CartDrawer({
   };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        right: 0,
-        width: "min(420px, 100vw)",
-        height: "100vh",
-        background: "rgba(0, 0, 0, 0.98)",
-        backdropFilter: "blur(24px)",
-        color: "#e5e5e5",
-        padding: 0,
-        boxShadow: "-8px 0 32px rgba(0, 0, 0, 0.9)",
-        borderLeft: "1px solid rgba(255, 255, 255, 0.15)",
-        zIndex: 200,
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-      }}
-    >
+    <>
+      {/* Backdrop overlay */}
+      <div
+        onClick={onClose}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "rgba(0, 0, 0, 0.5)",
+          zIndex: 199,
+        }}
+      />
+      
+      {/* Cart drawer */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          right: 0,
+          width: "min(420px, 100vw)",
+          height: "100vh",
+          background: "rgba(0, 0, 0, 0.98)",
+          backdropFilter: "blur(24px)",
+          color: "#e5e5e5",
+          padding: 0,
+          boxShadow: "-8px 0 32px rgba(0, 0, 0, 0.9)",
+          borderLeft: "1px solid rgba(255, 255, 255, 0.15)",
+          zIndex: 200,
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem", padding: "2rem 2rem 0 2rem", flexShrink: 0 }}>
         <h3 style={{ 
           color: "#ffffff", 
@@ -391,5 +407,6 @@ export default function CartDrawer({
         {isProcessing ? "Processing..." : cart.length === 0 ? "Add Items to Checkout" : "Proceed to Checkout"}
       </button>
     </div>
+    </>
   );
 }

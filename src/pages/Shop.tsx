@@ -26,7 +26,7 @@ export default function Shop() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 350px), 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 350px), 1fr))",
           gap: "clamp(1.5rem, 4vw, 3rem)",
         }}
       >
