@@ -71,13 +71,13 @@ export default function TermsOfService() {
       </section>
 
       <section style={{ marginBottom: "3rem" }}>
-        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>6. Product Care and Warranty</h2>
+        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>6. Product Quality and Care</h2>
         <ul style={{ lineHeight: 1.8, paddingLeft: "1.5rem" }}>
           <li>Products are guaranteed to be 100% authentic virgin hair</li>
-          <li>Warranty covers manufacturing defects only</li>
-          <li>Improper care or chemical damage voids warranty</li>
+          <li>Quality assurance covers manufacturing defects only</li>
+          <li>All claims must be reported within 72 hours of delivery with photographic evidence</li>
+          <li>Improper care or chemical alterations void quality guarantee</li>
           <li>Care instructions provided with each order</li>
-          <li>Contact us within 7 days for quality concerns</li>
         </ul>
       </section>
 

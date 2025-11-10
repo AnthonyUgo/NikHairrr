@@ -609,7 +609,7 @@ export default function Home() {
                 color: "#ffffff",
                 marginBottom: "1rem",
               }}>
-                365
+                100%
               </div>
               <div style={{
                 fontSize: "0.9rem",
@@ -617,7 +617,7 @@ export default function Home() {
                 letterSpacing: "0.1em",
                 opacity: 0.7,
               }}>
-                DAY WARRANTY
+                QUALITY GUARANTEED
               </div>
             </div>
             <div style={{

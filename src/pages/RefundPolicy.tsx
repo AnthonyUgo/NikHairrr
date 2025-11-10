@@ -8,150 +8,129 @@ export default function RefundPolicy() {
         ← Back to Home
       </Link>
       
-      <h1 style={{ color: "#ffffff", fontSize: "2.5rem", fontWeight: 700, marginBottom: "1rem" }}>Refund Policy</h1>
-      <p style={{ fontSize: "0.9rem", color: "#999", marginBottom: "3rem" }}>Last Updated: November 9, 2025</p>
+      <h1 style={{ color: "#ffffff", fontSize: "2.5rem", fontWeight: 700, marginBottom: "1rem" }}>Return & Exchange Policy</h1>
+      <p style={{ fontSize: "0.9rem", color: "#999", marginBottom: "3rem" }}>Last Updated: November 10, 2025</p>
 
       <section style={{ marginBottom: "3rem" }}>
-        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>Return Window</h2>
-        <p style={{ lineHeight: 1.8 }}>
-          We accept returns within <strong>7 days of delivery</strong> for eligible products. To be eligible for a return, items must be:
-        </p>
-        <ul style={{ lineHeight: 1.8, paddingLeft: "1.5rem", marginTop: "1rem" }}>
-          <li>Unused and unworn</li>
-          <li>In original packaging with all tags attached</li>
-          <li>Not washed, colored, or chemically treated</li>
-          <li>Free from any odors (smoke, perfume, etc.)</li>
-        </ul>
-      </section>
-
-      <section style={{ marginBottom: "3rem" }}>
-        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>Non-Refundable Items</h2>
+        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>1. Quality Assurance</h2>
         <p style={{ lineHeight: 1.8, marginBottom: "1rem" }}>
-          The following items are <strong>final sale</strong> and cannot be returned or exchanged:
+          We are committed to excellence. Every product undergoes a strict quality control process before shipment to maintain the highest standards.
+        </p>
+        <p style={{ lineHeight: 1.8, marginBottom: "1rem" }}>
+          If you receive a defective or damaged product, please contact our customer service team at <strong>support@nikhairrr.com</strong> within <strong>72 hours of receiving your order</strong>. Be sure to include:
         </p>
         <ul style={{ lineHeight: 1.8, paddingLeft: "1.5rem" }}>
-          <li>Custom-colored hair</li>
-          <li>Custom-cut or styled wigs</li>
-          <li>Sale or clearance items</li>
-          <li>Items worn or installed</li>
-          <li>Items without original packaging</li>
-          <li>Gift cards</li>
+          <li>Clear photos of the product and packaging</li>
+          <li>A detailed description of the issue</li>
         </ul>
+        <p style={{ lineHeight: 1.8, marginTop: "1rem", padding: "1rem", background: "rgba(255, 152, 0, 0.1)", border: "1px solid rgba(255, 152, 0, 0.3)" }}>
+          ⚠️ <strong>Important:</strong> Failure to provide photos may result in the claim being denied.
+        </p>
       </section>
 
       <section style={{ marginBottom: "3rem" }}>
-        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>Return Process</h2>
+        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>2. Final Sale Policy</h2>
+        <p style={{ lineHeight: 1.8 }}>
+          All purchases are <strong>final sale</strong> and cannot be returned, refunded, or exchanged except in cases where the product does not meet our quality standards (see Section 1).
+        </p>
+      </section>
+
+      <section style={{ marginBottom: "3rem" }}>
+        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>3. Returns for Quality Issues</h2>
         <p style={{ lineHeight: 1.8, marginBottom: "1rem" }}>
-          To initiate a return:
+          Returns are only accepted if the product is defective or does not meet our quality standards. If approved, you may be eligible for:
         </p>
-        <ol style={{ lineHeight: 1.8, paddingLeft: "1.5rem" }}>
-          <li>Contact us at <strong>returns@nikhairrr.com</strong> within 7 days of delivery</li>
-          <li>Provide your order number and reason for return</li>
-          <li>Wait for return authorization (RMA) number</li>
-          <li>Ship the item back using a trackable shipping method</li>
-          <li>Include the RMA number on the package</li>
-        </ol>
-        <p style={{ lineHeight: 1.8, marginTop: "1rem", padding: "1rem", background: "rgba(255, 255, 255, 0.05)", border: "1px solid rgba(255, 255, 255, 0.1)" }}>
-          ⚠️ <strong>Important:</strong> Returns without an RMA number will not be accepted.
-        </p>
-      </section>
-
-      <section style={{ marginBottom: "3rem" }}>
-        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>Return Shipping Costs</h2>
-        <ul style={{ lineHeight: 1.8, paddingLeft: "1.5rem" }}>
-          <li><strong>Customer error:</strong> Customer pays return shipping</li>
-          <li><strong>Our error or defective product:</strong> We pay return shipping</li>
-          <li><strong>Exchanges:</strong> We cover shipping for exchanges on defective items</li>
+        <ul style={{ lineHeight: 1.8, paddingLeft: "1.5rem", marginBottom: "1rem" }}>
+          <li>A full refund to the original payment method, or</li>
+          <li>A store credit for the full amount</li>
         </ul>
-        <p style={{ lineHeight: 1.8, marginTop: "1rem" }}>
-          Return shipping address will be provided with your RMA number.
-        </p>
-      </section>
-
-      <section style={{ marginBottom: "3rem" }}>
-        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>Refund Processing</h2>
-        <p style={{ lineHeight: 1.8 }}>
-          Once we receive and inspect your return:
-        </p>
-        <ul style={{ lineHeight: 1.8, paddingLeft: "1.5rem", marginTop: "1rem" }}>
-          <li><strong>Inspection time:</strong> 2-3 business days</li>
-          <li><strong>Refund processing:</strong> 5-10 business days</li>
-          <li><strong>Refund method:</strong> Original payment method</li>
-          <li><strong>Shipping costs:</strong> Original shipping fees are non-refundable</li>
-          <li><strong>Platform fees:</strong> Non-refundable (2.94%)</li>
-        </ul>
-        <p style={{ lineHeight: 1.8, marginTop: "1rem" }}>
-          You will receive an email confirmation once your refund is processed.
-        </p>
-      </section>
-
-      <section style={{ marginBottom: "3rem" }}>
-        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>Exchanges</h2>
-        <p style={{ lineHeight: 1.8 }}>
-          We accept exchanges for:
-        </p>
-        <ul style={{ lineHeight: 1.8, paddingLeft: "1.5rem", marginTop: "1rem" }}>
-          <li>Different sizes (subject to availability)</li>
-          <li>Defective or damaged products</li>
-          <li>Incorrect items shipped</li>
-        </ul>
-        <p style={{ lineHeight: 1.8, marginTop: "1rem" }}>
-          To request an exchange, follow the same return process and specify your exchange preference.
-        </p>
-      </section>
-
-      <section style={{ marginBottom: "3rem" }}>
-        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>Damaged or Defective Products</h2>
         <p style={{ lineHeight: 1.8, marginBottom: "1rem" }}>
-          If you receive a damaged or defective product:
+          In rare cases, NikHairrr may offer a refund minus a 15% restocking fee, at our discretion.
         </p>
-        <ol style={{ lineHeight: 1.8, paddingLeft: "1.5rem" }}>
-          <li>Contact us immediately at <strong>support@nikhairrr.com</strong></li>
-          <li>Provide photos/videos of the damage or defect</li>
-          <li>Include your order number</li>
-          <li>We will arrange for a replacement or full refund</li>
-        </ol>
-        <p style={{ lineHeight: 1.8, marginTop: "1rem", padding: "1rem", background: "rgba(255, 255, 255, 0.05)", border: "1px solid rgba(255, 255, 255, 0.1)" }}>
-          📸 <strong>Tip:</strong> Take photos/videos when unboxing to document any shipping damage.
+        <p style={{ lineHeight: 1.8, padding: "1rem", background: "rgba(255, 255, 255, 0.05)", border: "1px solid rgba(255, 255, 255, 0.1)" }}>
+          <strong>Approval Requirement:</strong> Approval for returns is contingent upon the items being returned in their original packaging, including intact and untampered hang tags, EVA bag, and NikHairrr box.
         </p>
       </section>
 
       <section style={{ marginBottom: "3rem" }}>
-        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>Lost or Stolen Packages</h2>
+        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>4. Restocking Fee</h2>
         <p style={{ lineHeight: 1.8 }}>
-          We are not responsible for packages marked as "delivered" by the carrier. Please:
+          Any approved returns are subject to a <strong>15% restocking fee</strong>, unless the return is due to an error on our part.
         </p>
-        <ul style={{ lineHeight: 1.8, paddingLeft: "1.5rem", marginTop: "1rem" }}>
-          <li>Check with neighbors or building management</li>
-          <li>Verify the shipping address</li>
-          <li>File a claim with the shipping carrier</li>
-          <li>Contact us if the package cannot be located</li>
-        </ul>
       </section>
 
       <section style={{ marginBottom: "3rem" }}>
-        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>Warranty</h2>
+        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>5. Order Cancellations</h2>
         <p style={{ lineHeight: 1.8 }}>
-          All NikHairrr products are 100% single donor raw hair and covered by our quality guarantee:
+          Orders cannot be changed or canceled once submitted. Please review your order carefully before checkout.
         </p>
-        <ul style={{ lineHeight: 1.8, paddingLeft: "1.5rem", marginTop: "1rem" }}>
-          <li><strong>Coverage:</strong> Manufacturing defects and quality issues</li>
-          <li><strong>Duration:</strong> 30 days from delivery</li>
-          <li><strong>Not covered:</strong> Improper care, chemical damage, or misuse</li>
-          <li><strong>Claim process:</strong> Email warranty@nikhairrr.com with proof of purchase</li>
-        </ul>
       </section>
 
       <section style={{ marginBottom: "3rem" }}>
-        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>Store Credit</h2>
-        <p style={{ lineHeight: 1.8 }}>
-          As an alternative to refunds, we offer store credit:
+        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>6. Shipping Costs</h2>
+        <p style={{ lineHeight: 1.8, marginBottom: "1rem" }}>
+          NikHairrr does not cover return shipping costs unless the return is due to an error or a defective product.
         </p>
-        <ul style={{ lineHeight: 1.8, paddingLeft: "1.5rem", marginTop: "1rem" }}>
-          <li><strong>110% value:</strong> Get 10% extra as store credit</li>
-          <li><strong>No expiration:</strong> Use anytime on future purchases</li>
-          <li><strong>Transferable:</strong> Can be shared with friends/family</li>
-        </ul>
+        <p style={{ lineHeight: 1.8 }}>
+          Customers are responsible for shipping costs associated with returns.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: "3rem" }}>
+        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>7. Refused & Misplaced Deliveries</h2>
+        <p style={{ lineHeight: 1.8, marginBottom: "1rem" }}>
+          Refusing delivery does not qualify as a return. Any refused deliveries will incur a restocking fee, and original shipping costs will not be refunded.
+        </p>
+        <p style={{ lineHeight: 1.8 }}>
+          NikHairrr is not responsible for lost, misplaced, or incorrectly delivered shipments due to customer errors.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: "3rem" }}>
+        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>8. Pre-Orders</h2>
+        <p style={{ lineHeight: 1.8, marginBottom: "1rem" }}>
+          Pre-orders are processed immediately and cannot be canceled or altered.
+        </p>
+        <p style={{ lineHeight: 1.8 }}>
+          Shipping dates are subject to change due to order volume, supply chain delays, or other factors. We will update the product description and send email alerts regarding any changes.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: "3rem" }}>
+        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>9. Delayed Orders</h2>
+        <p style={{ lineHeight: 1.8 }}>
+          If an order is delayed by more than <strong>30 business days</strong> from the expected shipping date, you may request a full refund to your original payment method.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: "3rem" }}>
+        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>10. Import Duties</h2>
+        <p style={{ lineHeight: 1.8 }}>
+          Customers are responsible for any applicable import duties or taxes on international orders.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: "3rem" }}>
+        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>11. Delivery and Signature Requirement for Orders Over $500</h2>
+        <p style={{ lineHeight: 1.8, marginBottom: "1rem" }}>
+          Orders over $500 will require a signature upon delivery to confirm receipt of the product. If the recipient is unavailable to sign for the delivery, the carrier may attempt re-delivery or hold the package for pick-up.
+        </p>
+        <p style={{ lineHeight: 1.8 }}>
+          Please ensure that someone is available to sign at the delivery address. If no one is available to sign, the delivery may be delayed, and we are not responsible for any shipping-related issues caused by the lack of signature.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: "3rem" }}>
+        <h2 style={{ color: "#ffffff", fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>12. Policy Changes</h2>
+        <p style={{ lineHeight: 1.8 }}>
+          NikHairrr reserves the right to update or modify this policy at any time. Please refer to our website for the most current version.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: "3rem", padding: "1.5rem", background: "rgba(255, 255, 255, 0.05)", border: "1px solid rgba(255, 255, 255, 0.15)" }}>
+        <p style={{ lineHeight: 1.8, fontWeight: 600 }}>
+          By completing your purchase, you acknowledge that you have read, understood, and agreed to our Return & Exchange Policy.
+        </p>
       </section>
 
       <section style={{ marginBottom: "3rem" }}>
