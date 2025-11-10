@@ -500,13 +500,13 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
                         id: Date.now() + 1,
                         name: wiggingService.name,
                         price: wiggingService.price,
-                        quantity: 1, // Wigging services are typically per-wig
-                        lookupKey: wiggingService.lookupKey
+                        quantity: 1,
+                        priceId: wiggingService.lookupKey
                       });
                     }
                   }
 
-                  // Add coloring service if selected
+                  // Reset selections after adding
                   const coloringServiceId = selectedColoringService[wig.id];
                   if (coloringServiceId) {
                     const coloringService = COLORING_SERVICES.find(s => s.id === coloringServiceId);
@@ -515,13 +515,13 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
                         id: Date.now() + 2,
                         name: coloringService.name,
                         price: coloringService.price,
-                        quantity: 1, // Coloring for whole wig, not per bundle
-                        lookupKey: coloringService.lookupKey
+                        quantity: 1,
+                        priceId: coloringService.lookupKey
                       });
                     }
                   }
 
-                  // Reset selections
+                  // Add wigging service if selected
                   setSelectedWiggingService({...selectedWiggingService, [wig.id]: ''});
                   setSelectedColoringService({...selectedColoringService, [wig.id]: ''});
                 }}

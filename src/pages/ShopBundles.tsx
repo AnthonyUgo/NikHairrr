@@ -15,6 +15,7 @@ type Product = {
   description?: string; 
   priceMap?: {[key: string]: number};
   lookupKey?: string;
+  priceId?: string;
 };
 
 type ServiceAddon = {
@@ -551,8 +552,8 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                     alert('Please select a size');
                     return;
                   }
-                  const lookupKey = getLookupKey(b, size);
-                  if (!lookupKey) {
+                  const priceId = getLookupKey(b, size);
+                  if (!priceId) {
                     alert('This size is not available for checkout yet');
                     return;
                   }
@@ -563,7 +564,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                     size,
                     quantity: bundleQuantity,
                     price: getPrice(b, size),
-                    lookupKey
+                    priceId
                   });
 
                   // Add wigging service if selected
@@ -576,7 +577,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                         name: wiggingService.name,
                         price: wiggingService.price,
                         quantity: 1, // Wigging services are typically per-wig, not per bundle
-                        lookupKey: wiggingService.lookupKey
+                        priceId: wiggingService.lookupKey
                       });
                     }
                   }
@@ -591,7 +592,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                         name: coloringService.name,
                         price: coloringService.price,
                         quantity: bundleQuantity, // Coloring is per bundle
-                        lookupKey: coloringService.lookupKey
+                        priceId: coloringService.lookupKey
                       });
                     }
                   }
