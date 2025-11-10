@@ -60,7 +60,6 @@ const bundles: Omit<Product, 'size' | 'quantity'>[] = [
     id: 1, 
     name: "Natural Wave Bundle", 
     price: bundleVariants[SIZES[0]] || 120, // Use first size as base price
-    image: "/bundles-1.jpeg", 
     available: true,
     description: "Premium ST/BW texture\nTotal weight 100g per bundle\nNatural flowing wave pattern\nDouble drawn quality",
     priceMap: bundleVariants
@@ -223,7 +222,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
         gridTemplateColumns: viewMode === 'grid' ? "repeat(auto-fill, minmax(min(100%, 280px), 1fr))" : undefined,
         gap: "2rem",
       }}>
-        {sortedBundles.map((b, index) => (
+        {sortedBundles.map((b) => (
           <div 
             key={b.id} 
             style={{ 
@@ -255,13 +254,9 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
               flexShrink: 0,
               overflow: "hidden",
             }}>
-              <video 
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="none"
-                src={`/videos/nh_${(index % 2) + 1}.MOV`}
+              <img
+                src="/bundles.png"
+                alt={b.name}
                 style={{ 
                   width: "100%",
                   height: "100%",

@@ -57,12 +57,13 @@ export default function Shop() {
         >
           <div style={{ overflow: "hidden", position: "relative", aspectRatio: "4/5" }}>
             <img
-              src="/face-1.jpeg"
+              src="/bundles.png"
               alt="Bundles"
               style={{ 
                 width: "100%", 
                 height: "100%", 
                 objectFit: "cover",
+                objectPosition: "center 1pt",
                 transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             />
@@ -131,12 +132,13 @@ export default function Shop() {
         >
           <div style={{ overflow: "hidden", position: "relative", aspectRatio: "4/5" }}>
             <img
-              src="/face-2.jpeg"
+              src="/wigs.png"
               alt="Wigs"
               style={{ 
                 width: "100%", 
                 height: "100%", 
                 objectFit: "cover",
+                objectPosition: "center 1pt",
                 transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             />
@@ -205,12 +207,13 @@ export default function Shop() {
         >
           <div style={{ overflow: "hidden", position: "relative", aspectRatio: "4/5" }}>
             <img
-              src="/face-1.jpeg"
+              src="/closure.png"
               alt="Closures"
               style={{ 
                 width: "100%", 
                 height: "100%", 
                 objectFit: "cover",
+                objectPosition: "center 1pt",
                 transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             />
@@ -279,12 +282,13 @@ export default function Shop() {
         >
           <div style={{ overflow: "hidden", position: "relative", aspectRatio: "4/5" }}>
             <img
-              src="/face-2.jpeg"
+              src="/frontals.png"
               alt="Frontals"
               style={{ 
                 width: "100%", 
                 height: "100%", 
                 objectFit: "cover",
+                objectPosition: "center 1pt",
                 transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             />

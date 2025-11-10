@@ -25,7 +25,7 @@ const closures: Omit<Product, 'size' | 'quantity'>[] = [
     id: 201, 
     name: "5x5 Closure", 
     price: 156,
-    image: "/bundles-1.jpeg",
+    image: "/closure.png",
     available: true,
     description: "5 by 5 closure\nPremium lace closure\nST/NW textures available",
     type: "5x5"
@@ -158,19 +158,17 @@ export default function ShopClosures({ onAddToCart }: { onAddToCart: (p: Product
               position: "relative",
               overflow: "hidden",
             }}>
-              <video 
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="none"
-                src="/videos/nh_1.MOV"
-                style={{ 
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
+              {closure.image && (
+                <img 
+                  src={closure.image}
+                  alt={closure.name}
+                  style={{ 
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              )}
               <div style={{
                 position: "absolute",
                 inset: 0,

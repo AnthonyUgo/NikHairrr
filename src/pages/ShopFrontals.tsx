@@ -25,7 +25,7 @@ const frontals: Omit<Product, 'size' | 'quantity'>[] = [
     id: 301, 
     name: "13x4 Frontal", 
     price: 205,
-    image: "/bundles-2.jpeg",
+    image: "/frontals.png",
     available: true,
     description: "13 by 4 frontal\nEar to ear coverage\nST/NW textures available",
     type: "13x4"
@@ -34,7 +34,7 @@ const frontals: Omit<Product, 'size' | 'quantity'>[] = [
     id: 302, 
     name: "13x6 Frontal", 
     price: 290,
-    image: "/bundles-3.jpeg",
+    image: "/frontals.png",
     available: true,
     description: "13 by 6 frontal\nExtended parting space\nST/NW textures available",
     type: "13x6"
@@ -178,7 +178,7 @@ export default function ShopFrontals({ onAddToCart }: { onAddToCart: (p: Product
         gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 280px), 1fr))",
         gap: "2rem",
       }}>
-        {frontals.map((frontal, index) => (
+        {frontals.map((frontal) => (
           <div 
             key={frontal.id} 
             style={{ 
@@ -207,19 +207,17 @@ export default function ShopFrontals({ onAddToCart }: { onAddToCart: (p: Product
               position: "relative",
               overflow: "hidden",
             }}>
-              <video 
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="none"
-                src={`/videos/nh_${(index % 2) + 3}.MOV`}
-                style={{ 
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
+              {frontal.image && (
+                <img 
+                  src={frontal.image}
+                  alt={frontal.name}
+                  style={{ 
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              )}
               <div style={{
                 position: "absolute",
                 inset: 0,
