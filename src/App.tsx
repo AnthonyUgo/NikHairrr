@@ -41,6 +41,7 @@ export default function App() {
     }
   });
   const [cartOpen, setCartOpen] = useState(false);
+  const [checkoutCanceled, setCheckoutCanceled] = useState(false);
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
@@ -50,6 +51,24 @@ export default function App() {
       console.error('Failed to save cart to localStorage:', error);
     }
   }, [cart]);
+
+  // Check if user returned from canceled payment (cart should remain)
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const canceled = urlParams.get('checkout_canceled');
+    
+    if (canceled === 'true' && cart.length > 0) {
+      // User canceled payment, cart is preserved
+      setCheckoutCanceled(true);
+      setCartOpen(true);
+      
+      // Clear the URL parameter
+      window.history.replaceState({}, '', window.location.pathname);
+      
+      // Hide message after 5 seconds
+      setTimeout(() => setCheckoutCanceled(false), 5000);
+    }
+  }, [cart.length]);
 
   const addToCart = (product: Product) => {
     setCart((prev) => [...prev, product]);
@@ -81,6 +100,30 @@ export default function App() {
     <Router>
       <ScrollToTop />
       <Navbar onCartClick={() => setCartOpen(!cartOpen)} />
+      
+      {/* Checkout Canceled Notification */}
+      {checkoutCanceled && (
+        <div style={{
+          position: "fixed",
+          top: "100px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 300,
+          background: "rgba(255, 152, 0, 0.95)",
+          backdropFilter: "blur(12px)",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
+          padding: "1rem 2rem",
+          color: "#ffffff",
+          fontWeight: 600,
+          fontSize: "0.95rem",
+          letterSpacing: "0.05em",
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
+          animation: "slideDown 0.3s ease-out",
+        }}>
+          ⚠️ Checkout canceled - Your items are still in your cart
+        </div>
+      )}
+      
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />

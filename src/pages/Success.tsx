@@ -23,20 +23,24 @@ export default function Success() {
   useEffect(() => {
     // Get session ID from URL params
     const sessionId = searchParams.get('session_id');
+    const paymentIntent = searchParams.get('payment_intent');
     
-    if (sessionId) {
-      // In a full implementation, you would fetch order details from Mvmnt Pay API
-      // For now, we'll show a success message
+    if (sessionId || paymentIntent) {
+      // Payment was successful
       setOrderDetails({
-        sessionId,
+        sessionId: sessionId || paymentIntent || undefined,
       });
+      
+      // Clear cart from localStorage on successful payment
+      localStorage.removeItem('nikhairrr_cart');
+    } else {
+      // No payment confirmation, redirect to shop
+      navigate('/shop');
+      return;
     }
     
     setLoading(false);
-    
-    // Clear cart from localStorage on success
-    localStorage.removeItem('nikhairrr_cart');
-  }, [searchParams]);
+  }, [searchParams, navigate]);
 
   if (loading) {
     return (

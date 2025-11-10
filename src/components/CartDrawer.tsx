@@ -73,10 +73,12 @@ export default function CartDrawer({
       });
 
       // Redirect to MvmntPay checkout with all items
+      const cancelUrl = `${window.location.href}${window.location.href.includes('?') ? '&' : '?'}checkout_canceled=true`;
+      
       redirectToMvmntPayMultiItem(
         lineItems,
         `${window.location.origin}/success`,
-        window.location.href  // Return to current page (shop with cart open)
+        cancelUrl  // Return to current page with canceled flag
       );
       
     } catch (error) {
