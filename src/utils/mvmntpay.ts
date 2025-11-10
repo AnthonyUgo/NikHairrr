@@ -19,8 +19,8 @@ export interface MvmntPayCheckoutOptions {
 }
 
 export interface MvmntPayLineItem {
-  lookup_key?: string;
-  price?: string; // For legacy priceId items like Haffy Bob
+  lookupKey?: string; // Use camelCase to match MvmntPay API
+  price?: string; // For price IDs
   quantity: number;
 }
 
@@ -140,10 +140,10 @@ export function redirectToMvmntPayMultiItem(
     // Use price or lookupKey depending on what the item has
     if (item.price) {
       params.append('price', item.price);
-    } else if (item.lookup_key) {
-      params.append('lookupKey', item.lookup_key);
+    } else if (item.lookupKey) {
+      params.append('lookupKey', item.lookupKey);
     } else {
-      throw new Error('Line item must have either price or lookup_key');
+      throw new Error('Line item must have either price or lookupKey');
     }
     
     // Add shipping requirement to metadata

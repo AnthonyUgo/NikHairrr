@@ -53,18 +53,18 @@ export default function CartDrawer({
       }
 
       // Build line items for Mvmnt Pay
-      // Items with lookupKey use lookup_key, items with priceId use price
+      // Items with priceId use price, items with lookupKey use lookupKey (camelCase)
       const lineItems: MvmntPayLineItem[] = cart.map(item => {
         if (item.priceId) {
-          // Legacy price ID (e.g., Haffy Bob)
+          // Price ID format
           return {
             price: item.priceId,
             quantity: item.quantity
           };
         } else if (item.lookupKey) {
-          // Modern lookup key
+          // Lookup key format
           return {
-            lookup_key: item.lookupKey,
+            lookupKey: item.lookupKey,
             quantity: item.quantity
           };
         } else {
