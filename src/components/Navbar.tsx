@@ -41,7 +41,7 @@ export default function Navbar({ onCartClick }: { onCartClick: () => void }) {
           top: 0,
           left: 0,
           right: 0,
-          zIndex: 1000,
+          zIndex: 9999,
         }}
       >
       {/* Logo Button */}
