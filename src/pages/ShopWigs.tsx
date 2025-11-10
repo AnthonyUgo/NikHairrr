@@ -15,14 +15,14 @@ type ServiceAddon = {
 };
 
 const COLORING_SERVICES: ServiceAddon[] = [
-  { id: "jet-black", name: "Jet Black", price: 30, description: "$30/bundle", lookupKey: "svc_coloring_jet_black_per_bundle_usd_v1" },
-  { id: "browns", name: "Browns/Brunettes", price: 35, description: "$35/bundle", lookupKey: "svc_coloring_browns_brunettes_per_bundle_usd_v1" },
-  { id: "blondes", name: "Blondes", price: 50, description: "$50/bundle", lookupKey: "svc_coloring_blondes_per_bundle_usd_v1" },
-  { id: "reds", name: "Reds/Gingers", price: 50, description: "$50/bundle", lookupKey: "svc_coloring_reds_gingers_per_bundle_usd_v1" },
+  { id: "jet-black", name: "Jet Black", price: 30, description: "$30/bundle", lookupKey: "price_1SRvjNJLcxQ0xaoL2faRCGUB" },
+  { id: "browns", name: "Browns/Brunettes", price: 35, description: "$35/bundle", lookupKey: "price_1SRwBNJLcxQ0xaoLTC1vJTMT" },
+  { id: "blondes", name: "Blondes", price: 50, description: "$50/bundle", lookupKey: "price_1SRwBNJLcxQ0xaoLxsP83Yqn" },
+  { id: "reds", name: "Reds/Gingers", price: 50, description: "$50/bundle", lookupKey: "price_1SRwBNJLcxQ0xaoLk0LG8GtE" },
 ];
 
 const WIGGING_SERVICES: ServiceAddon[] = [
-  { id: "frontal-custom", name: "Frontal Customization (Bleached Knots & Light Plucking)", price: 20, description: "$20", lookupKey: "svc_frontal_customization_bleached_knots_light_plucking_usd_v1" },
+  { id: "frontal-custom", name: "Frontal Customization (Bleached Knots & Light Plucking)", price: 20, description: "$20", lookupKey: "price_1SRwEbJLcxQ0xaoLufl1klB4" },
 ];
 
 const wigs: Omit<Product, 'size' | 'quantity'>[] = [

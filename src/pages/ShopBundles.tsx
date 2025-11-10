@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiGrid, FiList } from "react-icons/fi";
-import { getProductsByCategory, getServicesByType } from "../data/productCatalog";
+import { getProductsByCategory } from "../data/productCatalog";
 
 type Product = { 
   id: number; 
@@ -36,25 +36,18 @@ const bundleVariants = catalogBundles.reduce((acc, bundle) => {
   return acc;
 }, {} as {[key: string]: number});
 
-// Load services from catalog
-const coloringServices = getServicesByType('coloring');
-const wiggingServices = getServicesByType('wigging');
+const COLORING_SERVICES: ServiceAddon[] = [
+  { id: "jet-black", name: "Jet Black", price: 30, description: "$30/bundle", lookupKey: "price_1SRvjNJLcxQ0xaoL2faRCGUB" },
+  { id: "browns", name: "Browns/Brunettes", price: 35, description: "$35/bundle", lookupKey: "price_1SRwBNJLcxQ0xaoLTC1vJTMT" },
+  { id: "blondes", name: "Blondes", price: 50, description: "$50/bundle", lookupKey: "price_1SRwBNJLcxQ0xaoLxsP83Yqn" },
+  { id: "reds", name: "Reds/Gingers", price: 50, description: "$50/bundle", lookupKey: "price_1SRwBNJLcxQ0xaoLk0LG8GtE" },
+];
 
-const COLORING_SERVICES: ServiceAddon[] = coloringServices.map(svc => ({
-  id: svc.lookupKey,
-  name: svc.productName.replace('Coloring: ', '').replace(' (per bundle)', ''),
-  price: svc.price,
-  description: `$${svc.price}${svc.productName.includes('per bundle') ? '/bundle' : ''}`,
-  lookupKey: svc.lookupKey
-}));
-
-const WIGGING_SERVICES: ServiceAddon[] = wiggingServices.map(svc => ({
-  id: svc.lookupKey,
-  name: svc.productName.replace(' (Wigging)', '').replace(' (each, Wigging add-on)', ''),
-  price: svc.price,
-  description: `$${svc.price}`,
-  lookupKey: svc.lookupKey
-}));
+const WIGGING_SERVICES: ServiceAddon[] = [
+  { id: "3-bundles-closure", name: "3 Bundles + Closure", price: 35, description: "$35", lookupKey: "price_1SRwEbJLcxQ0xaoLC94FyIuR" },
+  { id: "extra-bundles", name: "Extra Bundles (each)", price: 10, description: "$10", lookupKey: "price_1SRwEbJLcxQ0xaoL7l8yn9SS" },
+  { id: "frontal-custom", name: "Frontal Customization", price: 20, description: "$20", lookupKey: "price_1SRwEbJLcxQ0xaoLufl1klB4" },
+];
 
 const SIZES = Object.keys(bundleVariants).sort((a, b) => {
   const aNum = parseInt(a);
@@ -99,11 +92,19 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
   // Get lookup key for bundle + size
   const getLookupKey = (_bundle: typeof bundles[0], size?: string): string | undefined => {
     if (!size) return undefined;
-    // Find the catalog product for this size
-    const catalogProduct = catalogBundles.find(
-      p => p.sizeDisplay === size
-    );
-    return catalogProduct?.lookupKey;
+    // Map sizes to Stripe price IDs
+    const priceIdMap: {[key: string]: string} = {
+      '12"': 'price_1SRvu0JLcxQ0xaoLGBzGpH3u',
+      '14"': 'price_1SRvu0JLcxQ0xaoLWyuk4qr3',
+      '16"': 'price_1SRvu0JLcxQ0xaoLGykGTLlz',
+      '18"': 'price_1SRvu0JLcxQ0xaoLmtSWeaKP',
+      '20"': 'price_1SRvu0JLcxQ0xaoLecgijqO9',
+      '22"': 'price_1SRvu0JLcxQ0xaoLiPnbrQ4n',
+      '24"': 'price_1SRvu0JLcxQ0xaoLhLrMOFOC',
+      '26"': 'price_1SRvu0JLcxQ0xaoLNB5e8H0z',
+      '28"': 'price_1SRvu0JLcxQ0xaoLFtPxjLMW',
+    };
+    return priceIdMap[size];
   };
 
   return (

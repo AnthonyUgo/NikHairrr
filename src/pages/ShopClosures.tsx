@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
-import { getProductsByCategory } from "../data/productCatalog";
 
 type Product = { id: number; name: string; price: number; image?: string; size?: string; quantity: number; available?: boolean; description?: string; type?: string; lookupKey?: string };
 
@@ -15,10 +14,10 @@ type ServiceAddon = {
 };
 
 const COLORING_SERVICES: ServiceAddon[] = [
-  { id: "jet-black", name: "Jet Black", price: 30, description: "$30/bundle", lookupKey: "svc_coloring_jet_black_per_bundle_usd_v1" },
-  { id: "browns", name: "Browns/Brunettes", price: 35, description: "$35/bundle", lookupKey: "svc_coloring_browns_brunettes_per_bundle_usd_v1" },
-  { id: "blondes", name: "Blondes", price: 50, description: "$50/bundle", lookupKey: "svc_coloring_blondes_per_bundle_usd_v1" },
-  { id: "reds", name: "Reds/Gingers", price: 50, description: "$50/bundle", lookupKey: "svc_coloring_reds_gingers_per_bundle_usd_v1" },
+  { id: "jet-black", name: "Jet Black", price: 30, description: "$30/bundle", lookupKey: "price_1SRvjNJLcxQ0xaoL2faRCGUB" },
+  { id: "browns", name: "Browns/Brunettes", price: 35, description: "$35/bundle", lookupKey: "price_1SRwBNJLcxQ0xaoLTC1vJTMT" },
+  { id: "blondes", name: "Blondes", price: 50, description: "$50/bundle", lookupKey: "price_1SRwBNJLcxQ0xaoLxsP83Yqn" },
+  { id: "reds", name: "Reds/Gingers", price: 50, description: "$50/bundle", lookupKey: "price_1SRwBNJLcxQ0xaoLk0LG8GtE" },
 ];
 
 const closures: Omit<Product, 'size' | 'quantity'>[] = [
@@ -65,15 +64,18 @@ export default function ShopClosures({ onAddToCart }: { onAddToCart: (p: Product
     return [];
   };
 
-  // Get lookup key from catalog
-  const getLookupKey = (closure: typeof closures[0], size?: string): string | undefined => {
+  // Get lookup key from Stripe price IDs
+  const getLookupKey = (_closure: typeof closures[0], size?: string): string | undefined => {
     if (!size) return undefined;
-    const catalogClosures = getProductsByCategory('Closures');
-    const catalogProduct = catalogClosures.find(
-      p => p.construction === (closure.type === '5x5' ? '5x5 Closure' : closure.type) && 
-           p.sizeDisplay === size
-    );
-    return catalogProduct?.lookupKey;
+    // Map sizes to Stripe price IDs for 5x5 closures
+    const priceIdMap: {[key: string]: string} = {
+      '12"': 'price_1SRvyMJLcxQ0xaoLF2l5zq7x',
+      '14"': 'price_1SRvyMJLcxQ0xaoL5TUaQb1J',
+      '16"': 'price_1SRvyMJLcxQ0xaoLDy7phXB4',
+      '18"': 'price_1SRvyMJLcxQ0xaoLt8liSalh',
+      '20"': 'price_1SRvyMJLcxQ0xaoLo3nofIbT',
+    };
+    return priceIdMap[size];
   };
 
   return (

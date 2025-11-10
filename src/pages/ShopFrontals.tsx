@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
-import { getProductsByCategory } from "../data/productCatalog";
 
 type Product = { id: number; name: string; price: number; image?: string; size?: string; quantity: number; available?: boolean; description?: string; type?: string; lookupKey?: string };
 
@@ -15,10 +14,10 @@ type ServiceAddon = {
 };
 
 const COLORING_SERVICES: ServiceAddon[] = [
-  { id: "jet-black", name: "Jet Black", price: 30, description: "$30/bundle", lookupKey: "svc_coloring_jet_black_per_bundle_usd_v1" },
-  { id: "browns", name: "Browns/Brunettes", price: 35, description: "$35/bundle", lookupKey: "svc_coloring_browns_brunettes_per_bundle_usd_v1" },
-  { id: "blondes", name: "Blondes", price: 50, description: "$50/bundle", lookupKey: "svc_coloring_blondes_per_bundle_usd_v1" },
-  { id: "reds", name: "Reds/Gingers", price: 50, description: "$50/bundle", lookupKey: "svc_coloring_reds_gingers_per_bundle_usd_v1" },
+  { id: "jet-black", name: "Jet Black", price: 30, description: "$30/bundle", lookupKey: "price_1SRvjNJLcxQ0xaoL2faRCGUB" },
+  { id: "browns", name: "Browns/Brunettes", price: 35, description: "$35/bundle", lookupKey: "price_1SRwBNJLcxQ0xaoLTC1vJTMT" },
+  { id: "blondes", name: "Blondes", price: 50, description: "$50/bundle", lookupKey: "price_1SRwBNJLcxQ0xaoLxsP83Yqn" },
+  { id: "reds", name: "Reds/Gingers", price: 50, description: "$50/bundle", lookupKey: "price_1SRwBNJLcxQ0xaoLk0LG8GtE" },
 ];
 
 const frontals: Omit<Product, 'size' | 'quantity'>[] = [
@@ -80,15 +79,26 @@ export default function ShopFrontals({ onAddToCart }: { onAddToCart: (p: Product
     return [];
   };
 
-  // Get lookup key from catalog
+  // Get lookup key from Stripe price IDs
   const getLookupKey = (frontal: typeof frontals[0], size?: string): string | undefined => {
     if (!size) return undefined;
-    const catalogFrontals = getProductsByCategory('Frontals');
-    const catalogProduct = catalogFrontals.find(
-      p => p.construction === (frontal.type === '13x4' ? '13x4 Frontal' : '13x6 Frontal') && 
-           p.sizeDisplay === size
-    );
-    return catalogProduct?.lookupKey;
+    // Map sizes to Stripe price IDs
+    const priceIdMaps: {[key: string]: {[key: string]: string}} = {
+      '13x4': {
+        '12"': 'price_1SRw2GJLcxQ0xaoLThDYaZ7Z',
+        '14"': 'price_1SRw2GJLcxQ0xaoLvzzIK4ct',
+        '16"': 'price_1SRw2GJLcxQ0xaoLkD1kVKq1',
+        '18"': 'price_1SRw2GJLcxQ0xaoLHO556fjR',
+        '20"': 'price_1SRw2GJLcxQ0xaoLsGNY5gHa',
+      },
+      '13x6': {
+        '14"': 'price_1SRw5oJLcxQ0xaoLrDU4OFbw',
+        '16"': 'price_1SRw5oJLcxQ0xaoLruzDtXqO',
+        '18"': 'price_1SRw5oJLcxQ0xaoLD3NOfVWg',
+        '20"': 'price_1SRw5oJLcxQ0xaoLYQo6TmHl',
+      }
+    };
+    return frontal.type && priceIdMaps[frontal.type] ? priceIdMaps[frontal.type][size] : undefined;
   };
 
   return (
