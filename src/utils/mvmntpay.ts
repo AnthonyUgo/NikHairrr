@@ -19,7 +19,8 @@ export interface MvmntPayCheckoutOptions {
 }
 
 export interface MvmntPayLineItem {
-  lookup_key: string;
+  lookup_key?: string;
+  price?: string; // For legacy priceId items like Haffy Bob
   quantity: number;
 }
 
@@ -109,7 +110,7 @@ export function redirectToMvmntPay(
  * Redirect to MvmntPay checkout with multiple items
  * This is the preferred method for cart checkout with lookup_keys
  * 
- * @param lineItems - Array of line items with lookup_key and quantity
+ * @param lineItems - Array of line items with lookup_key (or price for legacy items) and quantity
  * @param successUrl - URL to redirect after successful payment
  * @param cancelUrl - URL to redirect when user cancels/goes back
  * @param metadata - Additional metadata to pass to Stripe
@@ -133,9 +134,17 @@ export function redirectToMvmntPayMultiItem(
     const item = lineItems[0];
     const params = new URLSearchParams({
       client: MVMNTPAY_CLIENT_ID,
-      lookupKey: item.lookup_key,
       quantity: item.quantity.toString(),
     });
+    
+    // Use price or lookupKey depending on what the item has
+    if (item.price) {
+      params.append('price', item.price);
+    } else if (item.lookup_key) {
+      params.append('lookupKey', item.lookup_key);
+    } else {
+      throw new Error('Line item must have either price or lookup_key');
+    }
     
     // Add shipping requirement to metadata
     const fullMetadata = {

@@ -53,11 +53,24 @@ export default function CartDrawer({
       }
 
       // Build line items for Mvmnt Pay
-      // Items with lookupKey use lookup_key, items with priceId use price_id
-      const lineItems: MvmntPayLineItem[] = cart.map(item => ({
-        lookup_key: item.lookupKey || item.priceId!,
-        quantity: item.quantity
-      }));
+      // Items with lookupKey use lookup_key, items with priceId use price
+      const lineItems: MvmntPayLineItem[] = cart.map(item => {
+        if (item.priceId) {
+          // Legacy price ID (e.g., Haffy Bob)
+          return {
+            price: item.priceId,
+            quantity: item.quantity
+          };
+        } else if (item.lookupKey) {
+          // Modern lookup key
+          return {
+            lookup_key: item.lookupKey,
+            quantity: item.quantity
+          };
+        } else {
+          throw new Error(`Item ${item.name} has neither priceId nor lookupKey`);
+        }
+      });
 
       // Redirect to MvmntPay checkout with all items
       redirectToMvmntPayMultiItem(
