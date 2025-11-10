@@ -10,8 +10,21 @@ const MVMNTPAY_BASE_URL = 'https://pay.mvmntech.com';
 const MVMNTPAY_API_URL = `${MVMNTPAY_BASE_URL}/api`;
 
 export interface MvmntPayCheckoutOptions {
-  priceId: string;
+  priceId?: string; // Deprecated: use lookupKey instead
+  lookupKey?: string; // Preferred: use Stripe lookup_key
   quantity?: number;
+  metadata?: Record<string, string>;
+  successUrl?: string;
+  cancelUrl?: string;
+}
+
+export interface MvmntPayLineItem {
+  lookup_key: string;
+  quantity: number;
+}
+
+export interface MvmntPayMultiItemCheckoutOptions {
+  lineItems: MvmntPayLineItem[];
   metadata?: Record<string, string>;
   successUrl?: string;
   cancelUrl?: string;
@@ -37,16 +50,18 @@ export interface MvmntPayPaymentIntent {
 /**
  * Redirect to MvmntPay checkout page (simplest integration)
  * 
- * @param priceId - Stripe Price ID for the product
+ * @param priceIdOrLookupKey - Stripe Price ID or lookup_key for the product
  * @param quantity - Number of items (default: 1)
  * @param successUrl - URL to redirect after successful payment
  * @param cancelUrl - URL to redirect when user cancels/goes back
+ * @param isLookupKey - Whether the first param is a lookup_key (default: false for backwards compat)
  */
 export function redirectToMvmntPay(
-  priceId: string,
+  priceIdOrLookupKey: string,
   quantity: number = 1,
   successUrl?: string,
-  cancelUrl?: string
+  cancelUrl?: string,
+  isLookupKey: boolean = false
 ): void {
   // Store URLs in session storage
   if (successUrl) {
@@ -56,12 +71,18 @@ export function redirectToMvmntPay(
     sessionStorage.setItem('mvmntpay_cancel_url', cancelUrl);
   }
   
-  // Build checkout URL (using 'client' param like Elite Aces)
+  // Build checkout URL - note the parameter is lookupKey (camelCase) not lookup_key
   const params = new URLSearchParams({
     client: MVMNTPAY_CLIENT_ID,
-    price: priceId,
     quantity: quantity.toString(),
   });
+  
+  // Add price or lookupKey (camelCase as per Mvmnt Pay API)
+  if (isLookupKey) {
+    params.append('lookupKey', priceIdOrLookupKey);
+  } else {
+    params.append('price', priceIdOrLookupKey);
+  }
   
   // Add shipping requirement to metadata
   const metadata = {
@@ -82,6 +103,86 @@ export function redirectToMvmntPay(
   
   // Redirect
   window.location.href = checkoutUrl;
+}
+
+/**
+ * Redirect to MvmntPay checkout with multiple items
+ * This is the preferred method for cart checkout with lookup_keys
+ * 
+ * @param lineItems - Array of line items with lookup_key and quantity
+ * @param successUrl - URL to redirect after successful payment
+ * @param cancelUrl - URL to redirect when user cancels/goes back
+ * @param metadata - Additional metadata to pass to Stripe
+ */
+export function redirectToMvmntPayMultiItem(
+  lineItems: MvmntPayLineItem[],
+  successUrl?: string,
+  cancelUrl?: string,
+  metadata?: Record<string, string>
+): void {
+  // Store URLs in session storage
+  if (successUrl) {
+    sessionStorage.setItem('mvmntpay_success_url', successUrl);
+  }
+  if (cancelUrl) {
+    sessionStorage.setItem('mvmntpay_cancel_url', cancelUrl);
+  }
+  
+  // For single item, use simple query params. For multiple items, use line_items array
+  if (lineItems.length === 1) {
+    const item = lineItems[0];
+    const params = new URLSearchParams({
+      client: MVMNTPAY_CLIENT_ID,
+      lookupKey: item.lookup_key,
+      quantity: item.quantity.toString(),
+    });
+    
+    // Add shipping requirement to metadata
+    const fullMetadata = {
+      requires_shipping: 'true',
+      client_name: 'NikHairrr',
+      ...(metadata || {})
+    };
+    params.append('metadata', btoa(JSON.stringify(fullMetadata)));
+    
+    // Add optional URLs if provided
+    if (successUrl) {
+      params.append('successUrl', successUrl);
+    }
+    if (cancelUrl) {
+      params.append('cancelUrl', cancelUrl);
+    }
+    
+    const checkoutUrl = `${MVMNTPAY_BASE_URL}/checkout?${params.toString()}`;
+    window.location.href = checkoutUrl;
+  } else {
+    // Multiple items - use line_items array
+    const params = new URLSearchParams({
+      client: MVMNTPAY_CLIENT_ID,
+    });
+    
+    // Add line items as JSON array
+    params.append('line_items', JSON.stringify(lineItems));
+    
+    // Add shipping requirement to metadata
+    const fullMetadata = {
+      requires_shipping: 'true',
+      client_name: 'NikHairrr',
+      ...(metadata || {})
+    };
+    params.append('metadata', btoa(JSON.stringify(fullMetadata)));
+    
+    // Add optional URLs if provided
+    if (successUrl) {
+      params.append('successUrl', successUrl);
+    }
+    if (cancelUrl) {
+      params.append('cancelUrl', cancelUrl);
+    }
+    
+    const checkoutUrl = `${MVMNTPAY_BASE_URL}/checkout?${params.toString()}`;
+    window.location.href = checkoutUrl;
+  }
 }
 
 /**

@@ -13,11 +13,19 @@ import ShopClosures from "./pages/ShopClosures";
 import ShopFrontals from "./pages/ShopFrontals";
 import Services from "./pages/Services";
 import Testimonials from "./pages/Testimonials";
+import Success from "./pages/Success";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import RefundPolicy from "./pages/RefundPolicy";
 
-type Product = { id: number; name: string; price: number; size?: string; quantity: number };
+type Product = { 
+  id: number; 
+  name: string; 
+  price: number; 
+  size?: string; 
+  quantity: number;
+  lookupKey?: string; // Stripe lookup key for checkout
+};
 
 const CART_STORAGE_KEY = 'nikhairrr_cart';
 
@@ -82,6 +90,7 @@ export default function App() {
             <Route path="/shop/frontals" element={<ShopFrontals onAddToCart={addToCart} />} />
             <Route path="/services" element={<Services />} />
             <Route path="/testimonials" element={<Testimonials />} />
+        <Route path="/success" element={<Success />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />

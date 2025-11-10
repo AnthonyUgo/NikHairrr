@@ -2,25 +2,27 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiGrid, FiList } from "react-icons/fi";
+import { getPriceId } from "../utils/productPrices";
 
-type Product = { id: number; name: string; price: number; image: string; size?: string; quantity: number; available?: boolean; description?: string; availableSizes?: string[] };
+type Product = { id: number; name: string; price: number; image?: string; size?: string; quantity: number; available?: boolean; description?: string; availableSizes?: string[]; lookupKey?: string; priceId?: string };
 
 type ServiceAddon = {
   id: string;
   name: string;
   price: number;
   description: string;
+  lookupKey: string;
 };
 
 const COLORING_SERVICES: ServiceAddon[] = [
-  { id: "jet-black", name: "Jet Black", price: 30, description: "$30/bundle" },
-  { id: "browns", name: "Browns/Brunettes", price: 35, description: "$35/bundle" },
-  { id: "blondes", name: "Blondes", price: 50, description: "$50/bundle" },
-  { id: "reds", name: "Reds/Gingers", price: 50, description: "$50/bundle" },
+  { id: "jet-black", name: "Jet Black", price: 30, description: "$30/bundle", lookupKey: "svc_coloring_jet_black_per_bundle_usd_v1" },
+  { id: "browns", name: "Browns/Brunettes", price: 35, description: "$35/bundle", lookupKey: "svc_coloring_browns_brunettes_per_bundle_usd_v1" },
+  { id: "blondes", name: "Blondes", price: 50, description: "$50/bundle", lookupKey: "svc_coloring_blondes_per_bundle_usd_v1" },
+  { id: "reds", name: "Reds/Gingers", price: 50, description: "$50/bundle", lookupKey: "svc_coloring_reds_gingers_per_bundle_usd_v1" },
 ];
 
 const WIGGING_SERVICES: ServiceAddon[] = [
-  { id: "frontal-custom", name: "Frontal Customization (Bleached Knots & Light Plucking)", price: 20, description: "$20" },
+  { id: "frontal-custom", name: "Frontal Customization (Bleached Knots & Light Plucking)", price: 20, description: "$20", lookupKey: "svc_frontal_customization_bleached_knots_light_plucking_usd_v1" },
 ];
 
 const wigs: Omit<Product, 'size' | 'quantity'>[] = [
@@ -474,11 +476,54 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
                     alert('Please select a size');
                     return;
                   }
+                  // Hafy Bob uses price_id system (not lookup_key)
+                  // We'll pass the price_id as a special identifier
+                  const priceId = getPriceId('hafy-bob-wig');
+                  const wigQuantity = selectedQuantities[wig.id] || 1;
+                  
+                  // Add main wig to cart
                   onAddToCart({
                     ...wig,
                     size,
-                    quantity: selectedQuantities[wig.id] || 1
+                    quantity: wigQuantity,
+                    priceId: priceId || undefined,
+                    // For now, don't include lookupKey for Hafy Bob
+                    // Cart will handle checkout via price_id
                   });
+
+                  // Add wigging service if selected
+                  const wiggingServiceId = selectedWiggingService[wig.id];
+                  if (wiggingServiceId) {
+                    const wiggingService = WIGGING_SERVICES.find(s => s.id === wiggingServiceId);
+                    if (wiggingService) {
+                      onAddToCart({
+                        id: Date.now() + 1,
+                        name: wiggingService.name,
+                        price: wiggingService.price,
+                        quantity: 1, // Wigging services are typically per-wig
+                        lookupKey: wiggingService.lookupKey
+                      });
+                    }
+                  }
+
+                  // Add coloring service if selected
+                  const coloringServiceId = selectedColoringService[wig.id];
+                  if (coloringServiceId) {
+                    const coloringService = COLORING_SERVICES.find(s => s.id === coloringServiceId);
+                    if (coloringService) {
+                      onAddToCart({
+                        id: Date.now() + 2,
+                        name: coloringService.name,
+                        price: coloringService.price,
+                        quantity: 1, // Coloring for whole wig, not per bundle
+                        lookupKey: coloringService.lookupKey
+                      });
+                    }
+                  }
+
+                  // Reset selections
+                  setSelectedWiggingService({...selectedWiggingService, [wig.id]: ''});
+                  setSelectedColoringService({...selectedColoringService, [wig.id]: ''});
                 }}
                 disabled={wig.available === false}
                 style={{

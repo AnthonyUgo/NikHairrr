@@ -2,21 +2,23 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
+import { getProductsByCategory } from "../data/productCatalog";
 
-type Product = { id: number; name: string; price: number; image: string; size?: string; quantity: number; available?: boolean; description?: string; type?: string };
+type Product = { id: number; name: string; price: number; image?: string; size?: string; quantity: number; available?: boolean; description?: string; type?: string; lookupKey?: string };
 
 type ServiceAddon = {
   id: string;
   name: string;
   price: number;
   description: string;
+  lookupKey: string;
 };
 
 const COLORING_SERVICES: ServiceAddon[] = [
-  { id: "jet-black", name: "Jet Black", price: 30, description: "$30/bundle" },
-  { id: "browns", name: "Browns/Brunettes", price: 35, description: "$35/bundle" },
-  { id: "blondes", name: "Blondes", price: 50, description: "$50/bundle" },
-  { id: "reds", name: "Reds/Gingers", price: 50, description: "$50/bundle" },
+  { id: "jet-black", name: "Jet Black", price: 30, description: "$30/bundle", lookupKey: "svc_coloring_jet_black_per_bundle_usd_v1" },
+  { id: "browns", name: "Browns/Brunettes", price: 35, description: "$35/bundle", lookupKey: "svc_coloring_browns_brunettes_per_bundle_usd_v1" },
+  { id: "blondes", name: "Blondes", price: 50, description: "$50/bundle", lookupKey: "svc_coloring_blondes_per_bundle_usd_v1" },
+  { id: "reds", name: "Reds/Gingers", price: 50, description: "$50/bundle", lookupKey: "svc_coloring_reds_gingers_per_bundle_usd_v1" },
 ];
 
 const closures: Omit<Product, 'size' | 'quantity'>[] = [
@@ -61,6 +63,17 @@ export default function ShopClosures({ onAddToCart }: { onAddToCart: (p: Product
       return SIZES_PRICES[closure.type].map(sp => sp.size);
     }
     return [];
+  };
+
+  // Get lookup key from catalog
+  const getLookupKey = (closure: typeof closures[0], size?: string): string | undefined => {
+    if (!size) return undefined;
+    const catalogClosures = getProductsByCategory('Closures');
+    const catalogProduct = catalogClosures.find(
+      p => p.construction === (closure.type === '5x5' ? '5x5 Closure' : closure.type) && 
+           p.sizeDisplay === size
+    );
+    return catalogProduct?.lookupKey;
   };
 
   return (
@@ -412,12 +425,38 @@ export default function ShopClosures({ onAddToCart }: { onAddToCart: (p: Product
                     alert('Please select a size');
                     return;
                   }
+                  const lookupKey = getLookupKey(closure, size);
+                  if (!lookupKey) {
+                    alert('This size is not available for checkout yet');
+                    return;
+                  }
+                  // Add main closure to cart
+                  const closureQuantity = selectedQuantities[closure.id] || 1;
                   onAddToCart({
                     ...closure,
                     size,
-                    quantity: selectedQuantities[closure.id] || 1,
-                    price: getPrice(closure, size)
+                    quantity: closureQuantity,
+                    price: getPrice(closure, size),
+                    lookupKey
                   });
+
+                  // Add coloring service if selected (multiplied by closure quantity)
+                  const coloringServiceId = selectedColoringService[closure.id];
+                  if (coloringServiceId) {
+                    const coloringService = COLORING_SERVICES.find(s => s.id === coloringServiceId);
+                    if (coloringService) {
+                      onAddToCart({
+                        id: Date.now() + 1,
+                        name: coloringService.name,
+                        price: coloringService.price,
+                        quantity: closureQuantity,
+                        lookupKey: coloringService.lookupKey
+                      });
+                    }
+                  }
+
+                  // Reset selections
+                  setSelectedColoringService({...selectedColoringService, [closure.id]: ''});
                 }}
                 disabled={closure.available === false}
                 style={{ 

@@ -2,77 +2,69 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiGrid, FiList } from "react-icons/fi";
-import { getProductsByCategory, getServicesByType } from "../data/productCatalog";
 
-type Product = { 
-  id: number; 
-  name: string; 
-  price: number; 
-  image?: string; // Optional for services
-  size?: string; 
-  quantity: number; 
-  available?: boolean; 
-  description?: string; 
-  priceMap?: {[key: string]: number};
-  lookupKey?: string;
-};
+type Product = { id: number; name: string; price: number; image: string; size?: string; quantity: number; available?: boolean; description?: string; priceMap?: {[key: string]: number} };
 
 type ServiceAddon = {
   id: string;
   name: string;
   price: number;
   description: string;
-  lookupKey: string;
 };
 
-// Load bundles from catalog
-const catalogBundles = getProductsByCategory('Bundles');
+const COLORING_SERVICES: ServiceAddon[] = [
+  { id: "jet-black", name: "Jet Black", price: 30, description: "$30/bundle" },
+  { id: "browns", name: "Browns/Brunettes", price: 35, description: "$35/bundle" },
+  { id: "blondes", name: "Blondes", price: 50, description: "$50/bundle" },
+  { id: "reds", name: "Reds/Gingers", price: 50, description: "$50/bundle" },
+];
 
-// Group bundles by size to create variant pricing
-const bundleVariants = catalogBundles.reduce((acc, bundle) => {
-  if (bundle.sizeDisplay) {
-    acc[bundle.sizeDisplay] = bundle.price;
-  }
-  return acc;
-}, {} as {[key: string]: number});
+const WIGGING_SERVICES: ServiceAddon[] = [
+  { id: "3-bundles-closure", name: "3 Bundles & Closure", price: 35, description: "$35" },
+  { id: "extra-bundle", name: "Extra Bundle", price: 10, description: "$10" },
+];
 
-// Load services from catalog
-const coloringServices = getServicesByType('coloring');
-const wiggingServices = getServicesByType('wigging');
-
-const COLORING_SERVICES: ServiceAddon[] = coloringServices.map(svc => ({
-  id: svc.lookupKey,
-  name: svc.productName.replace('Coloring: ', '').replace(' (per bundle)', ''),
-  price: svc.price,
-  description: `$${svc.price}${svc.productName.includes('per bundle') ? '/bundle' : ''}`,
-  lookupKey: svc.lookupKey
-}));
-
-const WIGGING_SERVICES: ServiceAddon[] = wiggingServices.map(svc => ({
-  id: svc.lookupKey,
-  name: svc.productName.replace(' (Wigging)', '').replace(' (each, Wigging add-on)', ''),
-  price: svc.price,
-  description: `$${svc.price}`,
-  lookupKey: svc.lookupKey
-}));
-
-const SIZES = Object.keys(bundleVariants).sort((a, b) => {
-  const aNum = parseInt(a);
-  const bNum = parseInt(b);
-  return aNum - bNum;
-});
+const SIZES_WITH_PRICES: {size: string; price: number}[] = [
+  { size: '12"', price: 120 },
+  { size: '14"', price: 135 },
+  { size: '16"', price: 155 },
+  { size: '18"', price: 175 },
+  { size: '20"', price: 195 },
+  { size: '22"', price: 225 },
+  { size: '24"', price: 255 },
+  { size: '26"', price: 285 },
+  { size: '28"', price: 310 },
+];
 
 const bundles: Omit<Product, 'size' | 'quantity'>[] = [
   { 
     id: 1, 
     name: "Natural Wave Bundle", 
-    price: bundleVariants[SIZES[0]] || 120, // Use first size as base price
+    price: 120, // Starting price
     image: "/bundles-1.jpeg", 
     available: true,
-    description: "Premium ST/BW texture\nTotal weight 100g per bundle\nNatural flowing wave pattern\nDouble drawn quality",
-    priceMap: bundleVariants
+    description: "Premium natural wave texture\nTotal weight 100g per bundle\nNatural flowing wave pattern\nDouble drawn quality",
+    priceMap: Object.fromEntries(SIZES_WITH_PRICES.map(({size, price}) => [size, price]))
+  },
+  { 
+    id: 2, 
+    name: "Straight Bundle", 
+    price: 90, 
+    image: "/bundles-2.jpeg", 
+    available: false,
+    description: "Silky straight texture\nTotal weight 100g per bundle\nSleek and smooth finish"
+  },
+  { 
+    id: 3, 
+    name: "Deep Wave Bundle", 
+    price: 95, 
+    image: "/bundles-3.jpeg", 
+    available: false,
+    description: "Luxurious deep wave texture\nTotal weight 100g per bundle\nDefined curl pattern"
   },
 ];
+
+const SIZES = ['12"', '14"', '16"', '18"', '20"', '22"', '24"', '26"', '28"'];
 
 export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product) => void }) {
   const [selectedSizes, setSelectedSizes] = useState<{[key: number]: string}>({});
@@ -94,16 +86,6 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
       return bundle.priceMap[size];
     }
     return bundle.price;
-  };
-
-  // Get lookup key for bundle + size
-  const getLookupKey = (_bundle: typeof bundles[0], size?: string): string | undefined => {
-    if (!size) return undefined;
-    // Find the catalog product for this size
-    const catalogProduct = catalogBundles.find(
-      p => p.sizeDisplay === size
-    );
-    return catalogProduct?.lookupKey;
   };
 
   return (
@@ -325,7 +307,10 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                         <span style={{ fontWeight: 700, color: "#ffffff" }}>ST</span> - Straight
                       </div>
                       <div style={{ fontSize: "0.8rem", color: "#e5e5e5" }}>
-                        <span style={{ fontWeight: 700, color: "#ffffff" }}>BW</span> - Body Wave
+                        <span style={{ fontWeight: 700, color: "#ffffff" }}>NW</span> - Natural Wave
+                      </div>
+                      <div style={{ fontSize: "0.8rem", color: "#e5e5e5" }}>
+                        <span style={{ fontWeight: 700, color: "#ffffff" }}>NW</span> - Natural Wave
                       </div>
                     </div>
                   </div>
@@ -555,54 +540,12 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                     alert('Please select a size');
                     return;
                   }
-                  const lookupKey = getLookupKey(b, size);
-                  if (!lookupKey) {
-                    alert('This size is not available for checkout yet');
-                    return;
-                  }
-                  // Add main bundle to cart
-                  const bundleQuantity = selectedQuantities[b.id] || 1;
                   onAddToCart({
                     ...b,
                     size,
-                    quantity: bundleQuantity,
-                    price: getPrice(b, size),
-                    lookupKey
+                    quantity: selectedQuantities[b.id] || 1,
+                    price: getPrice(b, size)
                   });
-
-                  // Add wigging service if selected
-                  const wiggingServiceId = selectedWiggingService[b.id];
-                  if (wiggingServiceId) {
-                    const wiggingService = WIGGING_SERVICES.find(s => s.id === wiggingServiceId);
-                    if (wiggingService) {
-                      onAddToCart({
-                        id: Date.now() + 1, // Unique ID for service
-                        name: wiggingService.name,
-                        price: wiggingService.price,
-                        quantity: 1, // Wigging services are typically per-wig, not per bundle
-                        lookupKey: wiggingService.lookupKey
-                      });
-                    }
-                  }
-
-                  // Add coloring service if selected (multiplied by bundle quantity)
-                  const coloringServiceId = selectedColoringService[b.id];
-                  if (coloringServiceId) {
-                    const coloringService = COLORING_SERVICES.find(s => s.id === coloringServiceId);
-                    if (coloringService) {
-                      onAddToCart({
-                        id: Date.now() + 2, // Unique ID for service
-                        name: coloringService.name,
-                        price: coloringService.price,
-                        quantity: bundleQuantity, // Coloring is per bundle
-                        lookupKey: coloringService.lookupKey
-                      });
-                    }
-                  }
-
-                  // Reset selections after adding
-                  setSelectedWiggingService({...selectedWiggingService, [b.id]: ''});
-                  setSelectedColoringService({...selectedColoringService, [b.id]: ''});
                 }}
                 disabled={b.available === false}
                 style={{ 

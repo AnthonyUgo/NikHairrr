@@ -1,10 +1,17 @@
 // src/components/CartDrawer.tsx
 import { useState } from "react";
 import { FiX, FiTrash2 } from "react-icons/fi";
-import { redirectToMvmntPay } from "../utils/mvmntpay";
-import { getPriceId } from "../utils/productPrices";
+import { redirectToMvmntPayMultiItem, type MvmntPayLineItem } from "../utils/mvmntpay";
 
-type Product = { id: number; name: string; price: number; size?: string; quantity: number };
+type Product = { 
+  id: number; 
+  name: string; 
+  price: number; 
+  size?: string; 
+  quantity: number;
+  lookupKey?: string; // Stripe lookup key for checkout
+  priceId?: string; // Legacy Stripe price_id (for Hafy Bob)
+};
 
 export default function CartDrawer({
   cart,
@@ -35,31 +42,26 @@ export default function CartDrawer({
     setCheckoutError(null);
 
     try {
-      // For now, only handle Hafy Bob wig
-      const hafyBobItem = cart.find(item => 
-        item.name.toLowerCase().includes('hafy') || 
-        item.name.toLowerCase().includes('bob')
-      );
-
-      if (!hafyBobItem) {
-        setCheckoutError('Only Hafy Bob wig is available for checkout at this time. Other products coming soon!');
+      // Check if all items have either lookup key or price ID
+      const itemsWithoutCheckoutId = cart.filter(item => !item.lookupKey && !item.priceId);
+      
+      if (itemsWithoutCheckoutId.length > 0) {
+        const itemNames = itemsWithoutCheckoutId.map(item => item.name).join(', ');
+        setCheckoutError(`These items are not yet available for checkout: ${itemNames}. Please remove them from your cart.`);
         setIsProcessing(false);
         return;
       }
 
-      // Get Stripe Price ID for Hafy Bob
-      const priceId = getPriceId('hafy-bob-wig');
-      
-      if (!priceId) {
-        setCheckoutError('Product not configured for checkout. Please contact support.');
-        setIsProcessing(false);
-        return;
-      }
-      
-      // Redirect to MvmntPay checkout
-      redirectToMvmntPay(
-        priceId,
-        hafyBobItem.quantity,
+      // Build line items for Mvmnt Pay
+      // Items with lookupKey use lookup_key, items with priceId use price_id
+      const lineItems: MvmntPayLineItem[] = cart.map(item => ({
+        lookup_key: item.lookupKey || item.priceId!,
+        quantity: item.quantity
+      }));
+
+      // Redirect to MvmntPay checkout with all items
+      redirectToMvmntPayMultiItem(
+        lineItems,
         `${window.location.origin}/success`,
         window.location.href  // Return to current page (shop with cart open)
       );
