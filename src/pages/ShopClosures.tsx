@@ -148,6 +148,7 @@ export default function ShopClosures({ onAddToCart }: { onAddToCart: (p: Product
                 loop
                 muted
                 playsInline
+                preload="none"
                 src="/videos/nh_1.MOV"
                 style={{ 
                   width: "100%",

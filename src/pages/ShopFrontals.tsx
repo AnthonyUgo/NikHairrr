@@ -52,7 +52,7 @@ const SIZES_PRICES: {[key: string]: {size: string; price: number}[]} = {
     { size: '14"', price: 290 },
     { size: '16"', price: 310 },
     { size: '18"', price: 329 },
-    { size: '20"', price: 350 },
+    { size: '20"', price: 370 },
   ]
 };
 
@@ -189,6 +189,7 @@ export default function ShopFrontals({ onAddToCart }: { onAddToCart: (p: Product
                 loop
                 muted
                 playsInline
+                preload="none"
                 src={`/videos/nh_${(index % 2) + 3}.MOV`}
                 style={{ 
                   width: "100%",

@@ -206,7 +206,8 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
                 loop
                 muted
                 playsInline
-                src={`/videos/nh_${(index % 2) + 3}.MOV`}
+                preload="none"
+                src={`/videos/nh_${(index % 4) + 1}.MOV`}
                 style={{ 
                   width: "100%",
                   height: "100%",

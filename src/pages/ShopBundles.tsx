@@ -34,7 +34,6 @@ const SIZES_WITH_PRICES: {size: string; price: number}[] = [
   { size: '24"', price: 255 },
   { size: '26"', price: 285 },
   { size: '28"', price: 310 },
-  { size: '30"', price: 340 },
 ];
 
 const bundles: Omit<Product, 'size' | 'quantity'>[] = [
@@ -65,7 +64,7 @@ const bundles: Omit<Product, 'size' | 'quantity'>[] = [
   },
 ];
 
-const SIZES = ['12"', '14"', '16"', '18"', '20"', '22"', '24"', '26"', '28"', '30"'];
+const SIZES = ['12"', '14"', '16"', '18"', '20"', '22"', '24"', '26"', '28"'];
 
 export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product) => void }) {
   const [selectedSizes, setSelectedSizes] = useState<{[key: number]: string}>({});
@@ -242,6 +241,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                 loop
                 muted
                 playsInline
+                preload="none"
                 src={`/videos/nh_${(index % 2) + 1}.MOV`}
                 style={{ 
                   width: "100%",

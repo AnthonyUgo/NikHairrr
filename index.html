@@ -31,6 +31,12 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/small-logo.svg" />
     
+    <!-- Performance Optimizations -->
+    <link rel="preload" href="/NH-Logo.png" as="image" type="image/png" />
+    <link rel="preload" href="/small-logo.svg" as="image" type="image/svg+xml" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -67,6 +73,23 @@
       ]
     }
     </script>
+    
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      
+      /* Performance: GPU-accelerated scrolling */
+      * {
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      /* Optimize repaints */
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
   </head>
   <body>
     <div id="app"></div>
