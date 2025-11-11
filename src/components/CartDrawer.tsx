@@ -28,18 +28,44 @@ export default function CartDrawer({
 }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [showCustomerForm, setShowCustomerForm] = useState(false);
+  const [customerName, setCustomerName] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [formError, setFormError] = useState<string | null>(null);
   
   const subtotal = cart.reduce((sum, p) => sum + (p.price * p.quantity), 0);
   
   const sizes = ["12\"", "14\"", "16\"", "18\"", "20\"", "22\"", "24\"", "26\"", "28\"", "30\""];
 
-  const handleCheckout = async () => {
+  const handleInitiateCheckout = () => {
     if (cart.length === 0) {
+      return;
+    }
+    // Show customer info form
+    setShowCustomerForm(true);
+    setFormError(null);
+  };
+
+  const handleCheckout = async () => {
+    // Validate form
+    if (!customerName.trim()) {
+      setFormError("Please enter your name");
+      return;
+    }
+    if (!customerEmail.trim()) {
+      setFormError("Please enter your email");
+      return;
+    }
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(customerEmail)) {
+      setFormError("Please enter a valid email address");
       return;
     }
 
     setIsProcessing(true);
     setCheckoutError(null);
+    setFormError(null);
 
     try {
       // Check if all items have either lookup key or price ID
@@ -72,13 +98,17 @@ export default function CartDrawer({
         }
       });
 
-      // Redirect to MvmntPay checkout with all items
+      // Redirect to MvmntPay checkout with all items and customer info
       const cancelUrl = `${window.location.href}${window.location.href.includes('?') ? '&' : '?'}checkout_canceled=true`;
       
       redirectToMvmntPayMultiItem(
         lineItems,
         `${window.location.origin}/success`,
-        cancelUrl  // Return to current page with canceled flag
+        cancelUrl,  // Return to current page with canceled flag
+        {
+          customer_name: customerName.trim(),
+          customer_email: customerEmail.trim()
+        }
       );
       
     } catch (error) {
@@ -389,19 +419,19 @@ export default function CartDrawer({
       )}
 
       <button
-        onClick={handleCheckout}
-        disabled={cart.length === 0 || isProcessing}
+        onClick={handleInitiateCheckout}
+        disabled={cart.length === 0}
         style={{ 
           width: "calc(100% - 4rem)", 
           margin: "0 2rem 2rem 2rem",
           padding: "1.25rem 2rem", 
-          background: cart.length === 0 || isProcessing ? "rgba(255, 255, 255, 0.1)" : "#ffffff", 
+          background: cart.length === 0 ? "rgba(255, 255, 255, 0.1)" : "#ffffff", 
           border: "none", 
           borderRadius: "0", 
-          color: cart.length === 0 || isProcessing ? "#666666" : "#000000",
+          color: cart.length === 0 ? "#666666" : "#000000",
           fontWeight: 600,
           fontSize: "0.95rem",
-          cursor: cart.length === 0 || isProcessing ? "not-allowed" : "pointer",
+          cursor: cart.length === 0 ? "not-allowed" : "pointer",
           transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
           letterSpacing: "0.12em",
           flexShrink: 0,
@@ -409,21 +439,224 @@ export default function CartDrawer({
           overflow: "hidden",
         }}
         onMouseEnter={(e) => {
-          if (cart.length > 0 && !isProcessing) {
+          if (cart.length > 0) {
             (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.02)";
             (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 15px 35px rgba(255, 255, 255, 0.2)";
           }
         }}
         onMouseLeave={(e) => {
-          if (cart.length > 0 && !isProcessing) {
+          if (cart.length > 0) {
             (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
             (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
           }
         }}
       >
-        {isProcessing ? "Processing..." : cart.length === 0 ? "Add Items to Checkout" : "Proceed to Checkout"}
+        {cart.length === 0 ? "Add Items to Checkout" : "Proceed to Checkout"}
       </button>
     </div>
+    
+    {/* Customer Information Modal */}
+    {showCustomerForm && (
+      <>
+        {/* Modal backdrop */}
+        <div
+          onClick={() => setShowCustomerForm(false)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.7)",
+            zIndex: 250,
+          }}
+        />
+        
+        {/* Modal content */}
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "min(450px, 90vw)",
+            background: "rgba(0, 0, 0, 0.98)",
+            backdropFilter: "blur(24px)",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            borderRadius: "0",
+            padding: "2.5rem",
+            zIndex: 251,
+            boxShadow: "0 20px 60px rgba(0, 0, 0, 0.9)",
+          }}
+        >
+          <h3 style={{
+            color: "#ffffff",
+            fontSize: "1.5rem",
+            fontWeight: 700,
+            marginTop: 0,
+            marginBottom: "0.5rem",
+            letterSpacing: "0.1em",
+          }}>
+            CUSTOMER INFORMATION
+          </h3>
+          <p style={{
+            color: "#999",
+            fontSize: "0.85rem",
+            marginBottom: "2rem",
+            lineHeight: 1.5,
+          }}>
+            Please provide your contact information to complete your order
+          </p>
+          
+          {formError && (
+            <div style={{
+              marginBottom: "1.5rem",
+              padding: "0.75rem 1rem",
+              background: "rgba(255, 68, 68, 0.1)",
+              border: "1px solid rgba(255, 68, 68, 0.3)",
+              color: "#ff4444",
+              fontSize: "0.85rem",
+            }}>
+              {formError}
+            </div>
+          )}
+          
+          <div style={{ marginBottom: "1.5rem" }}>
+            <label style={{
+              display: "block",
+              color: "#e5e5e5",
+              fontSize: "0.85rem",
+              fontWeight: 600,
+              marginBottom: "0.5rem",
+              letterSpacing: "0.05em",
+            }}>
+              FULL NAME *
+            </label>
+            <input
+              type="text"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+              placeholder="Enter your full name"
+              style={{
+                width: "100%",
+                padding: "0.875rem 1rem",
+                background: "rgba(255, 255, 255, 0.05)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                borderRadius: "0",
+                color: "#ffffff",
+                fontSize: "0.95rem",
+                outline: "none",
+                transition: "all 0.2s ease",
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.4)";
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+              }}
+            />
+          </div>
+          
+          <div style={{ marginBottom: "2rem" }}>
+            <label style={{
+              display: "block",
+              color: "#e5e5e5",
+              fontSize: "0.85rem",
+              fontWeight: 600,
+              marginBottom: "0.5rem",
+              letterSpacing: "0.05em",
+            }}>
+              EMAIL ADDRESS *
+            </label>
+            <input
+              type="email"
+              value={customerEmail}
+              onChange={(e) => setCustomerEmail(e.target.value)}
+              placeholder="Enter your email address"
+              style={{
+                width: "100%",
+                padding: "0.875rem 1rem",
+                background: "rgba(255, 255, 255, 0.05)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                borderRadius: "0",
+                color: "#ffffff",
+                fontSize: "0.95rem",
+                outline: "none",
+                transition: "all 0.2s ease",
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.4)";
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+              }}
+            />
+          </div>
+          
+          <div style={{ display: "flex", gap: "1rem" }}>
+            <button
+              onClick={() => setShowCustomerForm(false)}
+              style={{
+                flex: 1,
+                padding: "1rem",
+                background: "rgba(255, 255, 255, 0.1)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                borderRadius: "0",
+                color: "#ffffff",
+                fontWeight: 600,
+                fontSize: "0.9rem",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                letterSpacing: "0.1em",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.15)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+              }}
+            >
+              CANCEL
+            </button>
+            <button
+              onClick={handleCheckout}
+              disabled={isProcessing}
+              style={{
+                flex: 1,
+                padding: "1rem",
+                background: isProcessing ? "rgba(255, 255, 255, 0.5)" : "#ffffff",
+                border: "none",
+                borderRadius: "0",
+                color: "#000000",
+                fontWeight: 600,
+                fontSize: "0.9rem",
+                cursor: isProcessing ? "not-allowed" : "pointer",
+                transition: "all 0.2s ease",
+                letterSpacing: "0.1em",
+              }}
+              onMouseEnter={(e) => {
+                if (!isProcessing) {
+                  e.currentTarget.style.transform = "scale(1.02)";
+                  e.currentTarget.style.boxShadow = "0 8px 24px rgba(255, 255, 255, 0.2)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isProcessing) {
+                  e.currentTarget.style.transform = "scale(1)";
+                  e.currentTarget.style.boxShadow = "none";
+                }
+              }}
+            >
+              {isProcessing ? "PROCESSING..." : "CONTINUE TO CHECKOUT"}
+            </button>
+          </div>
+        </div>
+      </>
+    )}
     </>
   );
 }

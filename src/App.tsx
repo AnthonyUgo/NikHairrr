@@ -42,6 +42,7 @@ export default function App() {
   });
   const [cartOpen, setCartOpen] = useState(false);
   const [checkoutCanceled, setCheckoutCanceled] = useState(false);
+  const [itemAddedNotification, setItemAddedNotification] = useState<string | null>(null);
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
@@ -93,7 +94,9 @@ export default function App() {
         return [...prev, product];
       }
     });
-    // Cart will only open when user clicks cart icon
+    // Show notification
+    setItemAddedNotification(product.name);
+    setTimeout(() => setItemAddedNotification(null), 3000);
   };
 
   const updateQuantity = (index: number, newQuantity: number) => {
@@ -142,6 +145,29 @@ export default function App() {
           animation: "slideDown 0.3s ease-out",
         }}>
           ⚠️ Checkout canceled - Your items are still in your cart
+        </div>
+      )}
+      
+      {/* Item Added Notification */}
+      {itemAddedNotification && (
+        <div style={{
+          position: "fixed",
+          top: "100px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 300,
+          background: "rgba(0, 0, 0, 0.95)",
+          backdropFilter: "blur(12px)",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
+          padding: "1rem 2rem",
+          color: "#ffffff",
+          fontWeight: 600,
+          fontSize: "0.95rem",
+          letterSpacing: "0.05em",
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
+          animation: "slideDown 0.3s ease-out",
+        }}>
+          ✓ {itemAddedNotification} added to cart
         </div>
       )}
       
