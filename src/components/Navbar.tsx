@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { FiHome, FiShoppingBag, FiMessageCircle, FiShoppingCart, FiTool } from "react-icons/fi";
 
-export default function Navbar({ onCartClick }: { onCartClick: () => void }) {
+export default function Navbar({ onCartClick, cartItemCount = 0 }: { onCartClick: () => void; cartItemCount?: number }) {
   const navigate = useNavigate();
 
   return (
@@ -204,6 +204,7 @@ export default function Navbar({ onCartClick }: { onCartClick: () => void }) {
             fontSize: "0.95rem",
             transition: "all 0.3s ease",
             boxShadow: "0 4px 15px rgba(255, 255, 255, 0.3)",
+            position: "relative",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = "translateY(-2px)";
@@ -215,6 +216,27 @@ export default function Navbar({ onCartClick }: { onCartClick: () => void }) {
           }}
         >
           <FiShoppingCart size={18} /> <span className="nav-link-text">Cart</span>
+          {cartItemCount > 0 && (
+            <span style={{
+              position: "absolute",
+              top: "-8px",
+              right: "-8px",
+              background: "#ff0000",
+              color: "#ffffff",
+              borderRadius: "50%",
+              width: "24px",
+              height: "24px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "0.75rem",
+              fontWeight: 700,
+              border: "2px solid #000000",
+              boxShadow: "0 2px 8px rgba(255, 0, 0, 0.4)",
+            }}>
+              {cartItemCount > 99 ? '99+' : cartItemCount}
+            </span>
+          )}
         </button>
       </div>
 

@@ -72,7 +72,7 @@ export default function App() {
 
   const addToCart = (product: Product) => {
     setCart((prev) => [...prev, product]);
-    setCartOpen(true);
+    // Cart will only open when user clicks cart icon
   };
 
   const updateQuantity = (index: number, newQuantity: number) => {
@@ -99,7 +99,7 @@ export default function App() {
   <div className={appBackground}>
     <Router>
       <ScrollToTop />
-      <Navbar onCartClick={() => setCartOpen(!cartOpen)} />
+      <Navbar onCartClick={() => setCartOpen(!cartOpen)} cartItemCount={cart.length} />
       
       {/* Checkout Canceled Notification */}
       {checkoutCanceled && (
