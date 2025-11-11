@@ -159,9 +159,10 @@ export default function ShopClosures({ onAddToCart }: { onAddToCart: (p: Product
               overflow: "hidden",
             }}>
               {closure.image && (
-                <img 
+                <img
                   src={closure.image}
                   alt={closure.name}
+                  loading="lazy"
                   style={{ 
                     width: "100%",
                     height: "100%",

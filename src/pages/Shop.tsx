@@ -59,6 +59,7 @@ export default function Shop() {
             <img
               src="/bundles.png"
               alt="Bundles"
+              loading="lazy"
               style={{ 
                 width: "100%", 
                 height: "100%", 
@@ -134,6 +135,7 @@ export default function Shop() {
             <img
               src="/wigs.png"
               alt="Wigs"
+              loading="lazy"
               style={{ 
                 width: "100%", 
                 height: "100%", 
@@ -209,6 +211,7 @@ export default function Shop() {
             <img
               src="/closure.png"
               alt="Closures"
+              loading="lazy"
               style={{ 
                 width: "100%", 
                 height: "100%", 
@@ -284,6 +287,7 @@ export default function Shop() {
             <img
               src="/frontals.png"
               alt="Frontals"
+              loading="lazy"
               style={{ 
                 width: "100%", 
                 height: "100%", 

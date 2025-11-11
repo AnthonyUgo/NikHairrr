@@ -236,6 +236,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.8)",
               display: viewMode === 'list' ? "flex" : "block",
               flexDirection: viewMode === 'list' ? "row" : undefined,
+              flexWrap: viewMode === 'list' ? "wrap" : undefined,
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-8px)";
@@ -249,7 +250,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
             }}
           >
             <div style={{ 
-              width: viewMode === 'list' ? "300px" : "100%",
+              width: viewMode === 'list' ? "min(300px, 40%)" : "100%",
               aspectRatio: viewMode === 'list' ? "1" : "4 / 5",
               position: "relative",
               flexShrink: 0,
@@ -258,6 +259,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
               <img
                 src="/bundles.png"
                 alt={b.name}
+                loading="lazy"
                 style={{ 
                   width: "100%",
                   height: "100%",
@@ -270,7 +272,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                 background: "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%)",
               }} />
             </div>
-            <div style={{ padding: "1.5rem", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+            <div style={{ padding: "1.5rem", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", minWidth: "0" }}>
               <div>
                 <h3 style={{ color: "#ffffff", marginBottom: "0.75rem", fontSize: "1.4rem", fontWeight: 700, letterSpacing: "0.05em" }}>
                   {b.name}
@@ -610,10 +612,11 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                   color: b.available === false ? "rgba(255, 255, 255, 0.3)" : "#000000", 
                   fontWeight: 600, 
                   fontSize: "0.9rem",
-                  cursor: b.available === false ? "not-allowed" : "pointer", 
-                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                  width: viewMode === 'list' ? "200px" : "100%",
-                  letterSpacing: "0.12em",
+                cursor: b.available === false ? "not-allowed" : "pointer", 
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                width: viewMode === 'list' ? "auto" : "100%",
+                minWidth: viewMode === 'list' ? "150px" : undefined,
+                letterSpacing: "0.12em",
                   position: "relative",
                   overflow: "hidden",
                 }}

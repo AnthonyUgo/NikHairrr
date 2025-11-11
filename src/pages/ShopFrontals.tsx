@@ -208,9 +208,10 @@ export default function ShopFrontals({ onAddToCart }: { onAddToCart: (p: Product
               overflow: "hidden",
             }}>
               {frontal.image && (
-                <img 
+                <img
                   src={frontal.image}
                   alt={frontal.name}
+                  loading="lazy"
                   style={{ 
                     width: "100%",
                     height: "100%",

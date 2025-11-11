@@ -75,24 +75,28 @@
     </script>
     
     <style>
+      /* Critical CSS for performance */
       html {
         scroll-behavior: smooth;
-        overflow-y: scroll; /* Always show scrollbar to prevent layout shift */
+        overflow-y: scroll;
+        scrollbar-gutter: stable; /* Prevent layout shift from scrollbar */
       }
       
-      /* Performance: GPU-accelerated scrolling */
+      /* GPU-accelerated scrolling */
       * {
         -webkit-overflow-scrolling: touch;
+        will-change: auto; /* Let browser decide what to optimize */
       }
       
-      /* Optimize repaints and ensure scrollbar doesn't overlap header */
+      /* Prevent layout shifts */
       body {
         margin: 0;
         padding: 0;
         padding-top: 72px; /* Space for fixed navbar */
+        min-height: 100vh;
       }
       
-      /* Ensure scrollbar is always visible and doesn't overlap content */
+      /* Custom scrollbar styling */
       ::-webkit-scrollbar {
         width: 12px;
       }
@@ -108,6 +112,24 @@
       
       ::-webkit-scrollbar-thumb:hover {
         background: rgba(255, 255, 255, 0.5);
+      }
+      
+      /* Optimize image and video rendering */
+      img, video {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+      }
+      
+      /* Prevent FOUC (Flash of Unstyled Content) */
+      #app {
+        opacity: 0;
+        animation: fadeIn 0.3s ease-in forwards;
+      }
+      
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
       }
     </style>
   </head>

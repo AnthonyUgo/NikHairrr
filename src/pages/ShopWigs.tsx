@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiGrid, FiList } from "react-icons/fi";
 import { getPriceId } from "../utils/productPrices";
+import LazyVideo from "../components/LazyVideo";
 
 type Product = { id: number; name: string; price: number; image?: string; size?: string; quantity: number; available?: boolean; description?: string; availableSizes?: string[]; lookupKey?: string; priceId?: string };
 
@@ -184,6 +185,7 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
               transition: "all 0.3s ease",
               display: viewMode === 'list' ? "flex" : "block",
               flexDirection: viewMode === 'list' ? "row" : undefined,
+              flexWrap: viewMode === 'list' ? "wrap" : undefined,
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-8px)";
@@ -197,18 +199,13 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
             }}
           >
             <div style={{ 
-              width: viewMode === 'list' ? "300px" : "100%",
+              width: viewMode === 'list' ? "min(300px, 40%)" : "100%",
               aspectRatio: viewMode === 'list' ? "1" : "4 / 5",
               position: "relative",
               flexShrink: 0,
               overflow: "hidden",
             }}>
-              <video 
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="none"
+              <LazyVideo 
                 src={`/videos/nh_${(index % 4) + 1}.MOV`}
                 style={{ 
                   width: "100%",
@@ -222,7 +219,7 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
                 background: "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%)",
               }} />
             </div>
-            <div style={{ padding: "1.5rem", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+            <div style={{ padding: "1.5rem", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", minWidth: "0" }}>
               <div>
                 <h3 style={{ marginBottom: "0.75rem", color: "#ffffff", fontSize: "1.4rem", fontWeight: 700, letterSpacing: "0.05em" }}>
                   {wig.name}
@@ -534,9 +531,10 @@ export default function ShopWigs({ onAddToCart }: { onAddToCart: (p: Product) =>
                   color: wig.available === false ? "rgba(255, 255, 255, 0.3)" : "#000000",
                   fontWeight: 600,
                   fontSize: "0.9rem",
-                  cursor: wig.available === false ? "not-allowed" : "pointer",
+                  cursor: wig.available === false ? "not-allowed" : "pointer", 
                   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                  width: viewMode === 'list' ? "200px" : "100%",
+                  width: viewMode === 'list' ? "auto" : "100%",
+                  minWidth: viewMode === 'list' ? "150px" : undefined,
                   letterSpacing: "0.12em",
                   position: "relative",
                   overflow: "hidden",

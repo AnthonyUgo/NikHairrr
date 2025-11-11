@@ -71,7 +71,28 @@ export default function App() {
   }, [cart.length]);
 
   const addToCart = (product: Product) => {
-    setCart((prev) => [...prev, product]);
+    setCart((prev) => {
+      // Check if identical item already exists (same id, size, lookupKey/priceId)
+      const existingIndex = prev.findIndex(item => 
+        item.id === product.id && 
+        item.size === product.size &&
+        item.lookupKey === product.lookupKey &&
+        item.name === product.name // Important for add-ons which might share same id
+      );
+      
+      if (existingIndex !== -1) {
+        // Item exists, increase quantity
+        const updated = [...prev];
+        updated[existingIndex] = {
+          ...updated[existingIndex],
+          quantity: updated[existingIndex].quantity + product.quantity
+        };
+        return updated;
+      } else {
+        // New item, add to cart
+        return [...prev, product];
+      }
+    });
     // Cart will only open when user clicks cart icon
   };
 
