@@ -1,13 +1,148 @@
 // src/pages/Home.tsx
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import ReviewCarousel from "../components/ReviewCarousel";
+import { fadeInScale, float } from "../styles/app.css";
 
 export default function Home() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [showSubscribeSuccess, setShowSubscribeSuccess] = useState(false);
+
+  // Check if user just subscribed
+  useEffect(() => {
+    if (searchParams.get('subscribed') === 'true') {
+      setShowSubscribeSuccess(true);
+      // Remove the parameter from URL
+      searchParams.delete('subscribed');
+      setSearchParams(searchParams);
+      // Don't auto-hide - user can close manually
+    }
+  }, [searchParams, setSearchParams]);
 
   return (
     <div style={{
       fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     }}>
+      {/* Subscribe Success Message */}
+      {showSubscribeSuccess && (
+        <div style={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 1000,
+          background: "rgba(0, 0, 0, 0.98)",
+          backdropFilter: "blur(24px)",
+          border: "2px solid #ffffff",
+          padding: "3rem 4rem",
+          textAlign: "center",
+          animation: `${fadeInScale} 0.5s cubic-bezier(0.4, 0, 0.2, 1)`,
+          maxWidth: "90vw",
+          boxShadow: "0 0 60px rgba(255, 255, 255, 0.3)",
+        }}>
+          {/* Close button */}
+          <button
+            onClick={() => setShowSubscribeSuccess(false)}
+            style={{
+              position: "absolute",
+              top: "1rem",
+              right: "1rem",
+              background: "transparent",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              color: "#ffffff",
+              width: "32px",
+              height: "32px",
+              fontSize: "1.25rem",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+              e.currentTarget.style.transform = "rotate(90deg)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.transform = "rotate(0deg)";
+            }}
+          >
+            ×
+          </button>
+          
+          <div style={{
+            fontSize: "4rem",
+            marginBottom: "1rem",
+            animation: `${float} 2s ease-in-out infinite`,
+          }}>
+            ✦
+          </div>
+          <h2 style={{
+            color: "#ffffff",
+            fontSize: "2rem",
+            fontWeight: 700,
+            letterSpacing: "0.1em",
+            marginBottom: "1rem",
+          }}>
+            WELCOME TO THE FAMILY!
+          </h2>
+          <p style={{
+            color: "#e5e5e5",
+            fontSize: "1.1rem",
+            lineHeight: 1.6,
+            marginBottom: "1.5rem",
+          }}>
+            You're now part of our exclusive community.<br />
+            Get ready for luxury hair updates, styling tips, and special offers.
+          </p>
+          <a
+            href="mailto:"
+            onClick={() => setShowSubscribeSuccess(false)}
+            style={{
+              display: "inline-block",
+              padding: "0.75rem 2rem",
+              background: "#ffffff",
+              color: "#000000",
+              fontWeight: 600,
+              fontSize: "0.9rem",
+              letterSpacing: "0.1em",
+              marginTop: "1rem",
+              textDecoration: "none",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.05)";
+              e.currentTarget.style.boxShadow = "0 8px 24px rgba(255, 255, 255, 0.3)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          >
+            CHECK YOUR EMAIL
+          </a>
+        </div>
+      )}
+
+      {/* Backdrop overlay for success message */}
+      {showSubscribeSuccess && (
+        <div
+          onClick={() => setShowSubscribeSuccess(false)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.7)",
+            zIndex: 999,
+          }}
+        />
+      )}
+      
       {/* Hero Section */}
       <section style={{
         minHeight: "100vh",
@@ -129,6 +264,8 @@ export default function Home() {
               marginTop: "2rem",
               paddingTop: "2rem",
               borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+              flexWrap: "wrap",
+              justifyContent: "center",
             }}>
               <div>
                 <div style={{ fontSize: "0.75rem", color: "#666", letterSpacing: "0.15em", marginBottom: "0.5rem" }}>
@@ -447,29 +584,6 @@ export default function Home() {
                 </div>
                 <div>
                   <div style={{ color: "#ffffff", fontWeight: 600, marginBottom: "0.25rem" }}>
-                    Ethically Sourced
-                  </div>
-                  <div style={{ color: "#999", fontSize: "0.95rem" }}>
-                    Premium quality from sustainable origins
-                  </div>
-                </div>
-              </div>
-              
-              <div style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
-                <div style={{
-                  width: "40px",
-                  height: "40px",
-                  border: "1px solid rgba(255, 255, 255, 0.3)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "1.2rem",
-                  flexShrink: 0,
-                }}>
-                  ✦
-                </div>
-                <div>
-                  <div style={{ color: "#ffffff", fontWeight: 600, marginBottom: "0.25rem" }}>
                     Versatile Styling
                   </div>
                   <div style={{ color: "#999", fontSize: "0.95rem" }}>
@@ -567,7 +681,7 @@ export default function Home() {
             margin: "0 auto 3rem",
             opacity: 0.8,
           }}>
-            Every bundle is 100% single donor raw hair, ethically sourced and unprocessed. 
+            Every bundle is 100% single donor raw hair, unprocessed and authentic. 
             Natural cuticle-aligned hair that delivers authentic movement and shine. 
             Professional-grade quality that transforms your look instantly.
           </p>
@@ -645,7 +759,35 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Reviews Section */}
+      <section style={{
+        minHeight: "60vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "4rem 2rem",
+        position: "relative",
+        borderTop: "1px solid rgba(255, 255, 255, 0.05)",
+      }}>
+        <div style={{
+          maxWidth: "1200px",
+          width: "100%",
+        }}>
+          <h2 style={{
+            fontSize: "clamp(2rem, 5vw, 3.5rem)",
+            fontWeight: 700,
+            color: "#ffffff",
+            marginBottom: "3rem",
+            letterSpacing: "-0.02em",
+            textAlign: "center",
+          }}>
+            LOVED BY THOUSANDS
+          </h2>
+          <ReviewCarousel />
+        </div>
+      </section>
+
+      {/* Newsletter Signup Section */}
       <section style={{
         minHeight: "100vh",
         display: "flex",
@@ -668,7 +810,7 @@ export default function Home() {
             letterSpacing: "-0.02em",
             lineHeight: 1.1,
           }}>
-            READY TO<br/>ELEVATE YOUR LOOK?
+            STAY IN THE LOOP
           </h2>
           <p style={{
             fontSize: "1.25rem",
@@ -677,32 +819,108 @@ export default function Home() {
             marginBottom: "3rem",
             opacity: 0.8,
           }}>
-            Experience the difference that premium quality makes.
+            Get exclusive access to new collections, styling tips, and special offers.
           </p>
-          <button
-            onClick={() => navigate('/shop')}
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              
+              try {
+                await fetch('https://forms.zohopublic.com/nikenikh1/form/EmailSubscription/formperma/E0jD6KvZ3KeNrofLU917ViirgyDZbf3lx8aJh8CvNeA/htmlRecords/submit', {
+                  method: 'POST',
+                  body: formData,
+                  mode: 'no-cors', // Zoho doesn't support CORS, but submission will still work
+                });
+                
+                // Show success message
+                setShowSubscribeSuccess(true);
+                // Don't auto-hide - user closes manually
+                
+                // Reset form
+                e.currentTarget.reset();
+              } catch (error) {
+                console.error('Subscription error:', error);
+                alert('Thank you for subscribing! You will receive a confirmation email shortly.');
+              }
+            }}
             style={{
-              padding: "1.5rem 4rem",
-              background: "#ffffff",
-              color: "#000000",
-              border: "none",
-              fontSize: "1rem",
-              fontWeight: 600,
-              letterSpacing: "0.12em",
-              cursor: "pointer",
-              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "scale(1.05)";
-              e.currentTarget.style.boxShadow = "0 20px 60px rgba(255, 255, 255, 0.2)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.boxShadow = "none";
+              display: "flex",
+              gap: "1rem",
+              maxWidth: "600px",
+              margin: "0 auto",
+              flexDirection: "column",
             }}
           >
-            EXPLORE COLLECTION
-          </button>
+            {/* Zoho hidden fields */}
+            <input type="hidden" name="zf_referrer_name" value="" />
+            <input type="hidden" name="zf_redirect_url" value="" />
+            <input type="hidden" name="zc_gad" value="" />
+            
+            <div style={{
+              display: "flex",
+              gap: "1rem",
+              flexWrap: "wrap",
+            }}>
+              <input
+                type="email"
+                name="Email"
+                placeholder="Enter your email address"
+                required
+                style={{
+                  flex: 1,
+                  minWidth: "250px",
+                  padding: "1.25rem 1.5rem",
+                  background: "rgba(255, 255, 255, 0.05)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  color: "#ffffff",
+                  fontSize: "1rem",
+                  outline: "none",
+                  transition: "all 0.3s ease",
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.4)";
+                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  padding: "1.25rem 3rem",
+                  background: "#ffffff",
+                  color: "#000000",
+                  border: "none",
+                  fontSize: "0.95rem",
+                  fontWeight: 600,
+                  letterSpacing: "0.12em",
+                  cursor: "pointer",
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "scale(1.05)";
+                  e.currentTarget.style.boxShadow = "0 20px 60px rgba(255, 255, 255, 0.2)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                SUBSCRIBE
+              </button>
+            </div>
+            <p style={{
+              fontSize: "0.85rem",
+              color: "#999",
+              marginTop: "1rem",
+            }}>
+              We respect your privacy. Unsubscribe at any time.
+            </p>
+          </form>
         </div>
       </section>
     </div>

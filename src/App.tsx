@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import CartDrawer from "./components/CartDrawer";
 import ScrollToTop from "./components/ScrollToTop";
+import BackToTop from "./components/BackToTop";
 import { appBackground } from "./styles/background.css";
 import Shop from "./pages/Shop";
 import ShopBundles from "./pages/ShopBundles";
@@ -194,6 +195,7 @@ export default function App() {
           onRemoveItem={removeItem}
         />
       )}
+      <BackToTop />
     </Router>
   </div>
 );

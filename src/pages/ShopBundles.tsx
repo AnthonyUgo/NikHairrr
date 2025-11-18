@@ -151,7 +151,7 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
             PREMIUM BUNDLES
           </h2>
           <p style={{ color: "#e5e5e5", fontSize: "1.1rem", opacity: 0.8 }}>
-            Ethically sourced, salon-grade quality that lasts through countless styles.
+            Salon-grade quality that lasts through countless styles.
           </p>
         </div>
 
