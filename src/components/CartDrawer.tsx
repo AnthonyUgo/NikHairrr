@@ -179,6 +179,28 @@ export default function CartDrawer({
         return;
       }
 
+      // Calculate bundle sale discount based on size
+      const getBundleSaleDiscount = (item: Product): number => {
+        // Only apply to bundles (items with "Bundle" in name and a size)
+        if (!item.name.includes("Bundle") || !item.size) {
+          return 0;
+        }
+        
+        const sizeNum = parseInt(item.size);
+        if (sizeNum >= 12 && sizeNum <= 18) {
+          return 1500; // $15 off in cents
+        } else if (sizeNum >= 20 && sizeNum <= 26) {
+          return 2000; // $20 off in cents
+        }
+        return 0;
+      };
+
+      // Calculate total bundle sale discount across all cart items
+      const bundleSaleDiscount = cart.reduce((total, item) => {
+        const itemDiscount = getBundleSaleDiscount(item);
+        return total + (itemDiscount * item.quantity);
+      }, 0);
+
       // Build line items for Mvmnt Pay
       // Items with priceId use price, items with lookupKey use lookupKey (camelCase)
       const lineItems: MvmntPayLineItem[] = cart.map(item => {
@@ -202,6 +224,9 @@ export default function CartDrawer({
       // Redirect to MvmntPay checkout with all items, customer info, and discounts
       const cancelUrl = `${window.location.href}${window.location.href.includes('?') ? '&' : '?'}checkout_canceled=true`;
       
+      // Combine bundle sale discount with promo discount
+      const totalPromoDiscount = promoDiscountAmount + bundleSaleDiscount;
+      
       redirectToMvmntPayMultiItem(
         lineItems,
         `${window.location.origin}/success`,
@@ -210,11 +235,12 @@ export default function CartDrawer({
           customer_name: nameToUse,
           customer_email: emailToUse,
           ...(pointsToRedeem > 0 && { points_used: pointsToRedeem.toString() }),
-          ...(appliedDiscount && { discount_code: appliedDiscount.code })
+          ...(appliedDiscount && { discount_code: appliedDiscount.code }),
+          ...(bundleSaleDiscount > 0 && { bundle_sale_discount: (bundleSaleDiscount / 100).toFixed(2) })
         },
         pointsDiscountAmount > 0 ? pointsDiscountAmount : undefined,
         appliedDiscount?.code,
-        promoDiscountAmount > 0 ? promoDiscountAmount : undefined
+        totalPromoDiscount > 0 ? totalPromoDiscount : undefined
       );
       
     } catch (error) {
