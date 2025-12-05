@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@stripe/stripe-js": "^8.3.0",
+    "@supabase/supabase-js": "^2.84.0",
     "@vanilla-extract/css": "^1.17.4",
     "@vanilla-extract/sprinkles": "^1.6.5",
     "react": "^19.1.1",

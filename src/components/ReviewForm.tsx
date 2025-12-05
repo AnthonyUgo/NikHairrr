@@ -1,41 +1,115 @@
 // src/components/ReviewForm.tsx
 import { useState } from 'react';
-import * as styles from '../styles/review.css';
+import { supabase } from '../utils/supabase';
+import { useAuth } from '../contexts/AuthContext';
+import * as styles from '../styles/review.css.ts';
 
 interface ReviewFormProps {
-  onSubmit: (review: {
-    name: string;
-    rating: number;
-    title: string;
-    text: string;
-    product: string;
-  }) => void;
+  onSuccess?: () => void;
 }
 
-export default function ReviewForm({ onSubmit }: ReviewFormProps) {
+export default function ReviewForm({ onSuccess }: ReviewFormProps) {
+  const { user } = useAuth();
   const [name, setName] = useState('');
   const [rating, setRating] = useState(5);
-  const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [product, setProduct] = useState('');
   const [hoveredRating, setHoveredRating] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ name, rating, title, text, product });
+    setSubmitting(true);
+    setError(null);
     
-    // Reset form
-    setName('');
-    setRating(5);
-    setTitle('');
-    setText('');
-    setProduct('');
+    try {
+      const { error: insertError } = await supabase
+        .from('reviews')
+        .insert({
+          name,
+          rating,
+          text,
+          product: product || null,
+          status: 'pending', // Reviews need approval before showing
+          verified: false,
+          featured: false,
+        });
+      
+      if (insertError) throw insertError;
+      
+      setSuccess(true);
+      
+      // Reset form
+      setName('');
+      setRating(5);
+      setText('');
+      setProduct('');
+      
+      // Call success callback
+      if (onSuccess) {
+        setTimeout(() => {
+          onSuccess();
+        }, 2000);
+      }
+    } catch (err: any) {
+      console.error('Failed to submit review:', err);
+      setError(err.message || 'Failed to submit review. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  if (success) {
+    return (
+      <div style={{
+        padding: '3rem',
+        background: 'rgba(81, 207, 102, 0.1)',
+        border: '1px solid rgba(81, 207, 102, 0.3)',
+        textAlign: 'center',
+        marginBottom: '2rem',
+      }}>
+        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✓</div>
+        <h3 style={{ color: '#51cf66', fontSize: '1.5rem', marginBottom: '0.5rem' }}>
+          Thank you for your review!
+        </h3>
+        <p style={{ color: '#e5e5e5', fontSize: '1rem' }}>
+          Your review has been submitted and will be published after verification.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form className={styles.reviewForm} onSubmit={handleSubmit}>
       <h3 className={styles.formHeading}>Share Your Experience</h3>
       
+      {error && (
+        <div style={{
+          padding: '1rem',
+          background: 'rgba(255, 0, 0, 0.1)',
+          border: '1px solid rgba(255, 0, 0, 0.3)',
+          color: '#ff6b6b',
+          marginBottom: '1rem',
+        }}>
+          {error}
+        </div>
+      )}
+      
+      {!user && (
+        <div style={{
+          padding: '1rem',
+          background: 'rgba(255, 255, 255, 0.05)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          color: '#e5e5e5',
+          marginBottom: '1rem',
+          fontSize: '0.9rem',
+        }}>
+          ℹ️ You can submit a review without an account, but verified purchases require membership.
+        </div>
+      )}
+
       <div className={styles.formGroup}>
         <label htmlFor="name" className={styles.label}>Your Name *</label>
         <input
@@ -46,6 +120,7 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
           className={styles.input}
           required
           placeholder="Enter your name"
+          disabled={submitting}
         />
       </div>
 
@@ -61,6 +136,7 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
               onMouseEnter={() => setHoveredRating(star)}
               onMouseLeave={() => setHoveredRating(0)}
               aria-label={`${star} star${star > 1 ? 's' : ''}`}
+              disabled={submitting}
             >
               ★
             </button>
@@ -69,28 +145,15 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
       </div>
 
       <div className={styles.formGroup}>
-        <label htmlFor="product" className={styles.label}>Product Purchased *</label>
+        <label htmlFor="product" className={styles.label}>Product Purchased</label>
         <input
           id="product"
           type="text"
           value={product}
           onChange={(e) => setProduct(e.target.value)}
           className={styles.input}
-          required
-          placeholder="e.g., 22-inch Brazilian Bundle"
-        />
-      </div>
-
-      <div className={styles.formGroup}>
-        <label htmlFor="title" className={styles.label}>Review Title *</label>
-        <input
-          id="title"
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className={styles.input}
-          required
-          placeholder="Sum up your experience"
+          placeholder="e.g., 22-inch Brazilian Bundle (optional)"
+          disabled={submitting}
         />
       </div>
 
@@ -104,11 +167,17 @@ export default function ReviewForm({ onSubmit }: ReviewFormProps) {
           required
           placeholder="Tell us about your experience with NikHairrr..."
           rows={5}
+          disabled={submitting}
         />
       </div>
 
-      <button type="submit" className={styles.submitButton}>
-        Submit Review
+      <button 
+        type="submit" 
+        className={styles.submitButton}
+        disabled={submitting}
+        style={{ opacity: submitting ? 0.6 : 1 }}
+      >
+        {submitting ? 'Submitting...' : 'Submit Review'}
       </button>
     </form>
   );

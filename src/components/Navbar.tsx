@@ -1,8 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
-import { FiHome, FiShoppingBag, FiMessageCircle, FiShoppingCart, FiTool } from "react-icons/fi";
+import { FiHome, FiShoppingBag, FiMessageCircle, FiShoppingCart, FiTool, FiUser, FiStar } from "react-icons/fi";
+import { useAuth } from "../contexts/AuthContext";
 
-export default function Navbar({ onCartClick, cartItemCount = 0 }: { onCartClick: () => void; cartItemCount?: number }) {
+export default function Navbar({ onCartClick, onMemberClick, cartItemCount = 0 }: { onCartClick: () => void; onMemberClick: () => void; cartItemCount?: number }) {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   return (
     <>
@@ -164,6 +166,33 @@ export default function Navbar({ onCartClick, cartItemCount = 0 }: { onCartClick
           <FiTool size={18} /> <span className="nav-link-text">Services</span>
         </Link>
         <Link
+          to="/membership"
+          style={{
+            color: "#ffffff",
+            textDecoration: "none",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            transition: "all 0.3s ease",
+            fontWeight: 600,
+            fontSize: "0.95rem",
+            padding: "0.5rem 0.75rem",
+            borderRadius: "8px",
+            background: "rgba(147, 51, 234, 0.1)",
+            border: "1px solid rgba(147, 51, 234, 0.3)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "rgba(147, 51, 234, 0.2)";
+            e.currentTarget.style.borderColor = "rgba(147, 51, 234, 0.5)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "rgba(147, 51, 234, 0.1)";
+            e.currentTarget.style.borderColor = "rgba(147, 51, 234, 0.3)";
+          }}
+        >
+          <FiStar size={18} /> <span className="nav-link-text">Rewards</span>
+        </Link>
+        <Link
           to="/testimonials"
           style={{
             color: "#ffffff",
@@ -188,6 +217,43 @@ export default function Navbar({ onCartClick, cartItemCount = 0 }: { onCartClick
         >
           <FiMessageCircle size={18} /> <span className="nav-link-text">Testimonials</span>
         </Link>
+        
+        {/* Member Button */}
+        <button
+          onClick={onMemberClick}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            color: user ? "#000000" : "#ffffff",
+            background: user ? "#ffffff" : "transparent",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            borderRadius: "999px",
+            padding: "0.65rem clamp(0.75rem, 2vw, 1.5rem)",
+            cursor: "pointer",
+            fontWeight: 600,
+            fontSize: "0.95rem",
+            transition: "all 0.3s ease",
+            position: "relative",
+          }}
+          onMouseEnter={(e) => {
+            if (user) {
+              e.currentTarget.style.background = "#cccccc";
+            } else {
+              e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (user) {
+              e.currentTarget.style.background = "#ffffff";
+            } else {
+              e.currentTarget.style.background = "transparent";
+            }
+          }}
+        >
+          <FiUser size={18} /> <span className="nav-link-text">{user ? 'Account' : 'Sign In'}</span>
+        </button>
+        
         <button
           onClick={onCartClick}
           style={{

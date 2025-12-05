@@ -1,16 +1,17 @@
 // src/components/ReviewCarousel.tsx
 import { useState, useEffect } from 'react';
-import * as styles from '../styles/review.css';
+import { supabase } from '../utils/supabase';
+import * as styles from '../styles/review.css.ts';
 
 interface Review {
-  id: number;
+  id: string;
   name: string;
   rating: number;
-  date: string;
-  title: string;
+  created_at: string;
   text: string;
   product: string;
   verified: boolean;
+  featured: boolean;
 }
 
 export default function ReviewCarousel() {
@@ -19,18 +20,28 @@ export default function ReviewCarousel() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/reviews.json')
-      .then((res) => res.json())
-      .then((data) => {
+    async function fetchReviews() {
+      try {
+        const { data, error } = await supabase
+          .from('reviews')
+          .select('*')
+          .eq('status', 'approved')
+          .eq('featured', true)
+          .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
         // Shuffle reviews randomly for variety
-        const shuffled = [...data.reviews].sort(() => Math.random() - 0.5);
+        const shuffled = data ? [...data].sort(() => Math.random() - 0.5) : [];
         setReviews(shuffled);
-        setLoading(false);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error('Failed to load reviews:', err);
+      } finally {
         setLoading(false);
-      });
+      }
+    }
+    
+    fetchReviews();
   }, []);
 
   useEffect(() => {
@@ -77,18 +88,17 @@ export default function ReviewCarousel() {
             <div className={styles.reviewHeader}>
               <div>
                 <h4 className={styles.reviewerName}>{review.name}</h4>
-                <p className={styles.reviewDate}>{formatDate(review.date)}</p>
+                <p className={styles.reviewDate}>{formatDate(review.created_at)}</p>
               </div>
               <div className={styles.reviewStars}>
                 {'★'.repeat(review.rating)}
               </div>
             </div>
             
-            <h3 className={styles.reviewTitle}>"{review.title}"</h3>
-            <p className={styles.reviewText}>{review.text}</p>
+            <p className={styles.reviewText}>"{review.text}"</p>
             
             <div className={styles.reviewProduct}>
-              <span>Product: {review.product}</span>
+              {review.product && <span>Product: {review.product}</span>}
               {review.verified && (
                 <span className={styles.verifiedBadge}>
                   ✓ Verified Purchase

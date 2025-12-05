@@ -1,11 +1,15 @@
 // App.tsx
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import CartDrawer from "./components/CartDrawer";
 import ScrollToTop from "./components/ScrollToTop";
 import BackToTop from "./components/BackToTop";
+import AuthModal from "./components/AuthModal";
+import MemberDashboard from "./pages/MemberDashboard";
+import Membership from "./pages/Membership";
 import { appBackground } from "./styles/background.css";
 import Shop from "./pages/Shop";
 import ShopBundles from "./pages/ShopBundles";
@@ -30,7 +34,9 @@ type Product = {
 
 const CART_STORAGE_KEY = 'nikhairrr_cart';
 
-export default function App() {
+function AppContent() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   // Initialize cart from localStorage
   const [cart, setCart] = useState<Product[]>(() => {
     try {
@@ -44,6 +50,8 @@ export default function App() {
   const [cartOpen, setCartOpen] = useState(false);
   const [checkoutCanceled, setCheckoutCanceled] = useState(false);
   const [itemAddedNotification, setItemAddedNotification] = useState<string | null>(null);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
@@ -120,11 +128,30 @@ export default function App() {
     setCart((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleMemberClick = () => {
+    if (user) {
+      // User is logged in, go to dashboard
+      navigate('/member/dashboard');
+    } else {
+      // User not logged in, show login modal
+      setAuthMode('login');
+      setAuthModalOpen(true);
+    }
+  };
+
+  const handleAuthSuccess = () => {
+    setAuthModalOpen(false);
+    navigate('/member/dashboard');
+  };
+
     return (
   <div className={appBackground}>
-    <Router>
       <ScrollToTop />
-      <Navbar onCartClick={() => setCartOpen(!cartOpen)} cartItemCount={cart.length} />
+      <Navbar 
+        onCartClick={() => setCartOpen(!cartOpen)} 
+        onMemberClick={handleMemberClick}
+        cartItemCount={cart.length} 
+      />
       
       {/* Checkout Canceled Notification */}
       {checkoutCanceled && (
@@ -185,7 +212,19 @@ export default function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/membership" element={<Membership />} />
+        <Route path="/member/dashboard" element={<MemberDashboard />} />
       </Routes>
+      
+      {authModalOpen && (
+        <AuthModal
+          mode={authMode}
+          onClose={() => setAuthModalOpen(false)}
+          onSuccess={handleAuthSuccess}
+          onSwitchMode={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
+        />
+      )}
+      
       {cartOpen && (
         <CartDrawer 
           cart={cart} 
@@ -196,7 +235,16 @@ export default function App() {
         />
       )}
       <BackToTop />
-    </Router>
   </div>
 );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </Router>
+  );
 }

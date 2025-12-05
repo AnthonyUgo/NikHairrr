@@ -1,29 +1,26 @@
 // src/pages/Home.tsx
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { supabase } from "../utils/supabase";
 import ReviewCarousel from "../components/ReviewCarousel";
+import MembershipBanner from "../components/MembershipBanner";
 import { fadeInScale, float } from "../styles/app.css";
 
 export default function Home() {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
   const [showSubscribeSuccess, setShowSubscribeSuccess] = useState(false);
-
-  // Check if user just subscribed
-  useEffect(() => {
-    if (searchParams.get('subscribed') === 'true') {
-      setShowSubscribeSuccess(true);
-      // Remove the parameter from URL
-      searchParams.delete('subscribed');
-      setSearchParams(searchParams);
-      // Don't auto-hide - user can close manually
-    }
-  }, [searchParams, setSearchParams]);
+  const { user } = useAuth();
+  const [subscribing, setSubscribing] = useState(false);
+  const [subscribeError, setSubscribeError] = useState<string | null>(null);
 
   return (
     <div style={{
       fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     }}>
+      {/* Membership Popup */}
+      <MembershipBanner />
+      
       {/* Subscribe Success Message */}
       {showSubscribeSuccess && (
         <div style={{
@@ -33,7 +30,6 @@ export default function Home() {
           transform: "translate(-50%, -50%)",
           zIndex: 1000,
           background: "rgba(0, 0, 0, 0.98)",
-          backdropFilter: "blur(24px)",
           border: "2px solid #ffffff",
           padding: "3rem 4rem",
           textAlign: "center",
@@ -86,7 +82,7 @@ export default function Home() {
             letterSpacing: "0.1em",
             marginBottom: "1rem",
           }}>
-            WELCOME TO THE FAMILY!
+            {user ? 'WELCOME TO THE FAMILY!' : 'THANK YOU FOR SUBSCRIBING!'}
           </h2>
           <p style={{
             color: "#e5e5e5",
@@ -94,36 +90,94 @@ export default function Home() {
             lineHeight: 1.6,
             marginBottom: "1.5rem",
           }}>
-            You're now part of our exclusive community.<br />
-            Get ready for luxury hair updates, styling tips, and special offers.
+            {user ? (
+              <>
+                You're now part of our exclusive community.<br />
+                <strong style={{ color: "#51cf66" }}>+50 loyalty points added to your account!</strong><br />
+                Get ready for luxury hair updates, styling tips, and special offers.
+              </>
+            ) : (
+              <>
+                Get ready for luxury hair updates, styling tips, and special offers.<br />
+                <strong style={{ color: "#ffffff", marginTop: "1rem", display: "block" }}>
+                  Want to earn loyalty points?
+                </strong>
+              </>
+            )}
           </p>
-          <a
-            href="mailto:"
-            onClick={() => setShowSubscribeSuccess(false)}
-            style={{
-              display: "inline-block",
-              padding: "0.75rem 2rem",
-              background: "#ffffff",
-              color: "#000000",
-              fontWeight: 600,
-              fontSize: "0.9rem",
-              letterSpacing: "0.1em",
-              marginTop: "1rem",
-              textDecoration: "none",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "scale(1.05)";
-              e.currentTarget.style.boxShadow = "0 8px 24px rgba(255, 255, 255, 0.3)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.boxShadow = "none";
-            }}
-          >
-            CHECK YOUR EMAIL
-          </a>
+          {user ? (
+            <button
+              onClick={() => {
+                setShowSubscribeSuccess(false);
+                navigate('/member/dashboard');
+              }}
+              style={{
+                display: "inline-block",
+                padding: "0.75rem 2rem",
+                background: "#ffffff",
+                color: "#000000",
+                border: "none",
+                fontWeight: 600,
+                fontSize: "0.9rem",
+                letterSpacing: "0.1em",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+                e.currentTarget.style.boxShadow = "0 8px 24px rgba(255, 255, 255, 0.3)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+            >
+              VIEW YOUR POINTS
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setShowSubscribeSuccess(false);
+                // Scroll to top and trigger auth modal (you'll need to pass this function down)
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                  const signInBtn = document.querySelector('[data-auth-trigger]') as HTMLElement;
+                  signInBtn?.click();
+                }, 500);
+              }}
+              style={{
+                display: "inline-block",
+                padding: "0.75rem 2rem",
+                background: "#ffffff",
+                color: "#000000",
+                border: "none",
+                fontWeight: 600,
+                fontSize: "0.9rem",
+                letterSpacing: "0.1em",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+                e.currentTarget.style.boxShadow = "0 8px 24px rgba(255, 255, 255, 0.3)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+            >
+              CREATE ACCOUNT & EARN POINTS
+            </button>
+          )}
+          <p style={{
+            color: "#666",
+            fontSize: "0.85rem",
+            marginTop: "1.5rem",
+          }}>
+            {user 
+              ? "Check your email for exclusive updates!" 
+              : "Members earn points on every purchase and get exclusive perks!"}
+          </p>
         </div>
       )}
 
@@ -145,20 +199,13 @@ export default function Home() {
       
       {/* Hero Section */}
       <section style={{
-        minHeight: "100vh",
+        minHeight: "80vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "clamp(5rem, 8vw, 2rem) clamp(1rem, 5vw, 2rem) clamp(1rem, 5vw, 2rem)",
+        padding: "clamp(3rem, 6vw, 4rem) clamp(1rem, 5vw, 2rem)",
         position: "relative",
       }}>
-        {/* Background gradient */}
-        <div style={{
-          position: "absolute",
-          inset: 0,
-          background: "radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 50%)",
-          pointerEvents: "none",
-        }} />
 
         <div style={{
           maxWidth: "1400px",
@@ -353,7 +400,8 @@ export default function Home() {
               
               <img 
                 src="/small-logo.svg" 
-                alt="NikHairrr" 
+                alt="NikHairrr"
+                loading="eager"
                 style={{
                   width: "100%",
                   height: "auto",
@@ -395,21 +443,13 @@ export default function Home() {
 
       {/* Stylish Image Section with Parallax Effect */}
       <section style={{
-        minHeight: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "4rem 2rem",
+        padding: "6rem 2rem",
         position: "relative",
         borderTop: "1px solid rgba(255, 255, 255, 0.05)",
-        overflow: "hidden",
       }}>
-        <div style={{
-          position: "absolute",
-          inset: 0,
-          background: "radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 60%)",
-          pointerEvents: "none",
-        }} />
         
         <div style={{
           maxWidth: "1400px",
@@ -483,15 +523,16 @@ export default function Home() {
               <img 
                 src="/images/nh_2.JPG"
                 alt="NikHairrr Luxury Hair"
+                loading="lazy"
                 style={{
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
                   filter: "brightness(0.9) contrast(1.1)",
-                  transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+                  transition: "transform 0.4s ease-out",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "scale(1.05)";
+                  e.currentTarget.style.transform = "scale(1.02)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "scale(1)";
@@ -650,11 +691,10 @@ export default function Home() {
 
       {/* Quality Section */}
       <section style={{
-        minHeight: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "4rem 2rem",
+        padding: "6rem 2rem",
         position: "relative",
         borderTop: "1px solid rgba(255, 255, 255, 0.05)",
       }}>
@@ -761,11 +801,10 @@ export default function Home() {
 
       {/* Reviews Section */}
       <section style={{
-        minHeight: "60vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "4rem 2rem",
+        padding: "6rem 2rem",
         position: "relative",
         borderTop: "1px solid rgba(255, 255, 255, 0.05)",
       }}>
@@ -789,11 +828,10 @@ export default function Home() {
 
       {/* Newsletter Signup Section */}
       <section style={{
-        minHeight: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "4rem 2rem",
+        padding: "6rem 2rem 8rem",
         position: "relative",
         borderTop: "1px solid rgba(255, 255, 255, 0.05)",
       }}>
@@ -824,24 +862,47 @@ export default function Home() {
           <form
             onSubmit={async (e) => {
               e.preventDefault();
+              setSubscribing(true);
+              setSubscribeError(null);
+              
               const formData = new FormData(e.currentTarget);
+              const email = formData.get('email') as string;
               
               try {
-                await fetch('https://forms.zohopublic.com/nikenikh1/form/EmailSubscription/formperma/E0jD6KvZ3KeNrofLU917ViirgyDZbf3lx8aJh8CvNeA/htmlRecords/submit', {
-                  method: 'POST',
-                  body: formData,
-                  mode: 'no-cors', // Zoho doesn't support CORS, but submission will still work
-                });
+                // Check if already subscribed
+                const { data: existing } = await supabase
+                  .from('newsletter_subscribers')
+                  .select('email')
+                  .eq('email', email)
+                  .single();
+                
+                if (existing) {
+                  setSubscribeError('This email is already subscribed!');
+                  setSubscribing(false);
+                  return;
+                }
+                
+                // Subscribe to newsletter
+                const { error } = await supabase
+                  .from('newsletter_subscribers')
+                  .insert({
+                    email,
+                    user_id: user?.id || null,
+                    source: 'website'
+                  });
+                
+                if (error) throw error;
                 
                 // Show success message
                 setShowSubscribeSuccess(true);
-                // Don't auto-hide - user closes manually
                 
                 // Reset form
                 e.currentTarget.reset();
-              } catch (error) {
+              } catch (error: any) {
                 console.error('Subscription error:', error);
-                alert('Thank you for subscribing! You will receive a confirmation email shortly.');
+                setSubscribeError('Something went wrong. Please try again.');
+              } finally {
+                setSubscribing(false);
               }
             }}
             style={{
@@ -852,10 +913,33 @@ export default function Home() {
               flexDirection: "column",
             }}
           >
-            {/* Zoho hidden fields */}
-            <input type="hidden" name="zf_referrer_name" value="" />
-            <input type="hidden" name="zf_redirect_url" value="" />
-            <input type="hidden" name="zc_gad" value="" />
+            {/* Error Message */}
+            {subscribeError && (
+              <div style={{
+                padding: '1rem',
+                background: 'rgba(255, 0, 0, 0.1)',
+                border: '1px solid rgba(255, 0, 0, 0.3)',
+                color: '#ff6b6b',
+                fontSize: '0.9rem',
+                textAlign: 'center',
+              }}>
+                {subscribeError}
+              </div>
+            )}
+            
+            {/* Info: Show if user is logged in */}
+            {user && (
+              <div style={{
+                padding: '1rem',
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                color: '#51cf66',
+                fontSize: '0.9rem',
+                textAlign: 'center',
+              }}>
+                ✨ As a member, you'll earn <strong>50 bonus points</strong> for subscribing!
+              </div>
+            )}
             
             <div style={{
               display: "flex",
@@ -864,9 +948,10 @@ export default function Home() {
             }}>
               <input
                 type="email"
-                name="Email"
+                name="email"
                 placeholder="Enter your email address"
                 required
+                disabled={subscribing}
                 style={{
                   flex: 1,
                   minWidth: "250px",
@@ -889,6 +974,7 @@ export default function Home() {
               />
               <button
                 type="submit"
+                disabled={subscribing}
                 style={{
                   padding: "1.25rem 3rem",
                   background: "#ffffff",
@@ -897,20 +983,23 @@ export default function Home() {
                   fontSize: "0.95rem",
                   fontWeight: 600,
                   letterSpacing: "0.12em",
-                  cursor: "pointer",
+                  cursor: subscribing ? "not-allowed" : "pointer",
                   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                   whiteSpace: "nowrap",
+                  opacity: subscribing ? 0.6 : 1,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "scale(1.05)";
-                  e.currentTarget.style.boxShadow = "0 20px 60px rgba(255, 255, 255, 0.2)";
+                  if (!subscribing) {
+                    e.currentTarget.style.transform = "scale(1.05)";
+                    e.currentTarget.style.boxShadow = "0 20px 60px rgba(255, 255, 255, 0.2)";
+                  }
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "scale(1)";
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                SUBSCRIBE
+                {subscribing ? 'SUBSCRIBING...' : 'SUBSCRIBE'}
               </button>
             </div>
             <p style={{
@@ -918,7 +1007,9 @@ export default function Home() {
               color: "#999",
               marginTop: "1rem",
             }}>
-              We respect your privacy. Unsubscribe at any time.
+              {user 
+                ? "You'll earn 50 loyalty points for subscribing!" 
+                : "Not a member? Sign up to earn loyalty points!"}
             </p>
           </form>
         </div>

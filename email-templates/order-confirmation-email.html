@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Confirmed</title>
+</head>
+<body style="margin:0; padding:0; background-color:#000000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', Arial, sans-serif;">
+
+  <table width="100%" cellspacing="0" cellpadding="0" style="background-color:#000000;">
+    <tr>
+      <td align="center" style="padding:40px 20px;">
+
+        <!-- MAIN WRAPPER -->
+        <table width="600" cellspacing="0" cellpadding="0" style="background-color:#0a0a0a; border:1px solid rgba(255,255,255,0.08);">
+
+          <!-- HEADER -->
+          <tr>
+            <td align="center" style="padding:50px 40px; background:#0a0a0a;">
+              <div style="font-size:42px; margin-bottom:20px;">✓</div>
+              <h1 style="margin:0; color:#ffffff; font-size:32px; font-weight:700; letter-spacing:0.03em;">
+                Order Confirmed
+              </h1>
+              <p style="margin:12px 0 0; color:#b3b3b3; font-size:15px;">
+                Thank you for your purchase
+              </p>
+            </td>
+          </tr>
+
+          <!-- CONTENT -->
+          <tr>
+            <td style="padding:40px;">
+
+              <p style="margin:0 0 25px; color:#ffffff; font-size:18px; line-height:1.6;">
+                Hey {{userName}},
+              </p>
+
+              <p style="margin:0 0 30px; color:#b3b3b3; font-size:16px; line-height:1.6;">
+                Your order has been confirmed and will be processed shortly. We'll send you another email when your items ship.
+              </p>
+
+              <!-- ORDER DETAILS -->
+              <table width="100%" cellspacing="0" cellpadding="0"
+                style="border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.02); margin-bottom:30px;">
+                <tr>
+                  <td style="padding:25px;">
+                    <p style="margin:0 0 8px; color:#b3b3b3; font-size:11px; letter-spacing:0.1em;">
+                      ORDER NUMBER
+                    </p>
+                    <p style="margin:0 0 20px; color:#ffffff; font-size:17px; font-weight:600;">
+                      #{{orderNumber}}
+                    </p>
+                    <p style="margin:0 0 8px; color:#b3b3b3; font-size:11px; letter-spacing:0.1em;">
+                      ORDER TOTAL
+                    </p>
+                    <p style="margin:0; color:#ffffff; font-size:24px; font-weight:700;">
+                      ${{orderTotal}}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- POINTS EARNED -->
+              <table width="100%" cellspacing="0" cellpadding="0"
+                style="border:1px solid rgba(212,180,124,0.35); background:rgba(212,180,124,0.04); margin-bottom:30px;">
+                <tr>
+                  <td align="center" style="padding:25px;">
+                    <div style="color:#d4b47c; letter-spacing:0.1em; font-size:11px; margin-bottom:10px;">
+                      YOU EARNED
+                    </div>
+                    <div style="font-size:40px; color:#d4b47c; font-weight:600; margin-bottom:8px;">
+                      +{{pointsEarned}}
+                    </div>
+                    <div style="color:#b3b3b3; font-size:14px;">
+                      Loyalty Points ✨
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- ITEMS ORDERED -->
+              {{#if items}}
+              <p style="margin:0 0 15px; color:#ffffff; font-size:17px; font-weight:600;">
+                Items ordered:
+              </p>
+              <table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:30px;">
+                {{#each items}}
+                <tr>
+                  <td style="padding:15px 0; border-bottom:1px solid rgba(255,255,255,0.08);">
+                    <div style="color:#ffffff; font-size:15px; margin-bottom:5px;">{{name}}</div>
+                    <div style="color:#b3b3b3; font-size:13px;">Qty: {{quantity}} × ${{price}}</div>
+                  </td>
+                  <td align="right" style="padding:15px 0; border-bottom:1px solid rgba(255,255,255,0.08);">
+                    <div style="color:#ffffff; font-size:16px; font-weight:600;">${{total}}</div>
+                  </td>
+                </tr>
+                {{/each}}
+              </table>
+              {{/if}}
+
+              <!-- WHAT'S NEXT -->
+              <table width="100%" cellspacing="0" cellpadding="0"
+                style="border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.02); margin-bottom:30px;">
+                <tr>
+                  <td style="padding:25px;">
+                    <p style="margin:0 0 15px; color:#ffffff; font-size:16px; font-weight:600;">
+                      What's next?
+                    </p>
+                    <p style="margin:0 0 10px; color:#b3b3b3; font-size:14px; line-height:1.6;">
+                      <span style="color:#d4b47c;">1.</span> We're preparing your order for shipment
+                    </p>
+                    <p style="margin:0 0 10px; color:#b3b3b3; font-size:14px; line-height:1.6;">
+                      <span style="color:#d4b47c;">2.</span> You'll receive tracking within 1-2 business days
+                    </p>
+                    <p style="margin:0; color:#b3b3b3; font-size:14px; line-height:1.6;">
+                      <span style="color:#d4b47c;">3.</span> Your items will arrive in 3-5 business days
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- CTA BUTTONS -->
+              <table width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="center">
+                    <a href="https://nikhairrr.com/member/dashboard"
+                      style="display:inline-block; padding:14px 30px; background:#ffffff; color:#000000; text-decoration:none; font-weight:600; letter-spacing:0.08em; font-size:14px; margin:5px;">
+                      VIEW MY POINTS
+                    </a>
+                    <a href="https://nikhairrr.com/shop"
+                      style="display:inline-block; padding:14px 30px; background:transparent; color:#ffffff; text-decoration:none; font-weight:600; letter-spacing:0.08em; font-size:14px; border:1px solid rgba(255,255,255,0.3); margin:5px;">
+                      CONTINUE SHOPPING
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="padding:35px 40px; background:#0a0a0a; border-top:1px solid rgba(255,255,255,0.08);">
+              <p style="margin:0 0 12px; color:#b3b3b3; font-size:13px; text-align:center;">
+                Need assistance? Email us at
+                <a href="mailto:support@nikhairrr.com" style="color:#d4b47c; text-decoration:none;">
+                  support@nikhairrr.com
+                </a>
+              </p>
+              <p style="margin:0; color:#666; font-size:12px; text-align:center;">
+                © 2025 NikHairrr. All rights reserved.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

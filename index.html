@@ -77,15 +77,13 @@
     <style>
       /* Critical CSS for performance */
       html {
-        scroll-behavior: smooth;
         overflow-y: scroll;
         scrollbar-gutter: stable; /* Prevent layout shift from scrollbar */
       }
       
-      /* GPU-accelerated scrolling */
-      * {
+      /* GPU-accelerated scrolling - only for scrollable containers */
+      .scrollable {
         -webkit-overflow-scrolling: touch;
-        will-change: auto; /* Let browser decide what to optimize */
       }
       
       /* Prevent layout shifts */
@@ -117,7 +115,18 @@
       /* Optimize image and video rendering */
       img, video {
         image-rendering: -webkit-optimize-contrast;
-        image-rendering: crisp-edges;
+      }
+      
+      /* Optimize animations and transforms */
+      @media (prefers-reduced-motion: no-preference) {
+        html {
+          scroll-behavior: smooth;
+        }
+      }
+      
+      /* Performance: Contain layout changes */
+      section {
+        contain: layout style;
       }
       
       /* Prevent FOUC (Flash of Unstyled Content) */
