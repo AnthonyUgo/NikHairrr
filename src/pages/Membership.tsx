@@ -33,8 +33,6 @@ const MEMBERSHIP_TIERS: MembershipTier[] = [
     benefits: [
       "500 points instantly upon signup",
       "Earn 1 point for every $1 spent",
-      "Birthday month special offer",
-      "Early access to new products",
       "Exclusive member-only sales",
       "Access to members-only content",
     ],
@@ -47,16 +45,14 @@ const MEMBERSHIP_TIERS: MembershipTier[] = [
     gradient: "rgba(255, 255, 255, 0.1)",
     icon: <FiAward size={32} />,
     description: "Unlock elite status when you reach 2,500 points",
-    signupBonus: 1000,
+    signupBonus: 0,
     earnRate: "2 points per $1 spent",
     recommended: true,
     benefits: [
-      "1,000 bonus points when unlocked",
       "Earn 2 points for every $1 spent (2x rewards!)",
       "Priority customer service",
       "15% off all products, all the time",
       "Exclusive Elite-only product launches",
-      "Quarterly surprise gift box ($75 value)",
       "Birthday month VIP treatment + gift",
       "First access to limited edition items",
       "Private styling consultation (1x per month)",
@@ -524,9 +520,8 @@ export default function Membership() {
               How do I unlock Elite tier?
             </h3>
             <p style={{ color: "#e5e5e5", opacity: 0.8, lineHeight: 1.6 }}>
-              Elite tier automatically unlocks when you reach 2,500 points! You'll receive a bonus
-              1,000 points when you unlock it, and immediately start earning 2x points (2 points per
-              $1) on all future purchases.
+              Elite tier automatically unlocks when you reach 2,500 points! Once unlocked, you'll
+              immediately start earning 2x points (2 points per $1) on all future purchases.
             </p>
           </div>
         </div>

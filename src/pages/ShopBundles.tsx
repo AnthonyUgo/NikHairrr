@@ -56,6 +56,22 @@ const SIZES = Object.keys(bundleVariants).sort((a, b) => {
   return aNum - bNum;
 });
 
+// Holiday Sale Pricing
+const getSaleDiscount = (size: string): number => {
+  const sizeNum = parseInt(size);
+  if (sizeNum >= 12 && sizeNum <= 18) {
+    return 15; // $15 off for 12"-18"
+  } else if (sizeNum >= 20 && sizeNum <= 26) {
+    return 20; // $20 off for 20"-26"
+  }
+  return 0; // No discount for other sizes
+};
+
+const getSalePrice = (originalPrice: number, size: string): number => {
+  const discount = getSaleDiscount(size);
+  return originalPrice - discount;
+};
+
 const bundles: Omit<Product, 'size' | 'quantity'>[] = [
   { 
     id: 1, 
@@ -138,6 +154,59 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
       >
         <FiArrowLeft /> BACK TO SHOP
       </button>
+
+      {/* Holiday Sale Banner */}
+      <div style={{
+        background: "linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(239, 68, 68, 0.15) 100%)",
+        border: "1px solid rgba(220, 38, 38, 0.3)",
+        padding: "1.5rem",
+        marginBottom: "2rem",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        flexWrap: "wrap",
+        gap: "1rem",
+      }}>
+        <div>
+          <div style={{
+            display: "inline-block",
+            background: "rgba(220, 38, 38, 0.3)",
+            border: "1px solid rgba(220, 38, 38, 0.5)",
+            padding: "0.375rem 1rem",
+            marginBottom: "0.75rem",
+            fontSize: "0.75rem",
+            fontWeight: 700,
+            letterSpacing: "0.15em",
+            color: "#ef4444",
+          }}>
+            🎄 HOLIDAY SALE
+          </div>
+          <h3 style={{ 
+            color: "#ffffff", 
+            fontSize: "1.5rem", 
+            fontWeight: 700,
+            marginBottom: "0.5rem",
+          }}>
+            Special Bundle Pricing
+          </h3>
+          <p style={{ color: "#e5e5e5", fontSize: "1rem", margin: 0 }}>
+            <span style={{ fontWeight: 700, color: "#22c55e" }}>$15 off</span> 12-18" bundles • 
+            <span style={{ fontWeight: 700, color: "#22c55e" }}> $20 off</span> 20-26" bundles
+          </p>
+        </div>
+        <div style={{
+          background: "rgba(255, 255, 255, 0.1)",
+          padding: "1rem 1.5rem",
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+        }}>
+          <div style={{ fontSize: "0.75rem", color: "#999", marginBottom: "0.25rem" }}>
+            SALE ENDS
+          </div>
+          <div style={{ fontSize: "1.25rem", fontWeight: 700, color: "#ffffff" }}>
+            Jan 31, 2026
+          </div>
+        </div>
+      </div>
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
         <div>
@@ -277,9 +346,58 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                 <h3 style={{ color: "#ffffff", marginBottom: "0.75rem", fontSize: "1.4rem", fontWeight: 700, letterSpacing: "0.05em" }}>
                   {b.name}
                 </h3>
-                <p style={{ color: "#ffffff", fontWeight: 700, fontSize: "1.5rem", marginBottom: "1.25rem" }}>
-                  ${getPrice(b, selectedSizes[b.id])}
-                </p>
+                
+                {/* Price Display with Sale */}
+                {selectedSizes[b.id] && getSaleDiscount(selectedSizes[b.id]) > 0 ? (
+                  <div style={{ marginBottom: "1.25rem" }}>
+                    {/* Sale Badge */}
+                    <div style={{
+                      display: "inline-block",
+                      background: "rgba(220, 38, 38, 0.2)",
+                      border: "1px solid rgba(220, 38, 38, 0.4)",
+                      padding: "0.25rem 0.75rem",
+                      marginBottom: "0.5rem",
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      letterSpacing: "0.1em",
+                      color: "#ef4444",
+                    }}>
+                      HOLIDAY SALE
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                      <p style={{ 
+                        color: "#999", 
+                        fontSize: "1.25rem", 
+                        textDecoration: "line-through",
+                        margin: 0,
+                      }}>
+                        ${getPrice(b, selectedSizes[b.id])}
+                      </p>
+                      <p style={{ 
+                        color: "#ffffff", 
+                        fontWeight: 700, 
+                        fontSize: "1.75rem",
+                        margin: 0,
+                      }}>
+                        ${getSalePrice(getPrice(b, selectedSizes[b.id]), selectedSizes[b.id])}
+                      </p>
+                      <span style={{
+                        background: "rgba(34, 197, 94, 0.2)",
+                        border: "1px solid rgba(34, 197, 94, 0.4)",
+                        color: "#22c55e",
+                        padding: "0.25rem 0.75rem",
+                        fontSize: "0.85rem",
+                        fontWeight: 700,
+                      }}>
+                        Save ${getSaleDiscount(selectedSizes[b.id])}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <p style={{ color: "#ffffff", fontWeight: 700, fontSize: "1.5rem", marginBottom: "1.25rem" }}>
+                    {selectedSizes[b.id] ? `$${getPrice(b, selectedSizes[b.id])}` : 'Select size for pricing'}
+                  </p>
+                )}
                 
                 {/* Description */}
                 {b.description && (
@@ -561,11 +679,14 @@ export default function ShopBundles({ onAddToCart }: { onAddToCart: (p: Product)
                   }
                   // Add main bundle to cart
                   const bundleQuantity = selectedQuantities[b.id] || 1;
+                  const originalPrice = getPrice(b, size);
+                  const finalPrice = getSalePrice(originalPrice, size); // Apply sale discount
+                  
                   onAddToCart({
                     ...b,
                     size,
                     quantity: bundleQuantity,
-                    price: getPrice(b, size),
+                    price: finalPrice, // Use sale price
                     priceId
                   });
 

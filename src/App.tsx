@@ -10,6 +10,7 @@ import BackToTop from "./components/BackToTop";
 import AuthModal from "./components/AuthModal";
 import MemberDashboard from "./pages/MemberDashboard";
 import Membership from "./pages/Membership";
+import HolidaySalesBanner from "./components/HolidaySalesBanner";
 import { appBackground } from "./styles/background.css";
 import Shop from "./pages/Shop";
 import ShopBundles from "./pages/ShopBundles";
@@ -152,6 +153,9 @@ function AppContent() {
         onMemberClick={handleMemberClick}
         cartItemCount={cart.length} 
       />
+      
+      {/* Holiday Sales Banner */}
+      <HolidaySalesBanner />
       
       {/* Checkout Canceled Notification */}
       {checkoutCanceled && (

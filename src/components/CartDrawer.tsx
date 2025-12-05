@@ -1,7 +1,10 @@
 // src/components/CartDrawer.tsx
-import { useState } from "react";
-import { FiX, FiTrash2 } from "react-icons/fi";
+import { useState, useEffect } from "react";
+import { FiX, FiTrash2, FiTag, FiStar } from "react-icons/fi";
 import { redirectToMvmntPayMultiItem, type MvmntPayLineItem } from "../utils/mvmntpay";
+import { validateDiscountCode, calculatePointsDiscount, formatDiscount, type DiscountCode } from "../utils/discounts";
+import { useAuth } from "../contexts/AuthContext";
+import { supabase } from "../utils/supabase";
 
 type Product = { 
   id: number; 
@@ -26,6 +29,7 @@ export default function CartDrawer({
   onUpdateSize: (index: number, newSize: string) => void;
   onRemoveItem: (index: number) => void;
 }) {
+  const { user } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [showCustomerForm, setShowCustomerForm] = useState(false);
@@ -33,32 +37,129 @@ export default function CartDrawer({
   const [customerEmail, setCustomerEmail] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
   
+  // Discount code state
+  const [discountCode, setDiscountCode] = useState("");
+  const [appliedDiscount, setAppliedDiscount] = useState<DiscountCode | null>(null);
+  const [discountError, setDiscountError] = useState<string | null>(null);
+  const [isValidatingCode, setIsValidatingCode] = useState(false);
+  
+  // Points state
+  const [availablePoints, setAvailablePoints] = useState(0);
+  const [pointsToRedeem, setPointsToRedeem] = useState(0);
+  
   const subtotal = cart.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+  const subtotalInCents = Math.round(subtotal * 100);
+  
+  // Fetch user's points balance
+  useEffect(() => {
+    if (user) {
+      fetchUserPoints();
+    }
+  }, [user]);
+  
+  const fetchUserPoints = async () => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('loyalty_points')
+        .select('total_points')
+        .eq('user_id', user.id)
+        .single();
+      
+      if (!error && data) {
+        setAvailablePoints(data.total_points || 0);
+      }
+    } catch (error) {
+      console.error('Error fetching points:', error);
+    }
+  };
+  
+  const handleApplyDiscount = async () => {
+    if (!discountCode.trim()) {
+      setDiscountError("Please enter a discount code");
+      return;
+    }
+    
+    setIsValidatingCode(true);
+    setDiscountError(null);
+    
+    const result = await validateDiscountCode(discountCode.trim(), subtotalInCents);
+    
+    setIsValidatingCode(false);
+    
+    if (result.valid && result.discount) {
+      setAppliedDiscount(result.discount);
+      setDiscountError(null);
+    } else {
+      setDiscountError(result.error || "Invalid code");
+      setAppliedDiscount(null);
+    }
+  };
+  
+  const handleRemoveDiscount = () => {
+    setAppliedDiscount(null);
+    setDiscountCode("");
+    setDiscountError(null);
+  };
+  
+  const handlePointsChange = (value: number) => {
+    const maxPoints = Math.min(availablePoints, subtotalInCents); // Can't use more than subtotal
+    setPointsToRedeem(Math.max(0, Math.min(value, maxPoints)));
+  };
+  
+  // Calculate discounts
+  const promoDiscountAmount = appliedDiscount 
+    ? (appliedDiscount.type === 'percentage' 
+        ? Math.round((subtotalInCents * appliedDiscount.value) / 100)
+        : Math.round(appliedDiscount.value * 100))
+    : 0;
+  
+  const pointsDiscountAmount = calculatePointsDiscount(pointsToRedeem);
+  const totalDiscount = promoDiscountAmount + pointsDiscountAmount;
+  const finalTotal = Math.max(0, subtotalInCents - totalDiscount);
   
   const sizes = ["12\"", "14\"", "16\"", "18\"", "20\"", "22\"", "24\"", "26\"", "28\"", "30\""];
+  
+  // Auto-fill email if user is logged in
+  useEffect(() => {
+    if (user?.email) {
+      setCustomerEmail(user.email);
+    }
+  }, [user]);
 
   const handleInitiateCheckout = () => {
     if (cart.length === 0) {
       return;
     }
-    // Show customer info form
-    setShowCustomerForm(true);
-    setFormError(null);
+    
+    // If user is logged in, skip the form and go straight to checkout
+    if (user) {
+      handleCheckout();
+    } else {
+      // Show customer info form for guest checkout
+      setShowCustomerForm(true);
+      setFormError(null);
+    }
   };
 
   const handleCheckout = async () => {
-    // Validate form
-    if (!customerName.trim()) {
+    // For logged-in users, use their email
+    const emailToUse = user?.email || customerEmail.trim();
+    const nameToUse = customerName.trim();
+    
+    // Validate form (only needed for guest checkout)
+    if (!user && !nameToUse) {
       setFormError("Please enter your name");
       return;
     }
-    if (!customerEmail.trim()) {
+    if (!emailToUse) {
       setFormError("Please enter your email");
       return;
     }
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(customerEmail)) {
+    if (!emailRegex.test(emailToUse)) {
       setFormError("Please enter a valid email address");
       return;
     }
@@ -98,7 +199,7 @@ export default function CartDrawer({
         }
       });
 
-      // Redirect to MvmntPay checkout with all items and customer info
+      // Redirect to MvmntPay checkout with all items, customer info, and discounts
       const cancelUrl = `${window.location.href}${window.location.href.includes('?') ? '&' : '?'}checkout_canceled=true`;
       
       redirectToMvmntPayMultiItem(
@@ -106,9 +207,14 @@ export default function CartDrawer({
         `${window.location.origin}/success`,
         cancelUrl,  // Return to current page with canceled flag
         {
-          customer_name: customerName.trim(),
-          customer_email: customerEmail.trim()
-        }
+          customer_name: nameToUse,
+          customer_email: emailToUse,
+          ...(pointsToRedeem > 0 && { points_used: pointsToRedeem.toString() }),
+          ...(appliedDiscount && { discount_code: appliedDiscount.code })
+        },
+        pointsDiscountAmount > 0 ? pointsDiscountAmount : undefined,
+        appliedDiscount?.code,
+        promoDiscountAmount > 0 ? promoDiscountAmount : undefined
       );
       
     } catch (error) {
@@ -364,6 +470,174 @@ export default function CartDrawer({
           <span style={{ color: "#e5e5e5", fontSize: "0.95rem" }}>Subtotal</span>
           <span style={{ color: "#e5e5e5", fontWeight: 600 }}>${subtotal.toFixed(2)}</span>
         </div>
+        
+        {/* Discount Code Section */}
+        <div style={{ 
+          borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+          paddingTop: "1rem",
+          marginBottom: "1rem",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
+            <FiTag size={16} color="#ffffff" />
+            <span style={{ color: "#ffffff", fontSize: "0.9rem", fontWeight: 600 }}>Promo Code</span>
+          </div>
+          
+          {!appliedDiscount ? (
+            <div style={{ display: "flex", gap: "0.5rem" }}>
+              <input
+                type="text"
+                value={discountCode}
+                onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
+                placeholder="Enter code"
+                disabled={isValidatingCode}
+                style={{
+                  flex: 1,
+                  padding: "0.75rem",
+                  background: "rgba(255, 255, 255, 0.05)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  color: "#ffffff",
+                  fontSize: "0.9rem",
+                  outline: "none",
+                }}
+                onKeyPress={(e) => e.key === 'Enter' && handleApplyDiscount()}
+              />
+              <button
+                onClick={handleApplyDiscount}
+                disabled={isValidatingCode || !discountCode.trim()}
+                style={{
+                  padding: "0.75rem 1.5rem",
+                  background: isValidatingCode || !discountCode.trim() 
+                    ? "rgba(255, 255, 255, 0.1)" 
+                    : "rgba(255, 255, 255, 0.15)",
+                  border: "1px solid rgba(255, 255, 255, 0.3)",
+                  color: "#ffffff",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  cursor: isValidatingCode || !discountCode.trim() ? "default" : "pointer",
+                  transition: "all 0.2s",
+                }}
+              >
+                {isValidatingCode ? "..." : "Apply"}
+              </button>
+            </div>
+          ) : (
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "0.75rem",
+              background: "rgba(76, 175, 80, 0.1)",
+              border: "1px solid rgba(76, 175, 80, 0.3)",
+            }}>
+              <div>
+                <div style={{ color: "#4CAF50", fontWeight: 600, fontSize: "0.9rem" }}>
+                  {appliedDiscount.code} Applied
+                </div>
+                <div style={{ color: "#4CAF50", fontSize: "0.8rem", marginTop: "0.25rem" }}>
+                  {formatDiscount(appliedDiscount)}
+                </div>
+              </div>
+              <button
+                onClick={handleRemoveDiscount}
+                style={{
+                  padding: "0.5rem",
+                  background: "transparent",
+                  border: "none",
+                  color: "#4CAF50",
+                  cursor: "pointer",
+                  fontSize: "0.85rem",
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          )}
+          
+          {discountError && (
+            <div style={{ color: "#ff4444", fontSize: "0.8rem", marginTop: "0.5rem" }}>
+              {discountError}
+            </div>
+          )}
+        </div>
+        
+        {/* Points Redemption Section */}
+        {user && availablePoints > 0 && (
+          <div style={{ 
+            borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+            paddingTop: "1rem",
+            marginBottom: "1rem",
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
+              <FiStar size={16} color="#FFD700" />
+              <span style={{ color: "#ffffff", fontSize: "0.9rem", fontWeight: 600 }}>
+                Use Points
+              </span>
+              <span style={{ color: "#999", fontSize: "0.8rem" }}>
+                (Available: {availablePoints.toLocaleString()})
+              </span>
+            </div>
+            
+            <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+              <input
+                type="number"
+                value={pointsToRedeem}
+                onChange={(e) => handlePointsChange(parseInt(e.target.value) || 0)}
+                min="0"
+                max={Math.min(availablePoints, subtotalInCents)}
+                style={{
+                  flex: 1,
+                  padding: "0.75rem",
+                  background: "rgba(255, 255, 255, 0.05)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  color: "#ffffff",
+                  fontSize: "0.9rem",
+                  outline: "none",
+                }}
+              />
+              <button
+                onClick={() => handlePointsChange(Math.min(availablePoints, subtotalInCents))}
+                style={{
+                  padding: "0.75rem 1rem",
+                  background: "rgba(255, 215, 0, 0.1)",
+                  border: "1px solid rgba(255, 215, 0, 0.3)",
+                  color: "#FFD700",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                Max
+              </button>
+            </div>
+            
+            <div style={{ color: "#999", fontSize: "0.75rem", marginTop: "0.5rem" }}>
+              100 points = $1.00 • Using {pointsToRedeem} points = ${(pointsToRedeem / 100).toFixed(2)} off
+            </div>
+          </div>
+        )}
+        
+        {/* Discount Breakdown */}
+        {(promoDiscountAmount > 0 || pointsDiscountAmount > 0) && (
+          <div style={{ 
+            borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+            paddingTop: "1rem",
+            marginBottom: "1rem",
+          }}>
+            {promoDiscountAmount > 0 && (
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                <span style={{ color: "#4CAF50", fontSize: "0.9rem" }}>🎉 Promo Discount</span>
+                <span style={{ color: "#4CAF50", fontWeight: 600 }}>-${(promoDiscountAmount / 100).toFixed(2)}</span>
+              </div>
+            )}
+            {pointsDiscountAmount > 0 && (
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                <span style={{ color: "#FFD700", fontSize: "0.9rem" }}>⭐ Points Redeemed</span>
+                <span style={{ color: "#FFD700", fontWeight: 600 }}>-${(pointsDiscountAmount / 100).toFixed(2)}</span>
+              </div>
+            )}
+          </div>
+        )}
+        
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
           <span style={{ color: "#e5e5e5", fontSize: "0.95rem" }}>Shipping</span>
           <span style={{ color: "#999", fontSize: "0.85rem", fontStyle: "italic" }}>Calculated at checkout</span>
@@ -385,15 +659,28 @@ export default function CartDrawer({
           justifyContent: "space-between", 
           alignItems: "center",
         }}>
-          <span style={{ color: "#ffffff", fontSize: "1.15rem", fontWeight: 700 }}>Subtotal</span>
+          <span style={{ color: "#ffffff", fontSize: "1.15rem", fontWeight: 700 }}>
+            {totalDiscount > 0 ? "Total After Discounts" : "Subtotal"}
+          </span>
           <span style={{ 
             color: "#ffffff", 
             fontSize: "1.5rem", 
             fontWeight: 700,
           }}>
-            ${subtotal.toFixed(2)}
+            ${(finalTotal / 100).toFixed(2)}
           </span>
         </div>
+        {totalDiscount > 0 && (
+          <div style={{ 
+            fontSize: "0.8rem", 
+            color: "#4CAF50", 
+            marginTop: "0.5rem",
+            textAlign: "right",
+            fontWeight: 600,
+          }}>
+            You're saving ${(totalDiscount / 100).toFixed(2)}!
+          </div>
+        )}
         <div style={{ 
           fontSize: "0.7rem", 
           color: "#888", 

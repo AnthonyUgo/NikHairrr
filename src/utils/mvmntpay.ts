@@ -29,6 +29,9 @@ export interface MvmntPayMultiItemCheckoutOptions {
   metadata?: Record<string, string>;
   successUrl?: string;
   cancelUrl?: string;
+  pointsDiscount?: number; // Points discount in cents
+  discountCode?: string; // Discount code name
+  promoDiscount?: number; // Calculated promo discount in cents
 }
 
 export interface MvmntPayPaymentBreakdown {
@@ -114,12 +117,18 @@ export function redirectToMvmntPay(
  * @param successUrl - URL to redirect after successful payment
  * @param cancelUrl - URL to redirect when user cancels/goes back
  * @param metadata - Additional metadata to pass to Stripe
+ * @param pointsDiscount - Points discount amount in cents (optional)
+ * @param discountCode - Discount code name (optional)
+ * @param promoDiscount - Calculated promo discount amount in cents (optional)
  */
 export function redirectToMvmntPayMultiItem(
   lineItems: MvmntPayLineItem[],
   successUrl?: string,
   cancelUrl?: string,
-  metadata?: Record<string, string>
+  metadata?: Record<string, string>,
+  pointsDiscount?: number,
+  discountCode?: string,
+  promoDiscount?: number
 ): void {
   // Store URLs in session storage
   if (successUrl) {
@@ -154,6 +163,17 @@ export function redirectToMvmntPayMultiItem(
     };
     params.append('metadata', btoa(JSON.stringify(fullMetadata)));
     
+    // Add discount parameters if provided
+    if (pointsDiscount && pointsDiscount > 0) {
+      params.append('points_discount', pointsDiscount.toString());
+    }
+    if (discountCode) {
+      params.append('discount_code', discountCode);
+    }
+    if (promoDiscount && promoDiscount > 0) {
+      params.append('promo_discount', promoDiscount.toString());
+    }
+    
     // Add optional URLs if provided
     if (successUrl) {
       params.append('successUrl', successUrl);
@@ -180,6 +200,17 @@ export function redirectToMvmntPayMultiItem(
       ...(metadata || {})
     };
     params.append('metadata', btoa(JSON.stringify(fullMetadata)));
+    
+    // Add discount parameters if provided
+    if (pointsDiscount && pointsDiscount > 0) {
+      params.append('points_discount', pointsDiscount.toString());
+    }
+    if (discountCode) {
+      params.append('discount_code', discountCode);
+    }
+    if (promoDiscount && promoDiscount > 0) {
+      params.append('promo_discount', promoDiscount.toString());
+    }
     
     // Add optional URLs if provided
     if (successUrl) {
