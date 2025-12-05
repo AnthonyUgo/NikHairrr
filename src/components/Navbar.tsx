@@ -1,10 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
-import { FiHome, FiShoppingBag, FiMessageCircle, FiShoppingCart, FiTool, FiUser, FiStar } from "react-icons/fi";
+import { FiHome, FiShoppingBag, FiMessageCircle, FiShoppingCart, FiTool, FiUser, FiStar, FiMenu, FiX } from "react-icons/fi";
 import { useAuth } from "../contexts/AuthContext";
+import { useState } from "react";
 
 export default function Navbar({ onCartClick, onMemberClick, cartItemCount = 0 }: { onCartClick: () => void; onMemberClick: () => void; cartItemCount?: number }) {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <>
@@ -20,15 +22,46 @@ export default function Navbar({ onCartClick, onMemberClick, cartItemCount = 0 }
         .hamburger-menu {
           display: none;
         }
+        .mobile-menu-overlay {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.98);
+          z-index: 100000;
+          padding: 1rem;
+          overflow-y: auto;
+        }
+        .mobile-menu-overlay.open {
+          display: block !important;
+        }
         @media (max-width: 768px) {
           .nav-links {
-            gap: 0.5rem;
+            display: none !important;
           }
-          .nav-link-text {
-            display: none;
+          .hamburger-menu {
+            display: flex !important;
+            align-items: center;
+            gap: 1rem;
+          }
+          .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          }
+          .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
           }
         }
       `}</style>
+
       <nav
         style={{
           display: "flex",
@@ -306,7 +339,242 @@ export default function Navbar({ onCartClick, onMemberClick, cartItemCount = 0 }
         </button>
       </div>
 
+      {/* Mobile Hamburger Menu */}
+      <div className="hamburger-menu" style={{ position: "relative", zIndex: 10000 }}>
+        <button
+          onClick={onCartClick}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#000000",
+            background: "#ffffff",
+            border: "1px solid #ffffff",
+            borderRadius: "50%",
+            width: "44px",
+            height: "44px",
+            cursor: "pointer",
+            transition: "all 0.3s ease",
+            boxShadow: "0 4px 15px rgba(255, 255, 255, 0.3)",
+            position: "relative",
+            WebkitTapHighlightColor: "transparent",
+          }}
+        >
+          <FiShoppingCart size={20} />
+          {cartItemCount > 0 && (
+            <span style={{
+              position: "absolute",
+              top: "-6px",
+              right: "-6px",
+              background: "#ff0000",
+              color: "#ffffff",
+              borderRadius: "50%",
+              width: "22px",
+              height: "22px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "0.7rem",
+              fontWeight: 700,
+              border: "2px solid #000000",
+              boxShadow: "0 2px 8px rgba(255, 0, 0, 0.4)",
+            }}>
+              {cartItemCount > 99 ? '99+' : cartItemCount}
+            </span>
+          )}
+        </button>
+        <button
+          onClick={() => {
+            console.log('Hamburger clicked!');
+            setMobileMenuOpen(true);
+          }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#ffffff",
+            background: "transparent",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            borderRadius: "8px",
+            width: "44px",
+            height: "44px",
+            cursor: "pointer",
+            transition: "all 0.3s ease",
+            WebkitTapHighlightColor: "transparent",
+          }}
+        >
+          <FiMenu size={24} />
+        </button>
+      </div>
     </nav>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+      <div className="mobile-menu-overlay open">
+        <div className="mobile-menu-header">
+          <div style={{
+            border: "2px solid rgba(255, 255, 255, 0.3)",
+            borderRadius: "50%",
+            padding: "6px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "rgba(255, 255, 255, 0.05)",
+          }}>
+            <img 
+              src="/small-logo.svg" 
+              alt="NikHairrr" 
+              style={{ 
+                height: "32px",
+                width: "auto",
+                objectFit: "contain",
+              }}
+            />
+          </div>
+          <button
+            onClick={() => {
+              console.log('Close clicked!');
+              setMobileMenuOpen(false);
+            }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#ffffff",
+              background: "transparent",
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              borderRadius: "8px",
+              width: "44px",
+              height: "44px",
+              cursor: "pointer",
+              WebkitTapHighlightColor: "transparent",
+            }}
+          >
+            <FiX size={24} />
+          </button>
+        </div>
+
+        <div className="mobile-menu-links">
+          <Link
+            to="/"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: "#ffffff",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              fontWeight: 600,
+              fontSize: "1.1rem",
+              padding: "1rem",
+              borderRadius: "12px",
+              background: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+            }}
+          >
+            <FiHome size={22} /> Home
+          </Link>
+          <Link
+            to="/shop"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: "#ffffff",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              fontWeight: 600,
+              fontSize: "1.1rem",
+              padding: "1rem",
+              borderRadius: "12px",
+              background: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+            }}
+          >
+            <FiShoppingBag size={22} /> Shop
+          </Link>
+          <Link
+            to="/services"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: "#ffffff",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              fontWeight: 600,
+              fontSize: "1.1rem",
+              padding: "1rem",
+              borderRadius: "12px",
+              background: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+            }}
+          >
+            <FiTool size={22} /> Services
+          </Link>
+          <Link
+            to="/membership"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: "#ffffff",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              fontWeight: 600,
+              fontSize: "1.1rem",
+              padding: "1rem",
+              borderRadius: "12px",
+              background: "rgba(147, 51, 234, 0.15)",
+              border: "1px solid rgba(147, 51, 234, 0.4)",
+            }}
+          >
+            <FiStar size={22} /> Rewards
+          </Link>
+          <Link
+            to="/testimonials"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              color: "#ffffff",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              fontWeight: 600,
+              fontSize: "1.1rem",
+              padding: "1rem",
+              borderRadius: "12px",
+              background: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+            }}
+          >
+            <FiMessageCircle size={22} /> Testimonials
+          </Link>
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              onMemberClick();
+            }}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              color: user ? "#000000" : "#ffffff",
+              background: user ? "#ffffff" : "rgba(255, 255, 255, 0.05)",
+              border: user ? "1px solid #ffffff" : "1px solid rgba(255, 255, 255, 0.1)",
+              borderRadius: "12px",
+              padding: "1rem",
+              cursor: "pointer",
+              fontWeight: 600,
+              fontSize: "1.1rem",
+            }}
+          >
+            <FiUser size={22} /> {user ? 'Account' : 'Sign In'}
+          </button>
+        </div>
+      </div>
+      )}
     </>
   );
 }
